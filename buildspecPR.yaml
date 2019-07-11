@@ -8,7 +8,8 @@ env:
 phases:
   install:
     commands:
-      - npm install -g swagger-cli dredd
+      - npm install -g swagger-cli
+      - npm install -g dredd --unsafe-perm=true
       - pip install awscli aws-sam-cli bandit coverage dredd-hooks prospector==1.1.6.2 pylint_quotes aws-lambda-decorators
   pre_build:
     commands:
