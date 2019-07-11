@@ -6,6 +6,9 @@ env:
     SAM_S3_BUCKET:            "/monorepo/build/SAM_S3_BUCKET"
 
 phases:
+  install:
+    commands:
+      - npm install -g swagger-cli
   pre_build:
     commands:
       - aws cloudformation validate-template --template-body file://template.yaml
