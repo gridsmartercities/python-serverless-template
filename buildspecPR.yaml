@@ -8,6 +8,7 @@ env:
 phases:
   build:
       commands:
+      -
       - aws s3 cp swagger.yaml s3://$SAM_S3_BUCKET/
       - sam build -s src
       - sam package --s3-bucket $SAM_S3_BUCKET --output-template-file NewSamTemplate.yaml
