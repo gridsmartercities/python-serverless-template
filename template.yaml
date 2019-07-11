@@ -2,6 +2,9 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: 'AWS::Serverless-2016-10-31'
 Description: An AWS Serverless Specification template for the Monorepo Service
 Parameters:
+  ApiNameSuffix:
+    Type: String
+    Default: -prod
   S3Bucket:
     Type : String
     Default: "bucket value will be overriden in buildspec"
