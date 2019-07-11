@@ -1,3 +1,3 @@
 def hello_func(name):
-    a = "HELLO FROM %s" % name.upper()
-    return a
+    a_a = "HELLO FROM %s" % name.upper()
+    return a_a
