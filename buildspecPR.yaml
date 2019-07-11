@@ -17,7 +17,7 @@ phases:
       - swagger-cli validate swagger.yaml
       - bandit -r .
       - prospector
-      - coverage run --branch --source='.' -m unittest
+      - coverage run --branch --source='.' -m unittest tests/*/test_*
       - coverage report -m --fail-under=100 --omit=*/__init__.py,tests/*
   build:
     commands:
