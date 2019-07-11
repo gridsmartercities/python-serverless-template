@@ -1,3 +1,4 @@
 bandit
 coverage
+dredd-hooks
 prospector==1.1.6.2

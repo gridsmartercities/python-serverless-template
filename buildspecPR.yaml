@@ -25,3 +25,4 @@ phases:
       - sam build -s src
       - sam package --s3-bucket $SAM_S3_BUCKET --output-template-file NewSamTemplate.yaml
       - sam deploy --no-fail-on-empty-changeset --capabilities CAPABILITY_NAMED_IAM --template-file NewSamTemplate.yaml --stack-name ${REPO_NAME}-stack --parameter-overrides ApiNameSuffix=-$CLEAN_PR S3Bucket=$SAM_S3_BUCKET
+      - dredd swagger.yaml https://r1pipevhy8.execute-api.eu-west-2.amazonaws.com --hookfiles tests/hooks.py --language python

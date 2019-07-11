@@ -16,24 +16,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Response"
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Response"
-        "403":
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Response"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Response"
         "500":
           description: Internal Server Error
           content:
@@ -52,24 +34,6 @@ paths:
       responses:
         "200":
           description: Profile Created
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Response"
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Response"
-        "403":
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Response"
-        "404":
-          description: Not Found
           content:
             application/json:
               schema:
