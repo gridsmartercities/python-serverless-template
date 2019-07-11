@@ -19,8 +19,9 @@ phases:
       - coverage run --branch --source='.' -m unittest
       - coverage report -m --fail-under=100 --omit=*/__init__.py,tests/*
   build:
-      commands:
+    commands:
+      - export CLEAN_PR=`echo $CODEBUILD_SOURCE_VERSION | tr '/' '-'`
       - aws s3 cp swagger.yaml s3://$SAM_S3_BUCKET/
       - sam build -s src
       - sam package --s3-bucket $SAM_S3_BUCKET --output-template-file NewSamTemplate.yaml
-      - sam deploy --no-fail-on-empty-changeset --capabilities CAPABILITY_NAMED_IAM --template-file NewSamTemplate.yaml --stack-name ${REPO_NAME}-stack --parameter-overrides S3Bucket=$SAM_S3_BUCKET
+      - sam deploy --no-fail-on-empty-changeset --capabilities CAPABILITY_NAMED_IAM --template-file NewSamTemplate.yaml --stack-name ${REPO_NAME}-stack --parameter-overrides ApiNameSuffix=-$CLEAN_PR S3Bucket=$SAM_S3_BUCKET
