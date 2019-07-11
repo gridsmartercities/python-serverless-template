@@ -3,8 +3,6 @@ info:
   version: "0.1"
   title: monorepo API
   description: An API to test a monorepo
-servers:
-  - url: /Prod
 paths:
   /alambda:
     get:
