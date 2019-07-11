@@ -9,7 +9,7 @@ phases:
   install:
     commands:
       - npm install -g swagger-cli
-      - pip install bandit coverage prospector==1.1.6.2
+      - pip install awscli aws-sam-cli bandit coverage prospector==1.1.6.2
   pre_build:
     commands:
       - aws cloudformation validate-template --template-body file://template.yaml
