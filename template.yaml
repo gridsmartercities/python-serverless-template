@@ -1,0 +1,51 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: An AWS Serverless Specification template for the Monorepo Service
+Parameters:
+  S3Bucket:
+    Type : String
+    Default: "bucket value will be overriden in buildspec"
+Globals:
+  Function:
+    Runtime: python3.7
+    Timeout: 3
+    MemorySize: 256
+Resources:
+  ALambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: 'a_lambda.lambda_handler'
+      Description: "some random work"
+      Events:
+        ALambdaApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /alambda
+            Method: GET
+      CodeUri: ./a_lambda
+  BLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: 'b_lambda.lambda_handler'
+      Description: "some random work"
+      Events:
+        BLambdaApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /blambda
+            Method: GET
+      CodeUri: ./b_lambda
+  ApiGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: !Sub "profiles-apis${ApiNameSuffix}"
+      EndpointConfiguration: REGIONAL
+      TracingEnabled: true
+      DefinitionBody:
+        Fn::Transform:
+          Name: 'AWS::Include'
+          Parameters:
+            Location: !Sub "s3://${S3Bucket}/swagger.yaml"
+      StageName: Prod

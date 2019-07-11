@@ -1,0 +1,14 @@
+version: 0.2
+env:
+  variables:
+    REPO_NAME:                "monorepo"
+  parameter-store:
+    SAM_S3_BUCKET:            "/build/SAM_S3_BUCKET"
+
+phases:
+  build:
+      commands:
+      - aws s3 cp swagger.yaml s3://$SAM_S3_BUCKET/
+      - sam build -s src
+      - sam package --s3-bucket $SAM_S3_BUCKET --output-template-file NewSamTemplate.yaml
+      - sam deploy --no-fail-on-empty-changeset --capabilities CAPABILITY_NAMED_IAM --template-file NewSamTemplate.yaml --stack-name ${REPO_NAME}-stack --parameter-overrides S3Bucket=$SAM_S3_BUCKET
