@@ -9,12 +9,13 @@ phases:
   install:
     commands:
       - npm install -g swagger-cli
+      - pip install bandit coverage prospector==1.1.6.2
   pre_build:
     commands:
       - aws cloudformation validate-template --template-body file://template.yaml
       - swagger-cli validate swagger.yaml
-#      - bandit -r .
-#      - prospector
+      - bandit -r .
+      - prospector
       - coverage run --branch --source='.' -m unittest
       - coverage report -m --fail-under=100 --omit=*/__init__.py,tests/*
 #  build:
