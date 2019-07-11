@@ -6,17 +6,21 @@ env:
     SAM_S3_BUCKET:            "/monorepo/build/SAM_S3_BUCKET"
 
 phases:
+  install:
+    commands:
+      - npm install -g swagger-cli
+      - pip install bandit coverage prospector==1.1.6.2
   pre_build:
     commands:
       - aws cloudformation validate-template --template-body file://template.yaml
       - swagger-cli validate swagger.yaml
-#      - bandit -r .
-#      - prospector
+      - bandit -r .
+      - prospector
       - coverage run --branch --source='.' -m unittest
       - coverage report -m --fail-under=100 --omit=*/__init__.py,tests/*
-  build:
-      commands:
-      - aws s3 cp swagger.yaml s3://$SAM_S3_BUCKET/
-      - sam build -s src
-      - sam package --s3-bucket $SAM_S3_BUCKET --output-template-file NewSamTemplate.yaml
-      - sam deploy --no-fail-on-empty-changeset --capabilities CAPABILITY_NAMED_IAM --template-file NewSamTemplate.yaml --stack-name ${REPO_NAME}-stack --parameter-overrides S3Bucket=$SAM_S3_BUCKET
+#  build:
+#      commands:
+#      - aws s3 cp swagger.yaml s3://$SAM_S3_BUCKET/
+#      - sam build -s src
+#      - sam package --s3-bucket $SAM_S3_BUCKET --output-template-file NewSamTemplate.yaml
+#      - sam deploy --no-fail-on-empty-changeset --capabilities CAPABILITY_NAMED_IAM --template-file NewSamTemplate.yaml --stack-name ${REPO_NAME}-stack --parameter-overrides S3Bucket=$SAM_S3_BUCKET
