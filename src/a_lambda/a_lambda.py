@@ -1,5 +1,5 @@
-from src.common import hello_func
 from aws_lambda_decorators import cors
+from src.common import hello_func
 
 
 @cors()
