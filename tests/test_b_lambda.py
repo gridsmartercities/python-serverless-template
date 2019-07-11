@@ -7,4 +7,4 @@ class BLambdaTests(unittest.TestCase):
     def test_success(self):
         response = lambda_handler(None, None)
         self.assertEqual(200, response["statusCode"])
-        self.assertEqual("{'message': 'HELLO FROM B_LAMBDA'}", response["body"])
+        self.assertEqual("""{"message": "HELLO FROM B_LAMBDA"}""", response["body"])
