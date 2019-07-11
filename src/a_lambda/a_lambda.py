@@ -1,4 +1,4 @@
-from src.common import hello_func
+from .common import hello_func
 
 
 def lambda_handler(event, context):  # pylint:disable=unused-argument
