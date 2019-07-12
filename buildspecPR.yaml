@@ -9,14 +9,15 @@ phases:
   install:
     commands:
       - npm install -g swagger-cli
-      - pip install awscli aws-sam-cli bandit coverage prospector==1.1.6.2
+      - npm install -g dredd --unsafe-perm=true
+      - pip install awscli aws-sam-cli bandit coverage dredd-hooks prospector==1.1.6.2 pylint_quotes aws-lambda-decorators
   pre_build:
     commands:
       - aws cloudformation validate-template --template-body file://template.yaml
       - swagger-cli validate swagger.yaml
       - bandit -r .
       - prospector
-      - coverage run --branch --source='.' -m unittest
+      - coverage run --branch --source='.' -m unittest tests/*/test_*
       - coverage report -m --fail-under=100 --omit=*/__init__.py,tests/*
   build:
     commands:
@@ -25,3 +26,4 @@ phases:
       - sam build -s src
       - sam package --s3-bucket $SAM_S3_BUCKET --output-template-file NewSamTemplate.yaml
       - sam deploy --no-fail-on-empty-changeset --capabilities CAPABILITY_NAMED_IAM --template-file NewSamTemplate.yaml --stack-name ${REPO_NAME}-stack --parameter-overrides ApiNameSuffix=-$CLEAN_PR S3Bucket=$SAM_S3_BUCKET
+      - dredd swagger.yaml https://o54q6v0yhc.execute-api.eu-west-2.amazonaws.com/Prod --hookfiles tests/hooks.py --hookfiles tests/a_lambda/hooks.py --hookfiles tests/b_lambda/hooks.py --language python
