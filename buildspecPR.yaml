@@ -25,7 +25,7 @@ phases:
       - export CLEAN_PR=`echo $CODEBUILD_SOURCE_VERSION | tr '/' '-'`
       - aws s3 cp swagger.yaml s3://$SAM_S3_BUCKET/
       - sam build -s src
-      - sam package --s3-bucket $SAM_S3_BUCKET --output-template-file NewSamTemplate.yaml
-      - sam deploy --no-fail-on-empty-changeset --capabilities CAPABILITY_NAMED_IAM --template-file NewSamTemplate.yaml --stack-name ${REPO_NAME}-stack --parameter-overrides ApiNameSuffix=-$CLEAN_PR S3Bucket=$SAM_S3_BUCKET
+      - sam package --s3-bucket $SAM_S3_BUCKET --s3-prefix $CLEAN_PR --output-template-file NewSamTemplate.yaml
+      - sam deploy --s3-bucket $SAM_S3_BUCKET --no-fail-on-empty-changeset --capabilities CAPABILITY_NAMED_IAM --template-file NewSamTemplate.yaml --stack-name ${REPO_NAME}-stack-${CLEAN_PR} --parameter-overrides ApiNameSuffix=-$CLEAN_PR S3Bucket=$SAM_S3_BUCKET/$CLEAR_PR
       - dredd swagger.yaml https://o54q6v0yhc.execute-api.eu-west-2.amazonaws.com/Prod --hookfiles tests/hooks.py --hookfiles tests/a_lambda/hooks.py --hookfiles tests/b_lambda/hooks.py --language python
       - coverage run --branch --source='.' -m unittest it/test_*.py
