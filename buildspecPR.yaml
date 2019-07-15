@@ -17,8 +17,9 @@ phases:
       - swagger-cli validate swagger.yaml
       - bandit -r .
       - prospector
-      - coverage run --branch --source='.' -m unittest tests/*/test_*
-      - coverage report -m --fail-under=100 --omit=*/__init__.py,tests/*
+      - coverage run --branch --source='.' -m unittest tests/test_*.py
+      - coverage run --branch --source='.' -m unittest tests/*/test_*.py
+      - coverage report -m --fail-under=100 --omit=tests/*,it/*
   build:
     commands:
       - export CLEAN_PR=`echo $CODEBUILD_SOURCE_VERSION | tr '/' '-'`
@@ -27,3 +28,4 @@ phases:
       - sam package --s3-bucket $SAM_S3_BUCKET --output-template-file NewSamTemplate.yaml
       - sam deploy --no-fail-on-empty-changeset --capabilities CAPABILITY_NAMED_IAM --template-file NewSamTemplate.yaml --stack-name ${REPO_NAME}-stack --parameter-overrides ApiNameSuffix=-$CLEAN_PR S3Bucket=$SAM_S3_BUCKET
       - dredd swagger.yaml https://o54q6v0yhc.execute-api.eu-west-2.amazonaws.com/Prod --hookfiles tests/hooks.py --hookfiles tests/a_lambda/hooks.py --hookfiles tests/b_lambda/hooks.py --language python
+      - coverage run --branch --source='.' -m unittest it/test_*.py
