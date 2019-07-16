@@ -1,7 +1,7 @@
 version: 0.2
 env:
   variables:
-    REPO_NAME:                "monorepo"
+    REPO_NAME:                "aws-python-template"
   parameter-store:
     SAM_S3_BUCKET:            "/monorepo/build/SAM_S3_BUCKET"
 
