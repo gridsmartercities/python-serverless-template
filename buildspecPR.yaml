@@ -16,11 +16,11 @@ phases:
     commands:
       - aws cloudformation validate-template --template-body file://template.yaml
       - swagger-cli validate swagger.yaml
-      - bandit -r .
-      - prospector
+      - bandit -r -q .
+      - prospector -0 -M
       - coverage run --branch --source='.' -m unittest tests/test_*.py
       - coverage run --branch --source='.' -m unittest tests/*/test_*.py
-      - coverage report -m --fail-under=100 --omit=tests/*,it/*
+      - coverage report -m --skip-covered --fail-under=100 --omit=tests/*,it/*
   build:
     commands:
       - export CLEAN_PR=`echo $CODEBUILD_SOURCE_VERSION | tr '/' '-'`
