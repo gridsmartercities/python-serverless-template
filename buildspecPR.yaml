@@ -30,5 +30,5 @@ phases:
       - sam deploy --s3-bucket $SAM_S3_BUCKET --no-fail-on-empty-changeset --capabilities CAPABILITY_NAMED_IAM --template-file NewSamTemplate.yaml --stack-name ${REPO_NAME}-stack-${CLEAN_PR} --parameter-overrides RepoName=${REPO_NAME} ApiNameSuffix=-$CLEAN_PR S3Bucket=$SAM_S3_BUCKET/$CLEAN_PR
       - export BASE_URL=https://`aws apigateway get-rest-apis --query "items[?name=='${REPO_NAME}-apis-${CLEAN_PR}'].id" | jq first | tr -d '"'`.execute-api.${AWS_REGION}.amazonaws.com/Prod
       - echo $BASE_URL
-      - dredd swagger.yaml $BASE_URL --hookfiles tests/hooks.py --hookfiles tests/a_lambda/hooks.py --hookfiles tests/b_lambda/hooks.py --language python
+      - dredd swagger.yaml $BASE_URL --hookfiles=tests/hooks.py --hookfiles=tests/*/hooks.py --language python
       - coverage run --branch --source='.' -m unittest it/test_*.py
