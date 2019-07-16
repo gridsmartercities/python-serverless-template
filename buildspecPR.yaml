@@ -23,7 +23,7 @@ phases:
   build:
     commands:
       - export CLEAN_PR=`echo $CODEBUILD_SOURCE_VERSION | tr '/' '-'`
-      - aws s3 cp swagger.yaml s3://$SAM_S3_BUCKET/
+      - aws s3 cp swagger.yaml s3://$SAM_S3_BUCKET/$CLEAN_PR/
       - sam build -s src
       - sam package --s3-bucket $SAM_S3_BUCKET --s3-prefix $CLEAN_PR --output-template-file NewSamTemplate.yaml
       - sam deploy --s3-bucket $SAM_S3_BUCKET --no-fail-on-empty-changeset --capabilities CAPABILITY_NAMED_IAM --template-file NewSamTemplate.yaml --stack-name ${REPO_NAME}-stack-${CLEAN_PR} --parameter-overrides ApiNameSuffix=-$CLEAN_PR S3Bucket=$SAM_S3_BUCKET/$CLEAN_PR
