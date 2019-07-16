@@ -18,7 +18,7 @@ phases:
       - aws cloudformation validate-template --template-body file://template.yaml
       - swagger-cli validate swagger.yaml
       - bandit -r -q .
-      - prospector -0 -M
+      - prospector
       - coverage run --branch --source='.' -m unittest tests/test_*.py
       - coverage run --branch --source='.' -m unittest tests/*/test_*.py
       - coverage report -m --skip-covered --fail-under=100 --omit=tests/*,it/*
