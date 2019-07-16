@@ -1,16 +1,17 @@
 version: 0.2
 env:
   variables:
-    REPO_NAME:                "monorepo"
+    REPO_NAME:                "aws-python-template"
   parameter-store:
     SAM_S3_BUCKET:            "/monorepo/build/SAM_S3_BUCKET"
 
 phases:
   install:
     commands:
-      - npm install -g swagger-cli
-      - npm install -g dredd --unsafe-perm=true
-      - pip install awscli aws-sam-cli bandit coverage dredd-hooks prospector==1.1.6.2 pylint_quotes aws-lambda-decorators
+      - npm install -g -q swagger-cli
+      - npm install -g -q dredd --unsafe-perm=true
+      - pip install -U -q pip
+      - pip install -q awscli aws-sam-cli bandit coverage dredd-hooks prospector==1.1.6.2 pylint_quotes aws-lambda-decorators
       - curl -qL -o jq https://stedolan.github.io/jq/download/linux64/jq && chmod +x ./jq
   pre_build:
     commands:
