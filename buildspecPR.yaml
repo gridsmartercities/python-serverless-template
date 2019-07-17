@@ -11,7 +11,7 @@ phases:
       - npm install -g -q swagger-cli
       - npm install -g -q dredd --unsafe-perm=true
       - pip install -U -q pip
-      - pip install -q awscli aws-sam-cli bandit coverage dredd-hooks prospector==1.1.6.2 pylint_quotes aws-lambda-decorators
+      - pip install -q awscli aws-sam-cli bandit coverage dredd-hooks prospector==1.1.6.2 pylint_quotes aws-lambda-decorators yq
       - curl -qL -o jq https://stedolan.github.io/jq/download/linux64/jq && chmod +x ./jq
   pre_build:
     commands:
@@ -27,7 +27,7 @@ phases:
       - export CLEAN_PR=`echo $CODEBUILD_SOURCE_VERSION | tr '/' '-'`
       - aws s3 cp swagger.yaml s3://$SAM_S3_BUCKET/$CLEAN_PR/
       - chmod u+x ./packager.sh
-      - bash ./packager.sh json
+      - bash ./packager.sh
       - sam build -s src
       - sam package --s3-bucket $SAM_S3_BUCKET --s3-prefix $CLEAN_PR --output-template-file NewSamTemplate.yaml
       - sam deploy --s3-bucket $SAM_S3_BUCKET --no-fail-on-empty-changeset --capabilities CAPABILITY_NAMED_IAM --template-file NewSamTemplate.yaml --stack-name ${REPO_NAME}-stack-${CLEAN_PR} --parameter-overrides RepoName=${REPO_NAME} ApiNameSuffix=-$CLEAN_PR S3Bucket=$SAM_S3_BUCKET/$CLEAN_PR

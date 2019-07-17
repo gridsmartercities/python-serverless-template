@@ -23,15 +23,15 @@ function debug() {
 function include() {
     debug_flag=$1
     file=$2
-    format=$3
+    parser=$3
 
     src_dir=${file%"/package.$format"}/src
 
     rm -rf $src_dir
     debug $debug_flag "removed $src_dir"
 
-    if [ "`jq -r '.include' $file`" != "null" ]; then
-        for entry in $(jq -r '.include[] | .' $file); do
+    if [ "`$parser -r '.include' $file`" != "null" ]; then
+        for entry in $($parser -r '.include[] | .' $file); do
             if [ ! -d "$src_dir" ]; then
                 mkdir $src_dir
                 debug $debug_flag "created $src_dir"
@@ -45,7 +45,7 @@ function include() {
 function package() {
     debug_flag=$1
     file=$2
-    format=$3
+    parser=$3
 
     base_dir=${file%"/package.$format"}
 
@@ -53,8 +53,8 @@ function package() {
 
     debug $debug_flag "removed and created $base_dir/requirements.txt"
 
-    if [ "`jq -r '.package' $file`" != "null" ]; then
-        for entry in $(jq -r '.package[] | .' $file); do
+    if [ "`$parser -r '.package' $file`" != "null" ]; then
+        for entry in $($parser -r '.package[] | .' $file); do
             echo $entry >> $base_dir/requirements.txt
             debug debug_flag "appended $entry to requirements.txt"
         done
@@ -63,14 +63,19 @@ function package() {
 
 debug $debug_flag "packager start"
 
-#   Manage folders with a package.json file only
+#   Manage folders with a package.yaml or package.json file only
 find . -name "package.$format" | while read package_file; do
 
     debug $debug_flag "processing $package_file"
 
-    include $debug_flag $package_file $format
+    parser=yq
+    if [ "$format" == "json" ]; then
+        parser=jq
+    fi
 
-    package $debug_flag $package_file $format
+    include $debug_flag $package_file $parser
+
+    package $debug_flag $package_file $parser
 
     rm $package_file
     debug $debug_flag "removed $package_file"
