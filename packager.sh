@@ -50,4 +50,4 @@ done
 
 print "packager end"
 
-exit 1
+exit 0
