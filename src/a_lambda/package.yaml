@@ -1,0 +1,6 @@
+include:
+  - common.py
+  - other_common.py
+package:
+  - aws-lambda-decorators
+  - test

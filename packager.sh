@@ -1,12 +1,17 @@
 #!/bin/bash
 set -e
 
-debug_flag=0
-if [[ $# -eq 1 ]]; then
-    debug_flag=$1
+format=yaml
+if [[ $# -gt 0 && "$1" == "json" ]]; then
+    format=json
 fi
 
-debug() {
+debug_flag=0
+if [[ $# -gt 1 ]]; then
+    debug_flag=$2
+fi
+
+function debug() {
     debug_flag=$1
     message=$2
 
@@ -15,11 +20,12 @@ debug() {
     fi
 }
 
-include() {
+function include() {
     debug_flag=$1
     file=$2
+    format=$3
 
-    src_dir=${file%"/package.json"}/src
+    src_dir=${file%"/package.$format"}/src
 
     rm -rf $src_dir
     debug $debug_flag "removed $src_dir"
@@ -36,11 +42,12 @@ include() {
     fi
 }
 
-package() {
+function package() {
     debug_flag=$1
     file=$2
+    format=$3
 
-    base_dir=${file%"/package.json"}
+    base_dir=${file%"/package.$format"}
 
     rm -f $base_dir/requirements.txt && touch $base_dir/requirements.txt
 
@@ -57,13 +64,13 @@ package() {
 debug $debug_flag "packager start"
 
 #   Manage folders with a package.json file only
-find . -name "package.json" | while read package_file; do
+find . -name "package.$format" | while read package_file; do
 
     debug $debug_flag "processing $package_file"
 
-    include $debug_flag $package_file
+    include $debug_flag $package_file $format
 
-    package $debug_flag $package_file
+    package $debug_flag $package_file $format
 
     rm $package_file
     debug $debug_flag "removed $package_file"
