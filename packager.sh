@@ -1,6 +1,6 @@
 #!/bin/bash
+set -e
 
-# deal with not having a debug value
 debug_flag=0
 if [[ $# -eq 1 ]]; then
     debug_flag=$1
