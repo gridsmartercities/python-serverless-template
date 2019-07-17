@@ -49,3 +49,5 @@ find . -name "package.json" | while read file; do
 done
 
 print "packager end"
+
+exit 1
