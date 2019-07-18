@@ -1,5 +1,8 @@
 {
   "include": [
     "common.py"
+  ],
+  "package": [
+    "requests"
   ]
 }
