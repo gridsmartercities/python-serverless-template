@@ -3,4 +3,3 @@ include:
   - other_common.py
 package:
   - aws-lambda-decorators
-  - test
