@@ -1,22 +1,37 @@
 #!/bin/bash
 set -e
 
-format=yaml
-if [[ $# -gt 0 && "$1" == "json" ]]; then
-    format=json
-fi
+OPTIND=1         # Reset in case getopts has been used previously in the shell.
 
 debug_flag=0
-if [[ $# -gt 1 ]]; then
-    debug_flag=$2
-fi
+
+function show_help() {
+    echo -e "\nUSAGE:\n\t./packager.sh -hd\n\nOPTIONS:\n\t-h\tShow usage\n\t-d\tShow debug messages\n"
+}
+
+while getopts "hd?:" opt; do
+    case "$opt" in
+        h)
+            show_help
+            exit 0
+            ;;
+        d)
+            debug_flag=1
+            ;;
+    esac
+done
+
+shift $((OPTIND-1))
+
+[ "${1:-}" = "--" ] && shift
+
 
 function debug() {
     debug_flag=$1
     message=$2
 
     if [ $debug_flag == 1 ]; then
-        echo $message
+        echo "... $message"
     fi
 }
 
@@ -61,25 +76,35 @@ function package() {
     fi
 }
 
+function run_format() {
+    debug_flag=$1
+    format=$2
+
+    debug $debug_flag "processing $format files"
+
+    find . -name "package.$format" | while read package_file; do
+
+        debug $debug_flag "processing $package_file"
+
+        parser=yq
+        if [ "$format" == "json" ]; then
+            parser=jq
+        fi
+
+        include $debug_flag $package_file $parser
+
+        package $debug_flag $package_file $parser
+
+        rm $package_file
+        debug $debug_flag "removed $package_file"
+    done
+}
+
 debug $debug_flag "packager start"
 
-#   Manage folders with a package.yaml or package.json file only
-find . -name "package.$format" | while read package_file; do
-
-    debug $debug_flag "processing $package_file"
-
-    parser=yq
-    if [ "$format" == "json" ]; then
-        parser=jq
-    fi
-
-    include $debug_flag $package_file $parser
-
-    package $debug_flag $package_file $parser
-
-    rm $package_file
-    debug $debug_flag "removed $package_file"
-done
+run_format $debug_flag "yaml"
+run_format $debug_flag "yml"
+run_format $debug_flag "json"
 
 debug $debug_flag "packager end"
 
