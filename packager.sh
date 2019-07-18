@@ -47,12 +47,17 @@ function include() {
 
     if [ "`$parser -r '.include' $file`" != "null" ]; then
         for entry in $($parser -r '.include[] | .' $file); do
-            if [ ! -d "$src_dir" ]; then
-                mkdir $src_dir
-                debug $debug_flag "created $src_dir"
+            name=$(basename $entry)
+            dir=$src_dir
+            if [[ $name != $entry ]]; then
+                dir=$src_dir/$(dirname $entry)
             fi
-            cp ./src/$entry $src_dir/$entry
-            debug $debug_flag "copied $entry files to $src_dir"
+            if [ ! -d "$dir" ]; then
+                mkdir $dir
+                debug $debug_flag "created $dir"
+            fi
+            cp ./src/$entry $dir/$name
+            debug $debug_flag "copied $name files to $dir"
         done
     fi
 }
