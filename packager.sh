@@ -82,7 +82,7 @@ function run_format() {
 
     debug $debug_flag "processing $format files"
 
-    find . -name "package.$format" | while read package_file; do
+    find ./build -name "package.$format" | while read package_file; do
 
         debug $debug_flag "processing $package_file"
 
@@ -101,6 +101,9 @@ function run_format() {
 }
 
 debug $debug_flag "packager start"
+
+debug $debug_flag "removing and creating build folder"
+rm -rf ./build && cp -R ./src ./build
 
 run_format $debug_flag "yaml"
 run_format $debug_flag "yml"
