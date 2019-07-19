@@ -8,6 +8,7 @@ __pycache__/
 
 # Distribution / packaging
 .Python
+.build/
 build/
 develop-eggs/
 dist/
@@ -104,7 +105,3 @@ venv.bak/
 
 # mypy
 .mypy_cache/
-
-# scripts
-test.sh
-coverage_report.sh
