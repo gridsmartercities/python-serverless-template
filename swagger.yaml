@@ -1,8 +1,8 @@
 openapi: 3.0.0
 info:
   version: "0.1"
-  title: monorepo API
-  description: An API to test a monorepo
+  title: AWS Python Serverless Template API
+  description: An API to produce a simple AWS Python Serverless Template
 paths:
   /alambda:
     get:
