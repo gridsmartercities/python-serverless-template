@@ -35,7 +35,7 @@ function debug() {
     fi
 }
 
-function include() {
+function add_internal_dependencies() {
     debug_flag=$1
     file=$2
     parser=$3
@@ -45,8 +45,8 @@ function include() {
     rm -rf $src_dir
     debug $debug_flag "removed $src_dir"
 
-    if [ "`$parser -r '.include' $file`" != "null" ]; then
-        for entry in $($parser -r '.include[] | .' $file); do
+    if [ "`$parser -r '.internal' $file`" != "null" ]; then
+        for entry in $($parser -r '.internal[] | .' $file); do
             name=$(basename $entry)
             dir=$src_dir
             if [[ $name != $entry ]]; then
@@ -62,7 +62,7 @@ function include() {
     fi
 }
 
-function package() {
+function add_external_dependencies() {
     debug_flag=$1
     file=$2
     parser=$3
@@ -73,15 +73,15 @@ function package() {
 
     debug $debug_flag "removed and created $base_dir/requirements.txt"
 
-    if [ "`$parser -r '.package' $file`" != "null" ]; then
-        for entry in $($parser -r '.package[] | .' $file); do
+    if [ "`$parser -r '.external' $file`" != "null" ]; then
+        for entry in $($parser -r '.external[] | .' $file); do
             echo $entry >> $base_dir/requirements.txt
             debug debug_flag "appended $entry to requirements.txt"
         done
     fi
 }
 
-function run_format() {
+function package() {
     debug_flag=$1
     format=$2
 
@@ -96,9 +96,9 @@ function run_format() {
             parser=jq
         fi
 
-        include $debug_flag $package_file $parser
+        add_internal_dependencies $debug_flag $package_file $parser
 
-        package $debug_flag $package_file $parser
+        add_external_dependencies $debug_flag $package_file $parser
 
         rm $package_file
         debug $debug_flag "removed $package_file"
@@ -110,9 +110,9 @@ debug $debug_flag "packager start"
 debug $debug_flag "removing and creating build folder"
 rm -rf ./build && cp -R ./src ./build
 
-run_format $debug_flag "yaml"
-run_format $debug_flag "yml"
-run_format $debug_flag "json"
+package $debug_flag "yaml"
+package $debug_flag "yml"
+package $debug_flag "json"
 
 debug $debug_flag "packager end"
 
