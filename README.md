@@ -16,19 +16,25 @@ The template makes use of:
 - Dredd, for contract testing against the OpenAPI definition, with hooks written in Python.
 
 
-## Set up
+## Project Set up
 
 1. Create a Github repo by clicking on the Github template button above.
 2. Create your AWS account.
 3. Run the cloudformation stack to setup the CI/CD process in your AWS account.
+
+## Developer Set up
+
+1. Clone your new repo locally
+2. Create a Python virtual environment
+3. Install the development requirements by running "pip install -r requirements.txt"
 4. Start writing your code!
 
-## Optional Set up
+Additionally, you can:
 
-1. Set a pre-push Git hook:
-    - copy pre-push.sh script to .git/hooks folder (cp pre-push.sh .git/hooks) folder and run chmod u+x pre-push
-
-
+1. Set a pre-push Git hook to run all checks before any code is pushed to Github:
+    - copy pre-push script to .git/hooks folder (cp pre-push .git/hooks) folder
+    - give execute permissions to pre-push script by running chmod u+x .git/hooks/pre-push
+    
 
 
 Note: set chmod u+x on pre-push and packager!!
