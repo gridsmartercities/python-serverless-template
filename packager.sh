@@ -40,7 +40,7 @@ function add_internal_dependencies() {
     file=$2
     parser=$3
 
-    src_dir=${file%"/package.$format"}/src
+    src_dir=${file%"/dependencies.$format"}/src
 
     rm -rf $src_dir
     debug $debug_flag "removed $src_dir"
@@ -67,7 +67,7 @@ function add_external_dependencies() {
     file=$2
     parser=$3
 
-    base_dir=${file%"/package.$format"}
+    base_dir=${file%"/dependencies.$format"}
 
     rm -f $base_dir/requirements.txt && touch $base_dir/requirements.txt
 
@@ -87,21 +87,21 @@ function package() {
 
     debug $debug_flag "processing $format files"
 
-    find ./build -name "package.$format" | while read package_file; do
+    find ./build -name "dependencies.$format" | while read dependencies_file; do
 
-        debug $debug_flag "processing $package_file"
+        debug $debug_flag "processing $dependencies_file"
 
         parser=yq
         if [ "$format" == "json" ]; then
             parser=jq
         fi
 
-        add_internal_dependencies $debug_flag $package_file $parser
+        add_internal_dependencies $debug_flag $dependencies_file $parser
 
-        add_external_dependencies $debug_flag $package_file $parser
+        add_external_dependencies $debug_flag $dependencies_file $parser
 
-        rm $package_file
-        debug $debug_flag "removed $package_file"
+        rm $dependencies_file
+        debug $debug_flag "removed $dependencies_file"
     done
 }
 
