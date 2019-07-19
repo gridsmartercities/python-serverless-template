@@ -53,5 +53,5 @@ Resources:
         Fn::Transform:
           Name: AWS::Include
           Parameters:
-            Location: !Sub s3://${S3Bucket}/swagger.yaml
+            Location: !Sub s3://${S3Bucket}/api-contract.yaml
       StageName: Prod
