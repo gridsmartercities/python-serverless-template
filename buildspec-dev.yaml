@@ -15,7 +15,7 @@ phases:
       - curl -qL -o jq https://stedolan.github.io/jq/download/linux64/jq && chmod +x ./jq
   pre_build:
     commands:
-      - aws cloudformation validate-template --template-body file://template.yaml
+      - aws cloudformation validate-template --template-body file://api-template.yaml
       - swagger-cli validate api-contract.yaml
       - prospector
       - bandit -r -q .
