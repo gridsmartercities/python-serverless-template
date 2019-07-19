@@ -1,8 +1,8 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 
 echo "... validating sam template"
-if [[ ! $(aws cloudformation validate-template --template-body file://template.yaml) ]]; then
+if [[ ! $(aws cloudformation validate-template --template-body file://api-template.yaml) ]]; then
     exit 1
 fi
 
