@@ -2,6 +2,6 @@ internal:
   - common.py
   - other_common.py
   - utils/some_code.py
-  - utils/sub/code.py
+  - utils/sub/code2.py
 external:
   - aws-lambda-decorators
