@@ -1,7 +1,7 @@
-include:
+internal:
   - common.py
   - other_common.py
   - test/test.py
   - test/test/test.py
-package:
+external:
   - aws-lambda-decorators
