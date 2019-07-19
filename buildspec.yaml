@@ -8,30 +8,14 @@ env:
 phases:
   install:
     commands:
-      - npm install -g -q swagger-cli
-      - npm install -g -q dredd --unsafe-perm=true
       - pip install -U -q pip
-      - pip install -q awscli aws-sam-cli bandit coverage dredd-hooks prospector==1.1.6.2 pylint_quotes aws-lambda-decorators yq
+      - pip install -q awscli aws-sam-cli aws-lambda-decorators yq
       - curl -qL -o jq https://stedolan.github.io/jq/download/linux64/jq && chmod +x ./jq
-  pre_build:
-    commands:
-      - aws cloudformation validate-template --template-body file://template.yaml
-      - swagger-cli validate swagger.yaml
-      - bandit -r -q .
-      - prospector
-      - coverage run --branch --source='.' -m unittest tests/test_*.py
-      - coverage run --branch --source='.' -m unittest tests/*/test_*.py
-      - coverage report -m --skip-covered --fail-under=100 --omit=tests/*,it/*
   build:
     commands:
-      - export CLEAN_PR=`echo $CODEBUILD_SOURCE_VERSION | tr '/' '-'`
-      - aws s3 cp swagger.yaml s3://$SAM_S3_BUCKET/$CLEAN_PR/
+      - aws s3 cp swagger.yaml s3://$SAM_S3_BUCKET/
       - chmod u+x ./packager.sh
       - bash ./packager.sh -q
       - sam build -s .build
-      - sam package --s3-bucket $SAM_S3_BUCKET --s3-prefix $CLEAN_PR --output-template-file NewSamTemplate.yaml
-      - sam deploy --s3-bucket $SAM_S3_BUCKET --no-fail-on-empty-changeset --capabilities CAPABILITY_NAMED_IAM --template-file NewSamTemplate.yaml --stack-name ${REPO_NAME}-stack-${CLEAN_PR} --parameter-overrides RepoName=${REPO_NAME} ApiNameSuffix=-$CLEAN_PR S3Bucket=$SAM_S3_BUCKET/$CLEAN_PR
-      - export BASE_URL=https://`aws apigateway get-rest-apis --query "items[?name=='${REPO_NAME}-apis-${CLEAN_PR}'].id" | jq first | tr -d '"'`.execute-api.${AWS_REGION}.amazonaws.com/Prod
-      - echo BASE_URL is $BASE_URL
-      - dredd swagger.yaml $BASE_URL --hookfiles=tests/hooks.py --hookfiles=tests/*/hooks.py --language python
-      - coverage run --branch --source='.' -m unittest it/test_*.py
+      - sam package --s3-bucket $SAM_S3_BUCKET --output-template-file NewSamTemplate.yaml
+      - sam deploy --s3-bucket $SAM_S3_BUCKET --no-fail-on-empty-changeset --capabilities CAPABILITY_NAMED_IAM --template-file NewSamTemplate.yaml --stack-name ${REPO_NAME}-stack --parameter-overrides RepoName=${REPO_NAME} S3Bucket=$SAM_S3_BUCKET
