@@ -1,3 +1,9 @@
+[<img align="right" alt="Grid Smarter Cities" src="https://s3.eu-west-2.amazonaws.com/open-source-resources/grid_smarter_cities_small.png">](https://www.gridsmartercities.com/)
+
+![Build Status][build-status]
+[![License: MIT][mit-license-svg]][mit-license]
+![Github Release][release]
+
 # python-serverless-template
 
 We believe Serverless technologies in general, and AWS Serverless in particular, are great. The barrier to entry, however, can be high and setting up a Python project can take a bit of effort.
@@ -110,6 +116,10 @@ Note: Setup prod process
 Note: Symlinks options
 
 
+[build-status]: https://codebuild.eu-west-2.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiTnE5ck1FRWpyK25SVm1tMTdnT3RBUENsRzBLWDREYjJ0ZUZsTkNacVAxMFFhUmxDaWxkeE43MWU1cnlzNnNESGw3QzJTdzduU25vVUFNaDN3UEE5bzFBPSIsIml2UGFyYW1ldGVyU3BlYyI6InB2LzE2MGRLY3czVXpmdlQiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master
+[mit-license-svg]: https://img.shields.io/badge/License-MIT-yellow.svg
+[mit-license]: https://opensource.org/licenses/MIT
+[release]: https://img.shields.io/github/release/gridsmartercities/python-serverless-template.svg?style=flat
 [sam]: https://aws.amazon.com/serverless/sam/
 [cloudformation]: https://aws.amazon.com/cloudformation/
 [openapi-3]: https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md
@@ -121,3 +131,4 @@ Note: Symlinks options
 [pylint]: https://www.pylint.org/
 [bandit]: https://bandit.readthedocs.io/en/latest/
 [dredd]: https://github.com/apiaryio/dredd
+[codebuild-badge]: https://codebuild.eu-west-2.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiTnE5ck1FRWpyK25SVm1tMTdnT3RBUENsRzBLWDREYjJ0ZUZsTkNacVAxMFFhUmxDaWxkeE43MWU1cnlzNnNESGw3QzJTdzduU25vVUFNaDN3UEE5bzFBPSIsIml2UGFyYW1ldGVyU3BlYyI6InB2LzE2MGRLY3czVXpmdlQiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master
