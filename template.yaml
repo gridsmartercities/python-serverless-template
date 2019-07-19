@@ -20,7 +20,7 @@ Resources:
   ALambda:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: a_lambda.lambda_handler
+      Handler: a_lambda.handler
       Description: some random work
       Events:
         ALambdaApi:
@@ -33,7 +33,7 @@ Resources:
   BLambda:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: b_lambda.lambda_handler
+      Handler: b_lambda.handler
       Description: some random work
       Events:
         BLambdaApi:
