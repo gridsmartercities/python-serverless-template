@@ -16,6 +16,6 @@ phases:
       - aws s3 cp api-contract.yaml s3://$SAM_S3_BUCKET/
       - chmod u+x ./packager
       - bash ./packager -q
-      - sam build -s .build
+      - sam build -s .build -t api-template.yaml
       - sam package --s3-bucket $SAM_S3_BUCKET --output-template-file NewSamTemplate.yaml
       - sam deploy --s3-bucket $SAM_S3_BUCKET --no-fail-on-empty-changeset --capabilities CAPABILITY_NAMED_IAM --template-file NewSamTemplate.yaml --stack-name ${REPO_NAME}-stack --parameter-overrides RepoName=${REPO_NAME} S3Bucket=$SAM_S3_BUCKET
