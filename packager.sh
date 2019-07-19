@@ -3,20 +3,20 @@ set -e
 
 OPTIND=1         # Reset in case getopts has been used previously in the shell.
 
-debug_flag=0
+debug_flag=1
 
 function show_help() {
     echo -e "\nUSAGE:\n\t./packager.sh -hd\n\nOPTIONS:\n\t-h\tShow usage\n\t-d\tShow debug messages\n"
 }
 
-while getopts "hd?:" opt; do
+while getopts "hq?:" opt; do
     case "$opt" in
         h)
             show_help
             exit 0
             ;;
-        d)
-            debug_flag=1
+        q)
+            debug_flag=0
             ;;
     esac
 done
@@ -87,7 +87,7 @@ function package() {
 
     debug $debug_flag "processing $format files"
 
-    find ./build -name "dependencies.$format" | while read dependencies_file; do
+    find .build -name "dependencies.$format" | while read dependencies_file; do
 
         debug $debug_flag "processing $dependencies_file"
 
@@ -108,7 +108,7 @@ function package() {
 debug $debug_flag "packager start"
 
 debug $debug_flag "removing and creating build folder"
-rm -rf ./build && cp -R ./src ./build
+rm -rf .build && cp -R ./src .build
 
 package $debug_flag "yaml"
 package $debug_flag "yml"
