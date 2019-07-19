@@ -23,3 +23,8 @@ The template makes use of:
 3. Run the cloudformation stack to setup the CI/CD process in your AWS account.
 4. Start writing your code!
 
+
+
+
+
+Note: set chmod u+x on pre-push and packager!!
