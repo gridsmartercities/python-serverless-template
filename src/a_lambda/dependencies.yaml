@@ -1,7 +1,7 @@
 internal:
   - common.py
   - other_common.py
-  - test/test.py
-  - test/test/test.py
+  - utils/some_code.py
+  - utils/sub/code.py
 external:
   - aws-lambda-decorators
