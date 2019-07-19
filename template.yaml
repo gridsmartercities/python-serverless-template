@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 Transform: AWS::Serverless-2016-10-31
-Description: An AWS Serverless Specification template for the Monorepo Service
+Description: An AWS Serverless Specification template for the AWS Python Serverless Template API
 Parameters:
   RepoName:
     Type: String
