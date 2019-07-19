@@ -1,1 +1,1 @@
-# aws-python-template
+# python-serverless-template

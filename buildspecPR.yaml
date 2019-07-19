@@ -1,9 +1,9 @@
 version: 0.2
 env:
   variables:
-    REPO_NAME:                "aws-python-serverless-template"
+    REPO_NAME:                "python-serverless-template"
   parameter-store:
-    SAM_S3_BUCKET:            "/aws-python-serverless-template/build/SAM_S3_BUCKET"
+    SAM_S3_BUCKET:            "/python-serverless-template/build/SAM_S3_BUCKET"
 
 phases:
   install:
