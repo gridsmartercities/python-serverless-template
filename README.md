@@ -23,8 +23,13 @@ The template makes use of:
 3. Run the cloudformation stack to setup the CI/CD process in your AWS account.
 4. Start writing your code!
 
+## Optional Set up
+
+1. Set a pre-push Git hook:
+    - copy pre-push.sh script to .git/hooks folder (cp pre-push.sh .git/hooks) folder and run chmod u+x pre-push
 
 
 
 
 Note: set chmod u+x on pre-push and packager!!
+
