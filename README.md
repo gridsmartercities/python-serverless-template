@@ -96,7 +96,7 @@ This template is opinionated, and makes use of:
 
 ## Developer Set up
 
-To follow these instructions, you will need to be familiar with pip, and creating and managing Python virtual environments. If you are not, take a look at [this](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/).
+To follow these instructions, you will need to be familiar with pip, and creating and managing Python virtual environments. If you are not, take a look at [this][pip-and-ve].
 
 1. Clone your new repo locally.
     - Change "python-serverless-template" to "your-project-name" everywhere in the repo.
@@ -140,15 +140,28 @@ Two buildspec files are included, one for the "dev" build and the other for the 
 
 ### API Contract Specification
 
+You can define your API contract in api-contract.yaml, as per the [OpenApi 3.0 specification][openapi-3].
+
 ### SAM template
+
+You can define your AWS resources in api-template.yaml, as per AWS's Serverless Application Model ([SAM][sam]).
 
 ### Developer tools
 
-test, unit-tests, coverage
+Four small scripts have been added to ease the development process:
+
+- Run all unit tests ([unit-tests][tool-unit-tests])
+- Run individual unit tests ([test][tool-test])
+- Run test coverage ([coverage][tool-coverage])
+- Run swagger validation, cloudformation template validate, bandit, prospector, unittest and coverage in one command ([pre-push][tool-pre-push])
 
 ### Packager
 
+This is a custom tool that manages lambda dependencies so only the right common code and external dependencies are packaged with each lambda. The tool is used by the build process, but you can also run it [locally](#How-to-run-the-project-locally).
 
+The tool can work with json or yaml files. For each lambda, add a "dependencies.yaml" or "dependencies.json" in the lambda folder. In there, add all internal code dependencies in the "internal" array, and all the external packages needed by your lambda in the "external" array.
+
+The packager creates a .build folder when run, that contains a copy of the internal common files needed by that lambda, and a requirements.txt files with a list of all the external dependencies.
 
 ## How to work on the project
 
@@ -213,3 +226,8 @@ Note: Symlinks options
 [aws-account-create]: https://aws.amazon.com/premiumsupport/knowledge-center/create-and-activate-aws-account/
 [lambda]: https://docs.aws.amazon.com/lambda/latest/dg/welcome.html
 [dredd-hooks]: https://dredd.org/en/latest/hooks/js.html
+[pip-and-ve]: https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/
+[tool-unit-tests]: https://github.com/gridsmartercities/python-serverless-template/unit-tests
+[tool-test]: https://github.com/gridsmartercities/python-serverless-template/test
+[tool-coverage]: https://github.com/gridsmartercities/python-serverless-template/coverage
+[tool-pre-push]: https://github.com/gridsmartercities/python-serverless-template/pre-push

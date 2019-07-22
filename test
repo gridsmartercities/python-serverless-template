@@ -21,4 +21,9 @@ shift $((OPTIND-1))
 
 [ "${1:-}" = "--" ] && shift
 
+if [[ $# == 0 ]]; then
+    show_help
+    exit 0
+fi
+
 python -m unittest $1
