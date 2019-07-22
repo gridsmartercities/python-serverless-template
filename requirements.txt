@@ -1,4 +1,6 @@
 aws-lambda-decorators
+awscli
+aws-sam-cli
 bandit
 coverage
 dredd-hooks
