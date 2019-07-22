@@ -6,7 +6,7 @@
 
 # python-serverless-template
 
-We believe Serverless technologies in general, and AWS Serverless in particular, are great. The barrier to entry, however, can be high and setting up a Python project can take a bit of effort.
+Serverless technologies in general, and AWS Serverless in particular are great. The barrier to entry, however, can be high and setting up a Python project can take a bit of effort.
 
 This is a Github Template to generate Serverless APIs (and more) in Python using AWS SAM with hopefully minimum effort, so you can concentrate on writing your API's business logic pretty much from the start.
  
@@ -22,7 +22,7 @@ The template is opinionated, and makes use of:
 - [Coverage][coverage], to ensure the Python code is 100% unit tested
 - [Prospector][prospector], a python tool to check code quality.
 - [pylint_quotes][pylint-quotes], a [pylint][pylint] plugin to ensure a consistent Python quotation style throughout the project.
-- [Bandit][bandit], a security testing tool
+- [Bandit][bandit], a security testing tool.
 - [Dredd][dredd], for contract testing against the OpenAPI definition, with hooks written in Python.
 - A custom packaging tool to ease the sharing of code between lambdas.
 
@@ -30,25 +30,82 @@ The template is opinionated, and makes use of:
 ## Project Set up
 
 1. Create a Github repo by clicking on the Github template button above.
-2. Create an AWS account if you don't have one already.
-3. Run the cloudformation stack to setup the CI/CD process in your AWS account (AWS codebuild has a [cost][codebuild-cost])
-    a. cloudformation
-    b. permissions
-    c. Update the Github webhooks
-4. To stop contributors from committing code directly to the master branch, setup a master branch protection rule in github. Only Peer reviewed, approved Pull Requests will be allowed to be merged into the master branch. Be aware that, at the time of writing, setting up branch protection in Github has a cost. 
+    - Change "python-serverless-template" to "your-project-name" everywhere in the repo.
+2. [Create an AWS account][aws-account-create] if you don't have one already.
+3. Create an AWS S3 bucket:
+    - In your AWS account, go to services and type s3.
+    - In S3, click on the "Create bucket" button.
+    - In the wizard, enter your-project-name-build-bucket in the "Name" input box.
+    - Click Next until you complete the wizard.
+4. Create a "dev" codebuild project in your account:    
+    - In your AWS account, go to services and type codebuild.
+    - Select the region you want to use from the top-right Region dropdown.
+    - In codebuild, click on the "Create build project" button.
+    - Enter your-project-name-dev as the "Project name".
+    - In the "Source" section, select "GitHub" as the "Source Provider".
+    - With "Connect using OAuth" selected, click on "Connect to GitHub". 
+    - You should be taken to a github.com authorization page. AWS codebuild might need access to your organization. If so, click on the "Grant" button to the side of your organization name. Finally, click on "Authorize aws-codesuite" (you might need to confirm your github password).
+    - On the "Primary source webhook events" section, select the "Rebuild every time a code change is pushed to this repository" option.
+    - In the "Event type" section, select "PULL_REQUEST_CREATED", "PULL_REQUEST_UPDATED", and "PULL_REQUEST_REOPENED" options. We want the build to be triggered when a GitHub Pull Request is created, updated or reopened.
+    - In the "Environment" section, select "Managed Image".
+    - Select "Ubuntu" in the "Operating system" dropdown.
+    - Select "standard" in the "Runtime(s)" dropdown.
+    - Select "aws/codebuild/standard:1.0" in the "Image" dropdown and leave "Always use the latest image for this runtime version" selected in the "Image version" dropdown.
+    - Ensure "New service role" is selected in the "Service role" option.
+    - Enter codebuild-your-project-name-dev-service-role in the "Role name" input box.
+    - In the "Buildspec" section, leave "Use a buildspec file" selected, and enter buildspec-dev.yaml in the "Buildpec name - optional" input box.
+    - Finally, click on "Create build project" at the bottom of the page.
+5. Update the "dev" webhook in Github, to trigger the AWS codebuild on Pull Requests only:
+    - In your github account, select "Settings".
+    - Go to the "Webhooks" section. You should see a webhook created by AWS codebuild. Click on "Edit".
+    - In the "Which events would you like to trigger this webhook?" select "Let me select individual events." and tick the "Pull requests" box only.
+    - Click on "Update webhook" at the bottom.
+6. Create a "stg" codebuild project in your account, as per point 4 above, and with the following changes:
+    - Replace "dev" for "stg" everywhere.
+    - In the "Event type" section select just "PUSH" as "Event type", and expand the "Start a build under this conditions" section. In the "HEAD_REF - optional" input, add ^refs/heads/master$. We want the build to be triggered by a push to the GitHub master branch only.
+7. Update the "stg" webhook in Github, to trigger the AWS codebuild on Push to the master branch only. 
+    - In your github account, select "Settings".
+    - Go to the "Webhooks" section. You should see a webhook created by AWS codebuild. Click on "Edit".
+    - In the "Which events would you like to trigger this webhook?" select "Just the push event" option.
+    - Click on "Update webhook" at the bottom.
+8. (Optional) To stop contributors from committing code directly to the master branch, setup a master branch protection rule in github. Only Peer reviewed, approved Pull Requests will be allowed to be merged into the master branch.
+    - in your GitHub account, select "Settings".
+    - Go to the "Branches" section, and click on "Add rule"
+    - In the Branch name pattern, enter "master"
+    - In the Rule settings:
+        - select "Require pull request reviews before merging", and "Dismiss stale pull request approvals when new commits are pushed".
+        - select "Require status checks to pass before merging", and "Require branches to be up to date before merging". After running your first build (when raising your first Pull Request), you should be able to make the codebuild run required in the "status checks" area of this section.
+        - select "Include administrators".
+        - click on the "Create" button.
+9. (Optional) With this codebuild setup, it is likely codebuild will raise permissions issues when running the build. The correct option to manage this is to add the missing permissions to the AWS Policies associated to the codebuild roles you created when setting up the build projects. This can, however, be time consuming and you might want to give the dev and stg codebuild roles Administrator privileges. To do that:
+    - In AWS, go to "Services" and type iam
+    - In IAM, select "Roles"
+    - Click on your dev role (codebuild-your-project-name-dev-service-role).
+    - Click on "Attach policies", and select "AdministratorAccess".
+    - Click on the "Attach policy" button.
+    - Repeat for the stg role (codebuild-your-project-name-stg-service-role).
+10. Codebuild will need to access your S3 bucket. It does so by having the bucket name added as a parameter in the buildspec files. To add the bucket name to the parameter store:
+    - In AWS, go to "Services" and type systems manager.
+    - Select "Parameter Store".
+    - Click on the "Create parameter" button.
+    - Enter "/your-project-name/build/SAM_S3_BUCKET" in the "Name" input.
+    - Ensure "Standar" and "String" are selected in "Tier" and "Type".
+    - Enter "your-project-name-build-bucket" in the "Value" textarea.
+    
+A NOTE ON COSTS:
+
+1. [Codebuild has a cost][codebuild-cost])
+2. At the time of writing, setting up a branch protection rule in Github has a cost. 
 
 ## Developer Set up
 
 To follow these instructions, you will need to be familiar with pip, and creating and managing Python virtual environments. If you are not, take a look at [this](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/).
 
-1. Clone your new repo locally
-2. Create a Python virtual environment
-3. Install the development requirements by running "pip install -r requirements.txt"
-4. Take a look at the [Project Structure](#Project-Structure) section below, and start writing your code!
-
-Additionally, you can:
-
-1. Set a pre-push Git hook to check your code before pushing it to your Github branch:
+1. Clone your new repo locally.
+2. Create a Python virtual environment.
+3. Install the development requirements by running "pip install -r requirements.txt".
+4. Take a look at the [Project Structure](#Project-Structure) section below, and start writing your code.
+5. (Optional) Set a pre-push Git hook to check your code before pushing it to your Github branch:
     - copy pre-push script to .git/hooks folder (cp pre-push .git/hooks) folder
     - give execute permissions to pre-push script (chmod u+x .git/hooks/pre-push)
     
@@ -135,3 +192,4 @@ Note: Symlinks options
 [dredd]: https://github.com/apiaryio/dredd
 [codebuild-badge]: https://codebuild.eu-west-2.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiTnE5ck1FRWpyK25SVm1tMTdnT3RBUENsRzBLWDREYjJ0ZUZsTkNacVAxMFFhUmxDaWxkeE43MWU1cnlzNnNESGw3QzJTdzduU25vVUFNaDN3UEE5bzFBPSIsIml2UGFyYW1ldGVyU3BlYyI6InB2LzE2MGRLY3czVXpmdlQiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master
 [codebuild-cost]: https://aws.amazon.com/codebuild/pricing/
+[aws-account-create]: https://aws.amazon.com/premiumsupport/knowledge-center/create-and-activate-aws-account/
