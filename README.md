@@ -89,7 +89,7 @@ This template is opinionated, and makes use of:
     - Ensure "Standar" and "String" are selected in "Tier" and "Type".
     - Enter "your-project-name-build-bucket" in the "Value" textarea.
     
-A NOTE ON COSTS:
+### A NOTE ON COSTS:
 
 1. [Codebuild has a cost][codebuild-cost] of around $1 per 200 build minutes beyond the first 100 free-tier minutes.
 2. You might need a GitHub Pro ($7 per month) account to setup branch protection rules.
@@ -108,7 +108,7 @@ To follow these instructions, you will need to be familiar with pip, and creatin
     - copy pre-push script to .git/hooks folder (cp pre-push .git/hooks) folder
     - give execute permissions to pre-push script (chmod u+x .git/hooks/pre-push)
     
-To run dredd locally:
+### To run dredd locally:
 
 1. Install dredd locally by running "npm install dredd"
 2. After creating a Pull Request, go to your AWS codebuild project and take a look at the BASE_URL in the codebuild logs (you can also get it from ApiGateway)
