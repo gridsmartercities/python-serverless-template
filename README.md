@@ -138,16 +138,16 @@ The .prospector.yaml and the .pylintrc files allows you to change the way prospe
 
 Two buildspec files are included, one for the "dev" build and the other for the "stg" (Staging) build. A production build could also be generated from the "stg" buildspec, and could be triggered by, say, if the integration tests have successfully run on the staging build.
 
-### 
+### API Contract Specification
 
+### SAM template
 
-12. Api Contract Specification
+### Developer tools
 
-13. Sam api template
+test, unit-tests, coverage
 
-16. Developer tools: test, unit-tests, coverage
+### Packager
 
-17. packager
 
 
 ## How to work on the project
@@ -162,6 +162,10 @@ Two buildspec files are included, one for the "dev" build and the other for the 
 8. If the build is green, get your code reviewed (and approved if ok) by another contributor
 9. If approved, rebase and merge into master
 10. To work on a new feature, repeat 1-9.
+
+## How to add a new API Gateway endpoint backed by a lambda function
+
+...
 
 ## How to run the project locally
 
