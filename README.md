@@ -193,6 +193,8 @@ If you add a dependency (to an internal file with common code, or to an external
 ## Future work
 
 Adding cloudformation templates to setup the codebuild projects.
+Nested stacks and SAM
+Nested OpenAPI contracts
 Add cfn-lint
 
 
