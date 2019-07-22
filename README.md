@@ -163,6 +163,8 @@ The tool can work with json or yaml files. For each lambda, add a "dependencies.
 
 The packager creates a .build folder when run, that contains a copy of the internal common files needed by that lambda, and a requirements.txt files with a list of all the external dependencies.
 
+Please note that if you run this packager locally, the .build folder might make the Bandit tests to take quite a lot of time. You might want to delete the .build folder once you've taken a look at it.
+
 ## How to work on the project
 
 1. git checkout master
@@ -178,31 +180,19 @@ The packager creates a .build folder when run, that contains a copy of the inter
 
 ## How to add a new API Gateway endpoint backed by a lambda function
 
-...
+You can add a new endpoint (or a method to an endpoint) in the api-contract.yaml. 
 
-## How to run the project locally
+You can define your AWS Function resource (and any other resources needed: database, roles, policies, ...) in the api-template.yaml SAM template.
 
-If you want to see if your lambdas work before uploading to AWS, run the following instructions from the buildspec-dev file:
+Create a folder with the same name in the tests folder, and add a python file with a test_ name to it. Start writing your unit tests there. Add a hooks.py file too if this lambda function needs to be contract tested (and you need to specify special hooks for dredd).
 
-1. ./packager
-2. sam build -s .build -t api-template.yaml
-...
+Create a new folder with the name of your feature inside the src folder, and add a python file with an adecuate name to it. In this python file, define your lambda function handler.
+
+If you add a dependency (to an internal file with common code, or to an external python package), add a dependencies.json or dependencies.yaml file to your lambda folder, and specify the dependencies there.
     
-## The Future
+## Future work
 
-1. Nested stacks and SAM ?
-2. Nested OpenApi ?
-
-
-Note: set chmod u+x on pre-push and packager!!
-
-Note: ensure you remove .build and .aws-build folders or bandit will take ages!!
-
-Note: requirements.txt on lambda folders will be overriden. The same with src folders!
-
-Note: Setup prod process
-
-Note: Symlinks options
+Adding cloudformation templates to setup the codebuild projects.
 
 
 [build-status]: https://codebuild.eu-west-2.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiTnE5ck1FRWpyK25SVm1tMTdnT3RBUENsRzBLWDREYjJ0ZUZsTkNacVAxMFFhUmxDaWxkeE43MWU1cnlzNnNESGw3QzJTdzduU25vVUFNaDN3UEE5bzFBPSIsIml2UGFyYW1ldGVyU3BlYyI6InB2LzE2MGRLY3czVXpmdlQiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master
