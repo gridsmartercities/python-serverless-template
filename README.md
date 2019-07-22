@@ -118,24 +118,32 @@ To follow these instructions, you will need to be familiar with pip, and creatin
     
 ## Project Structure
 
-1. Source code location
-2. Folder per individual lambda
-3. Lambda handler
-4. Dependencies file to manage internal and external dependencies
-5. Common code
+### Code
 
-6. Tests structure
-7. Folder per individual lambda
-8. Hooks per individual lambda
-9. Common code tests
+The source code is located in the src folder. All code common to more than 1 lambda should be placed in files in that directory (or subfolders in that directory) following the Single Responsibility and Interface Segregation principles.
 
-10. Integration tests
+Each lambda has its own folder inside src, which contains the lambda code itself and a dependencies (either yaml or json) file that indicates the internal (common code) and external dependencies (packages) the lambda needs.
 
-11. Config files: prospector and pylint
+### Tests
+
+Unit and contract tests are inside the tests folder, and follows the same structure as the code. Unit tests are placed in files starting with "test_", and contract tests are written as [Dredd hooks][dredd-hooks].
+
+Integration tests are separated into their own it folder.
+
+### Config Files
+
+The .prospector.yaml and the .pylintrc files allows you to change the way prospector runs. Other than forcing 120 characters per line, and the use of double quotes instead of single quotes (using the [pylint_quotes][pylint-quotes] plugin), the config files have the out of the box configuration for those tools. 
+
+### Buildspec Files
+
+Two buildspec files are included, one for the "dev" build and the other for the "stg" (Staging) build. A production build could also be generated from the "stg" buildspec, and could be triggered by, say, if the integration tests have successfully run on the staging build.
+
+### 
+
+
 12. Api Contract Specification
+
 13. Sam api template
-14. Setup cloudformation templates
-15. Buildspec files: pr and staging
 
 16. Developer tools: test, unit-tests, coverage
 
@@ -154,10 +162,6 @@ To follow these instructions, you will need to be familiar with pip, and creatin
 8. If the build is green, get your code reviewed (and approved if ok) by another contributor
 9. If approved, rebase and merge into master
 10. To work on a new feature, repeat 1-9.
-
-## How to create new API endpoints backed by a lambda function
-
-...
 
 ## How to run the project locally
 
@@ -204,3 +208,4 @@ Note: Symlinks options
 [codebuild-cost]: https://aws.amazon.com/codebuild/pricing/
 [aws-account-create]: https://aws.amazon.com/premiumsupport/knowledge-center/create-and-activate-aws-account/
 [lambda]: https://docs.aws.amazon.com/lambda/latest/dg/welcome.html
+[dredd-hooks]: https://dredd.org/en/latest/hooks/js.html
