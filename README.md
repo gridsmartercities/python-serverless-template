@@ -36,11 +36,11 @@ This template is opinionated, and makes use of:
     - Go to the *Source* section, and select *GitHub* as the Source Provider.
     - Ensure *Connect using OAuth* is selected, and click on the *Connect to GitHub* button.
     - Click the *Cancel* button to exit. Your AWS account can now access your GitHub account. 
-3. Run the setup-template.yaml stack to create the CI/CD build projects.
+3. Run the *setup-template.yaml* stack to create the CI/CD build projects.
     - In your AWS account, go to *Services* and type *cloudformation*.
     - In the *Stacks* section, click on the *Create stack* button.
     - In the *Specify Template* section, select *Upload a template file*.
-    - Click on the *Choose file* button, and select the setup-template.yaml cloudformation template located in this repository.
+    - Click on the *Choose file* button, and select the *setup-template.yaml* cloudformation template located in this repository.
     - Click on *Next*.
     - Enter a stack name (for example, my-service-stack-setup)
     - In the *Parameters* section, enter:
@@ -89,16 +89,21 @@ To follow these instructions, you will need to be familiar with pip, and creatin
 2. Create a Python virtual environment.
 3. Install the development requirements by running
 
-```pip install -r requirements.txt*```
+```pip install -r requirements.txt```
 
 4. Install the swagger cli by running
 
-```npm install swagger-cli*```
+```npm install swagger-cli```
 
 5. Take a look at the [Project Structure](#Project-Structure) section below, and start writing your code.
 6. (Optional) Set a pre-push Git hook to check your code before pushing it to your Github branch:
-    - Copy pre-push script to .git/hooks folder (cp pre-push .git/hooks) folder.
-    - Give execute permissions to pre-push script (chmod u+x .git/hooks/pre-push).
+    - Copy pre-push script to .git/hooks folder:
+    
+    ```cp pre-push .git/hooks```
+    
+    - Give execute permissions to pre-push script:
+    
+    ```chmod u+x .git/hooks/pre-push```
     
 ### To run dredd locally:
 
@@ -120,31 +125,31 @@ To follow these instructions, you will need to be familiar with pip, and creatin
 
 ### Code
 
-The source code is located in the src folder. All code common to more than 1 lambda should be placed in files in that directory (or subfolders in that directory) following the Single Responsibility and Interface Segregation principles.
+The source code is located in the src folder. All code shared by more than 1 lambda should be placed in files in that directory (or subfolders in that directory) following the Single Responsibility and Interface Segregation principles.
 
-Each lambda has its own folder inside src, which contains the lambda code itself and a dependencies (either yaml or json) file that indicates the internal (common code) and external dependencies (packages) the lambda needs.
+Each lambda has its own folder inside src, which contains the lambda code itself and a dependencies (either yaml or json) file that indicates the internal (common code) and external (packages) dependencies the lambda needs.
 
 ### Tests
 
-Unit and contract tests are inside the tests folder, and follows the same structure as the code. Unit tests are placed in files starting with *test_*, and contract tests are written as [Dredd hooks][dredd-hooks].
+Unit and contract tests are inside the tests folder, and follows the same structure as the code. Unit tests are placed in files starting with *test_* (for *unittest* discovery), and contract tests are written as [Dredd hooks][dredd-hooks].
 
-Integration tests are separated into their own it folder.
+Integration tests are separated into their own *it* folder.
 
 ### Config Files
 
-The .prospector.yaml and the .pylintrc files allows you to change the way prospector runs. Other than forcing 120 characters per line, and the use of double quotes instead of single quotes (using the [pylint_quotes][pylint-quotes] plugin), the config files have the out of the box configuration for those tools. 
+The .prospector.yaml and .pylintrc files allows you to change the way prospector runs. Other than forcing 120 characters per line, and the use of double quotes instead of single quotes (using the [pylint_quotes][pylint-quotes] plugin), the config files have the out of the box configuration for those tools. 
 
 ### Buildspec Files
 
-Two buildspec files are included, one for the *dev* build and the other for the *stg* (Staging) build. A production build could also be generated from the *stg* buildspec, and could be triggered by, say, if the integration tests have successfully run on the staging build.
+Two buildspec files are included, one for the *dev* build and the other for the *stg* (Staging) build. A production build could also be generated from the *stg* buildspec, and could be triggered when, say, the integration tests have successfully run on the staging build.
 
 ### API Contract Specification
 
-You can define your API contract in api-contract.yaml, as per the [OpenApi 3.0 specification][openapi-3].
+You can define your API contract in *api-contract.yaml*, as per the [OpenApi 3.0 specification][openapi-3].
 
 ### SAM template
 
-You can define your AWS resources in template.yaml, as per AWS's [Serverless Application Model][sam].
+You can define your AWS resources in *template.yaml*, as per AWS's [Serverless Application Model][sam].
 
 ### Developer tools
 
@@ -168,39 +173,56 @@ Four small scripts have been added to ease the development process:
 
 ### Packager
 
-This is a custom tool that manages lambda dependencies so only the right common code and external dependencies are packaged with each lambda. The tool is used by the build process only.
+This is a custom tool that manages lambda dependencies so only the right common code and external dependencies are packaged with each individual lambda. The tool is used by the build process only.
 
-The tool can work with json or yaml files. For each lambda, add a *dependencies.yaml* or *dependencies.json* in the lambda folder. In there, add all internal code dependencies in the *internal* array, and all the external packages needed by your lambda in the *external* array.
+The tool can work with json or yaml files. For each lambda, add a *dependencies.yaml* or *dependencies.json* in the lambda folder (the tool will skip folders without a dependencies file). In there, add all internal code dependencies in the *internal* array, and all the external packages needed by your lambda in the *external* array.
 
-The packager creates a .build folder when run, that contains a copy of the internal common files needed by that lambda, and a requirements.txt files with a list of all the external dependencies.
+The packager creates a .build folder when run, which contains a copy of the internal common files needed by that lambda, and a requirements.txt files with a list of all its external dependencies.
 
 Please note that if you run this packager locally, the .build folder might make the Bandit tests to take quite a lot of time. You might want to delete the .build folder once you've taken a look at it.
 
 ## How to work on the project
 
-1. Change to master branch: git checkout master
-2. Pull the code from the remote repo: git pull
-3. Create a new branch: git checkout -b your_new_feature_branch_name
+1. Change to master branch: 
+
+```git checkout master```
+
+2. Pull the code from the remote repo: 
+
+```git pull```
+
+3. Create a new branch: 
+
+```git checkout -b your_new_feature_branch_name```
+
 4. make your feature changes
-5. run checks with pre-push, or run them individually (swagger, cfn-lint, cloudformation validation, bandit, prospector, unittest, coverage). You can find the commands in the buildspec-dev.yaml file, and in the pre-push script.
-6. Push to remote repo: git push, or git push -u origin your_new_feature_branch_name if this is the first push (it will trigger an automatic pre-push check if you have configured the optional point 5 of the developer set up process).
-7. when finished, raise a PR in GitHub. This will trigger a build in your AWS account
-8. If the build is green, get your code reviewed (and approved if ok) by another contributor
-9. If approved, rebase and merge into master
+5. run checks with the pre-push, unit-tests, test or coverage tools, or run them individually (swagger, cfn-lint, cloudformation validation, bandit, prospector, unittest, coverage - you can find the commands in the buildspec-dev.yaml file, and in the pre-push script).
+6. Push to remote repo: 
+
+```git push```
+ 
+or 
+
+```git push -u origin your_new_feature_branch_name```
+ 
+ if this is the first push (it will trigger an automatic pre-push check if you have configured the optional point 5 of the developer set up process).
+7. Repeat 4-6 as many times as needed. When finished, raise a PR in GitHub. This will trigger a build of the *dev* codebuild project in your AWS account.
+8. If the build is green in GitHub, get your code reviewed (and approved if ok) by another contributor
+9. If approved, rebase and merge into master. This will trigger a build of the *stg* codebuild project in your AWS account, which will alert you by email in case of failure.
 10. To work on a new feature, repeat 1-9.
 
 ## How to add a new API Gateway endpoint backed by a lambda function
 
-You can add a new endpoint (or a method to an endpoint) in the api-contract.yaml. 
+You can add a new endpoint (or a method to an endpoint) in the *api-contract.yaml*. 
 
-You can define your AWS Function resource (and any other resources needed: database, roles, policies, ...) in the template.yaml SAM template.
+You can define your AWS Function resource (and any other resources needed: database, roles, policies, ...) in the *template.yaml* SAM template.
 
-Create a folder with the same name in the tests folder, and add a python file with a test_ name to it. Start writing your unit tests there. Add a hooks.py file too if this lambda function needs to be contract tested (and you need to specify some dredd hooks).
+Create a folder with the same name in the tests folder, and add a python file with a *test_* name to it. Start writing your unit tests there. Add a *hooks.py* file too if this lambda function needs to be contract tested (and you need to specify some dredd hooks).
 
-Create a new folder with the name of your feature inside the src folder, and add a python file with an adecuate name to it. In this python file, define your lambda function handler.
+Create a new folder with the name of your feature inside the *src* folder, and add a python file with an appropriate name to it. In this python file, define your lambda function handler.
 
 If you add a dependency (to an internal file with common code, or to an external python package), add a dependencies.json or dependencies.yaml file to your lambda folder, and specify the dependencies there.
-   
+
 
 [build-status]: https://codebuild.eu-west-2.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiTnE5ck1FRWpyK25SVm1tMTdnT3RBUENsRzBLWDREYjJ0ZUZsTkNacVAxMFFhUmxDaWxkeE43MWU1cnlzNnNESGw3QzJTdzduU25vVUFNaDN3UEE5bzFBPSIsIml2UGFyYW1ldGVyU3BlYyI6InB2LzE2MGRLY3czVXpmdlQiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master
 [mit-license-svg]: https://img.shields.io/badge/License-MIT-yellow.svg
