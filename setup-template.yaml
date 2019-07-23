@@ -22,11 +22,11 @@ Resources:
     Properties:
       Name: !Sub /${ServiceName}/build/SAM_S3_BUCKET
       Type: String
-      Value: !Sub ${ServiceName}-output-staging
+      Value: !Sub ${ServiceName}-output-stg
   CodebuildOutputS3Bucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Sub ${ServiceName}-output-staging
+      BucketName: !Sub ${ServiceName}-output-stg
       PublicAccessBlockConfiguration:
         BlockPublicAcls: true
         BlockPublicPolicy: true
@@ -46,7 +46,7 @@ Resources:
           build-status:
             - FAILED
           project-name:
-            - !Ref CodebuildStagingProject
+            - !Ref CodebuildStgProject
       Targets:
         - Arn: !Ref CodebuildAlarmTopic
           Id: !Sub ${ServiceName}-build-event-rule-target
@@ -80,11 +80,11 @@ Resources:
           - - Type: EVENT
               Pattern: PULL_REQUEST_CREATED,PULL_REQUEST_UPDATED,PULL_REQUEST_REOPENED
       TimeoutInMinutes: 10
-  CodebuildStagingProject:
+  CodebuildStgProject:
     Type: AWS::CodeBuild::Project
     Properties:
-      Name: !Sub ${ServiceName}-staging
-      ServiceRole: !GetAtt CodebuildStagingRole.Arn
+      Name: !Sub ${ServiceName}-stg
+      ServiceRole: !GetAtt CodebuildStgRole.Arn
       Artifacts:
         Type: no_artifacts
       Environment:
@@ -119,7 +119,7 @@ Resources:
             Action:
               - s3:PutObject
               - s3:GetObject
-            Resource: !Sub arn:aws:s3:::${ServiceName}-output-staging/*
+            Resource: !Sub arn:aws:s3:::${ServiceName}-output-stg/*
           - Effect: Allow
             Action: ssm:GetParameters
             Resource: "*"
@@ -163,7 +163,7 @@ Resources:
             Resource: !Sub arn:aws:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/${ServiceName}-*
       Roles:
         - !Ref CodebuildDevRole
-        - !Ref CodebuildStagingRole
+        - !Ref CodebuildStgRole
   CodebuildDevPolicy:
     Type: AWS::IAM::Policy
     Properties:
@@ -179,10 +179,10 @@ Resources:
             Resource: !Sub arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/${ServiceName}-dev*
       Roles:
         - !Ref CodebuildDevRole
-  CodebuildStagingPolicy:
+  CodebuildStgPolicy:
     Type: AWS::IAM::Policy
     Properties:
-      PolicyName: !Sub codebuild-${ServiceName}-staging-service-policy
+      PolicyName: !Sub codebuild-${ServiceName}-stg-service-policy
       PolicyDocument:
         Version: 2012-10-17
         Statement:
@@ -195,9 +195,9 @@ Resources:
               - logs:CreateLogGroup
               - logs:CreateLogStream
               - logs:PutLogEvents
-            Resource: !Sub arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/${ServiceName}-staging*
+            Resource: !Sub arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/${ServiceName}-stg*
       Roles:
-        - !Ref CodebuildStagingRole
+        - !Ref CodebuildStgRole
   CodebuildDevRole:
     Type: AWS::IAM::Role
     Properties:
@@ -211,10 +211,10 @@ Resources:
                   - codebuild.amazonaws.com
               Action:
                 - sts:AssumeRole
-  CodebuildStagingRole:
+  CodebuildStgRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !Sub codebuild-${ServiceName}-staging-service-role
+      RoleName: !Sub codebuild-${ServiceName}-stg-service-role
       AssumeRolePolicyDocument:
           Version: 2012-10-17
           Statement:
