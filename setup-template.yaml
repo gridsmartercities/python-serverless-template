@@ -4,17 +4,17 @@ Description: Build template for Dev and Staging projects
 
 Parameters:
   ServiceName:
-    Description: Enter a lower case, high level service name without environment details. Used to autofill service names
+    Description: Enter a lower case, high level service name without environment details. Used to autofill service names. For example, my-service-name
     Type: String
     Default: "{SERVICE}"
   GitRepo:
-    Description: Source uri of git repo to clone
+    Description: Source uri of git repo to clone, for example https://github.com/gridsmartercities/python-serverless-template.git
     Type: String
-    Default: https://github.com/gridsmartercities/{REPO}.git
+    Default: "{REPO}"
   AlertEmail:
-    Description: Email address to send staging build alerts to
+    Description: Email address to send staging build alerts to, or example you@example.com
     Type: String
-    Default: "{EMAIL}@gridsmartercities.com"
+    Default: "{EMAIL}"
 
 Resources:
   SamS3BucketParameter:
