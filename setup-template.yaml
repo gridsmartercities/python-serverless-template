@@ -130,6 +130,7 @@ Resources:
               - iam:DeleteRole
               - iam:AttachRolePolicy
               - iam:DetachRolePolicy
+              - iam:PassRole
             Resource: "*"
           - Effect: Allow
             Action:
