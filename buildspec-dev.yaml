@@ -10,6 +10,8 @@ phases:
     commands:
       # Installing swagger cli for OpenApi 3.0 validation
       - npm install -g -q swagger-cli
+      # Installing cfn linting
+      - npm install -g cfn-lint
       # Installing dredd contract testing tool
       - npm install -g -q dredd --unsafe-perm=true
       # Installing pip
@@ -22,6 +24,8 @@ phases:
     commands:
       # Validate the SAM template
       - aws cloudformation validate-template --template-body file://template.yaml
+      # Checking the SAM template
+      - cfn-lint validate template.yaml
       # Validate the OpenApi 3.0 specification
       - swagger-cli validate api-contract.yaml
       # Running all prospector tools for code quality analysis
