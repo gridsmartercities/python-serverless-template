@@ -125,11 +125,11 @@ Resources:
             Resource: "*"
           - Effect: Allow
             Action:
-              - iam:CreateRole
-              - iam:DetachRolePolicy
+              - iam:GetRole
               - iam:CreateRole
               - iam:DeleteRole
               - iam:AttachRolePolicy
+              - iam:DetachRolePolicy
             Resource: "*"
           - Effect: Allow
             Action:
