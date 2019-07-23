@@ -152,12 +152,12 @@ Please note that if you run this packager locally, the .build folder might make 
 
 ## How to work on the project
 
-1. git checkout master
-2. git pull
-3. git checkout -b your_new_feature_branch_name
+1. Change to master branch: git checkout master
+2. Pull the code from the remote repo: git pull
+3. Create a new branch: git checkout -b your_new_feature_branch_name
 4. make your feature changes
-5. run checks with pre-push, or run them individually (swagger, cloudformation, bandit, prospector, unittest, coverage). You can find the commands in the buildspec-dev.yaml file, and in the pre-push script.
-6. git push -u origin your_new_feature_branch_name (it will trigger an automatic pre-push check if you have configured the optional point 5 of the developer set up process).
+5. run checks with pre-push, or run them individually (swagger, cfn-lint, cloudformation validation, bandit, prospector, unittest, coverage). You can find the commands in the buildspec-dev.yaml file, and in the pre-push script.
+6. Push to remote repo: git push, or git push -u origin your_new_feature_branch_name if this is the first push (it will trigger an automatic pre-push check if you have configured the optional point 5 of the developer set up process).
 7. when finished, raise a PR in GitHub. This will trigger a build in your AWS account
 8. If the build is green, get your code reviewed (and approved if ok) by another contributor
 9. If approved, rebase and merge into master
