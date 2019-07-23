@@ -31,13 +31,13 @@ This template is opinionated, and makes use of:
 1. Create a Github repo by clicking on the Github *Use this template* button above.
 2. [Create an AWS account][aws-account-create] if you don't have one already.
 3. Ensure AWS has access to your GitHub account.
-    - In your AWS account, go to *Services* and type codebuild.
+    - In your AWS account, go to *Services* and type *codebuild*.
     - In the *Build Projects*, Click the *Create build project* button.
     - Go to the *Source* section, and select *GitHub* as the Source Provider.
     - Ensure *Connect using OAuth* is selected, and click on the *Connect to GitHub* button.
     - Click the *Cancel* button to exit. Your AWS account can now access your GitHub account. 
 3. Run the setup-template.yaml stack to create the CI/CD build projects.
-    - In your AWS account, go to *Services* and type cloudformation.
+    - In your AWS account, go to *Services* and type *cloudformation*.
     - In the *Stacks* section, click on the *Create stack* button.
     - In the *Specify Template* section, select *Upload a template file*.
     - Click on the *Choose file* button, and select the setup-template.yaml cloudformation template located in this repository.
@@ -51,7 +51,7 @@ This template is opinionated, and makes use of:
     - Accept the *Capabilities and transforms* options at the bottom of the page, and click the *Create stack* button.
     - Wait until the stack is created.
 4. Update the *dev* webhook in Github, to trigger the AWS codebuild on Pull Requests only:
-    - In your AWS account, got to *Services* and type codebuild.
+    - In your AWS account, got to *Services* and type *codebuild*.
     - Select the dev codebuild project.
     - Select the *Build details* tab.
     - In the *Primary source webhook events* section, click the external webhook link to go to GitHub. 
