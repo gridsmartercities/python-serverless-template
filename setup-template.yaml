@@ -14,7 +14,7 @@ Parameters:
   AlertEmail:
     Description: Email address to send staging build alerts to
     Type: String
-    Default: {EMAIL}@gridsmartercities.com
+    Default: "{EMAIL}@gridsmartercities.com"
 
 Resources:
   SamS3BucketParameter:
@@ -122,7 +122,7 @@ Resources:
             Resource: !Sub arn:aws:s3:::${ServiceName}-output-staging/*
           - Effect: Allow
             Action: ssm:GetParameters
-            Resource: *
+            Resource: "*"
           - Effect: Allow
             Action:
               - apigateway:PUT
@@ -137,7 +137,7 @@ Resources:
               - cloudformation:CreateChangeSet
               - cloudformation:GetTemplateSummary
               - cloudformation:ListStacks
-            Resource: *
+            Resource: "*"
           - Effect: Allow
             Action:
               - cloudformation:DescribeStacks
@@ -173,7 +173,7 @@ Resources:
           - Effect: Allow
             Action:
               - cloudformation:DeleteStack
-            Resource: *
+            Resource: "*"
           - Effect: Allow
             Action:
               - logs:CreateLogGroup
