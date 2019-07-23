@@ -28,48 +28,48 @@ This template is opinionated, and makes use of:
 
 ## Project Set up
 
-1. Create a Github repo by clicking on the Github template button above.
+1. Create a Github repo by clicking on the Github *Use this template* button above.
 2. [Create an AWS account][aws-account-create] if you don't have one already.
 3. Ensure AWS has access to your GitHub account.
-    - In your AWS account, go to "Services" and type codebuild.
-    - In the "Build Projects", Click the "Create build project" button.
-    - Go to the "Source" section, and select "GitHub" as the Source Provider.
-    - Ensure "Connect using OAuth" is selected, and click on the "Connect to GitHub" button.
-    - Click the "Cancel" button to exit. Your AWS account can now access your GitHub account. 
+    - In your AWS account, go to *Services* and type codebuild.
+    - In the *Build Projects*, Click the *Create build project* button.
+    - Go to the *Source* section, and select *GitHub* as the Source Provider.
+    - Ensure *Connect using OAuth* is selected, and click on the *Connect to GitHub* button.
+    - Click the *Cancel* button to exit. Your AWS account can now access your GitHub account. 
 3. Run the setup-template.yaml stack to create the CI/CD build projects.
-    - In your AWS account, go to "Services" and type cloudformation.
-    - In the "Stacks" section, click on the "Create stack" button.
-    - In the "Specify Template" section, select "Upload a template file".
-    - Click on the "Choose file" button, and select the setup-template.yaml cloudformation template located in this repository.
-    - Click on "Next".
+    - In your AWS account, go to *Services* and type cloudformation.
+    - In the *Stacks* section, click on the *Create stack* button.
+    - In the *Specify Template* section, select *Upload a template file*.
+    - Click on the *Choose file* button, and select the setup-template.yaml cloudformation template located in this repository.
+    - Click on *Next*.
     - Enter a stack name (for example, my-service-stack-setup)
-    - In the "Parameters" section, enter:
+    - In the *Parameters* section, enter:
         - The email address where staging errors should be sent to.
         - The full url to your GitHub repo (for example, https://github.com/gridsmartercities/python-serverless-template.git)
         - The name of your service (for example, my-service-name).
-    - Click "Next".
-    - Accept the "Capabilities and transforms" options at the bottom of the page, and click the "Create stack" button.
+    - Click *Next*.
+    - Accept the *Capabilities and transforms* options at the bottom of the page, and click the *Create stack* button.
     - Wait until the stack is created.
-4. Update the "dev" webhook in Github, to trigger the AWS codebuild on Pull Requests only:
-    - In your AWS account, got to "Services" and type codebuild.
+4. Update the *dev* webhook in Github, to trigger the AWS codebuild on Pull Requests only:
+    - In your AWS account, got to *Services* and type codebuild.
     - Select the dev codebuild project.
-    - Select the "Build details" tab.
-    - In the "Primary source webhook events" section, click the external webhook link to go to GitHub. 
-    - In the "Which events would you like to trigger this webhook?" select "Let me select individual events." and tick the "Pull requests" box only.
-    - Click on "Update webhook" at the bottom.
-5. Update the "stg" webhook in Github, to trigger the AWS codebuild on Push to the master branch only. 
-    - Follow the instructions on point 4, but for the "stg" codebuild project and webhook.
-    - In the "Which events would you like to trigger this webhook?" select "Just the push event" option.
-    - Click on "Update webhook" at the bottom.
+    - Select the *Build details* tab.
+    - In the *Primary source webhook events* section, click the external webhook link to go to GitHub. 
+    - In the *Which events would you like to trigger this webhook?* select *Let me select individual events.* and tick the *Pull requests* box only.
+    - Click on *Update webhook* at the bottom.
+5. Update the *stg* webhook in Github, to trigger the AWS codebuild on Push to the master branch only. 
+    - Follow the instructions on point 4, but for the *stg* codebuild project and webhook.
+    - In the *Which events would you like to trigger this webhook?* select *Just the push event* option.
+    - Click on *Update webhook* at the bottom.
 6. (Optional) To stop contributors from committing code directly to the master branch, setup a master branch protection rule in GitHub. Only Peer reviewed, approved Pull Requests will be allowed to be merged into the master branch.
-    - in your GitHub account, select "Settings".
-    - Go to the "Branches" section, and click on "Add rule"
-    - In the Branch name pattern, enter "master"
+    - in your GitHub account, select *Settings*.
+    - Go to the *Branches* section, and click on *Add rule*
+    - In the Branch name pattern, enter *master*
     - In the Rule settings:
-        - select "Require pull request reviews before merging", and "Dismiss stale pull request approvals when new commits are pushed".
-        - select "Require status checks to pass before merging", and "Require branches to be up to date before merging". After running your first build (when raising your first Pull Request), you should be able to make the codebuild run required in the "status checks" area of this section.
-        - select "Include administrators".
-        - click on the "Create" button.
+        - select *Require pull request reviews before merging*, and *Dismiss stale pull request approvals when new commits are pushed*.
+        - select *Require status checks to pass before merging*, and *Require branches to be up to date before merging*. After running your first build (when raising your first Pull Request), you should be able to make the codebuild run required in the *status checks* area of this section.
+        - select *Include administrators*.
+        - click on the *Create* button.
         
 ### A NOTE ON PERMISSIONS
 
@@ -85,10 +85,10 @@ As you add AWS services to your project, you will likely need to update the code
 To follow these instructions, you will need to be familiar with pip, and creating and managing Python virtual environments. If you are not, take a look at [this][pip-and-ve].
 
 1. Clone your new repo locally.
-    - Change "python-serverless-template" to "your-project-name" everywhere in the repo.
+    - Change *python-serverless-template* to *your-project-name* everywhere in the repo.
 2. Create a Python virtual environment.
-3. Install the development requirements by running "pip install -r requirements.txt".
-4. Install the swagger cli by running "npm install swagger-cli"
+3. Install the development requirements by running *pip install -r requirements.txt*.
+4. Install the swagger cli by running *npm install swagger-cli*
 5. Take a look at the [Project Structure](#Project-Structure) section below, and start writing your code.
 6. (Optional) Set a pre-push Git hook to check your code before pushing it to your Github branch:
     - copy pre-push script to .git/hooks folder (cp pre-push .git/hooks) folder
@@ -96,10 +96,10 @@ To follow these instructions, you will need to be familiar with pip, and creatin
     
 ### To run dredd locally:
 
-1. Install dredd locally by running "npm install dredd"
+1. Install dredd locally by running *npm install dredd*
 2. After creating a Pull Request, go to your AWS codebuild project and take a look at the BASE_URL in the codebuild logs (you can also get it from ApiGateway)
-3. Add the BASE_URL to your local environment variables by running "export BASE_URL=your-base-url-from-codebuild"
-4. Run dredd by typing "dredd api-contract.yaml $BASE_URL --hookfiles=tests/hooks.py --hookfiles=tests/*/hooks.py --language python"
+3. Add the BASE_URL to your local environment variables by running *export BASE_URL=your-base-url-from-codebuild*
+4. Run dredd by typing *dredd api-contract.yaml $BASE_URL --hookfiles=tests/hooks.py --hookfiles=tests/*/hooks.py --language python*
     
     
 ## Project Structure
@@ -112,7 +112,7 @@ Each lambda has its own folder inside src, which contains the lambda code itself
 
 ### Tests
 
-Unit and contract tests are inside the tests folder, and follows the same structure as the code. Unit tests are placed in files starting with "test_", and contract tests are written as [Dredd hooks][dredd-hooks].
+Unit and contract tests are inside the tests folder, and follows the same structure as the code. Unit tests are placed in files starting with *test_*, and contract tests are written as [Dredd hooks][dredd-hooks].
 
 Integration tests are separated into their own it folder.
 
@@ -122,7 +122,7 @@ The .prospector.yaml and the .pylintrc files allows you to change the way prospe
 
 ### Buildspec Files
 
-Two buildspec files are included, one for the "dev" build and the other for the "stg" (Staging) build. A production build could also be generated from the "stg" buildspec, and could be triggered by, say, if the integration tests have successfully run on the staging build.
+Two buildspec files are included, one for the *dev* build and the other for the *stg* (Staging) build. A production build could also be generated from the *stg* buildspec, and could be triggered by, say, if the integration tests have successfully run on the staging build.
 
 ### API Contract Specification
 
@@ -145,7 +145,7 @@ Four small scripts have been added to ease the development process:
 
 This is a custom tool that manages lambda dependencies so only the right common code and external dependencies are packaged with each lambda. The tool is used by the build process only.
 
-The tool can work with json or yaml files. For each lambda, add a "dependencies.yaml" or "dependencies.json" in the lambda folder. In there, add all internal code dependencies in the "internal" array, and all the external packages needed by your lambda in the "external" array.
+The tool can work with json or yaml files. For each lambda, add a *dependencies.yaml* or *dependencies.json* in the lambda folder. In there, add all internal code dependencies in the *internal* array, and all the external packages needed by your lambda in the *external* array.
 
 The packager creates a .build folder when run, that contains a copy of the internal common files needed by that lambda, and a requirements.txt files with a list of all the external dependencies.
 
