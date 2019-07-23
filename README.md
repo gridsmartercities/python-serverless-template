@@ -42,7 +42,7 @@ This template is opinionated, and makes use of:
     - In the "Specify Template" section, select "Upload a template file".
     - Click on the "Choose file" button, and select the setup-template.yaml cloudformation template located in this repository.
     - Click on "Next".
-    - Enter a stack name (for example, myservicestack)
+    - Enter a stack name (for example, my-service-stack-setup)
     - In the "Parameters" section, enter:
         - The email address where staging errors should be sent to.
         - The full url to your GitHub repo (for example, https://github.com/gridsmartercities/python-serverless-template.git)
@@ -174,13 +174,7 @@ Create a folder with the same name in the tests folder, and add a python file wi
 Create a new folder with the name of your feature inside the src folder, and add a python file with an adecuate name to it. In this python file, define your lambda function handler.
 
 If you add a dependency (to an internal file with common code, or to an external python package), add a dependencies.json or dependencies.yaml file to your lambda folder, and specify the dependencies there.
-    
-## Future work
-
-Adding cloudformation templates to setup the codebuild projects.
-Nested stacks and SAM
-Nested OpenAPI contracts
-
+   
 
 [build-status]: https://codebuild.eu-west-2.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiTnE5ck1FRWpyK25SVm1tMTdnT3RBUENsRzBLWDREYjJ0ZUZsTkNacVAxMFFhUmxDaWxkeE43MWU1cnlzNnNESGw3QzJTdzduU25vVUFNaDN3UEE5bzFBPSIsIml2UGFyYW1ldGVyU3BlYyI6InB2LzE2MGRLY3czVXpmdlQiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master
 [mit-license-svg]: https://img.shields.io/badge/License-MIT-yellow.svg
