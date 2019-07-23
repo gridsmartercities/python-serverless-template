@@ -96,7 +96,7 @@ Resources:
           Type: OAUTH
         Location: !Sub ${GitRepo}
         Type: GITHUB
-        BuildSpec: buildspec-staging.yaml
+        BuildSpec: buildspec-stg.yaml
       Triggers:
         Webhook: true
         FilterGroups:
