@@ -51,13 +51,14 @@ This template is opinionated, and makes use of:
     - Accept the "Capabilities and transforms" options at the bottom of the page, and click the "Create stack" button.
     - Wait until the stack is created.
 4. Update the "dev" webhook in Github, to trigger the AWS codebuild on Pull Requests only:
-    - In your GitHub account, select "Settings".
-    - Go to the "Webhooks" section and look for the "dev" webhook. Click on "Edit".
+    - In your AWS account, got to "Services" and type codebuild.
+    - Select the dev codebuild project.
+    - Select the "Build details" tab.
+    - In the "Primary source webhook events" section, click the external webhook link to go to GitHub. 
     - In the "Which events would you like to trigger this webhook?" select "Let me select individual events." and tick the "Pull requests" box only.
     - Click on "Update webhook" at the bottom.
 5. Update the "stg" webhook in Github, to trigger the AWS codebuild on Push to the master branch only. 
-    - In your GitHub account, select "Settings".
-    - Go to the "Webhooks" section and look for the "staging" webhook. Click on "Edit".
+    - Follow the instructions on point 4, but for the "stg" codebuild project and webhook.
     - In the "Which events would you like to trigger this webhook?" select "Just the push event" option.
     - Click on "Update webhook" at the bottom.
 6. (Optional) To stop contributors from committing code directly to the master branch, setup a master branch protection rule in GitHub. Only Peer reviewed, approved Pull Requests will be allowed to be merged into the master branch.

@@ -125,6 +125,14 @@ Resources:
             Resource: "*"
           - Effect: Allow
             Action:
+              - iam:CreateRole
+              - iam:DetachRolePolicy
+              - iam:CreateRole
+              - iam:DeleteRole
+              - iam:AttachRolePolicy
+            Resource: "*"
+          - Effect: Allow
+            Action:
               - apigateway:PUT
               - apigateway:POST
               - apigateway:PATCH
