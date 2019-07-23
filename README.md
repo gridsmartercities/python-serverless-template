@@ -184,7 +184,7 @@ You can add a new endpoint (or a method to an endpoint) in the api-contract.yaml
 
 You can define your AWS Function resource (and any other resources needed: database, roles, policies, ...) in the template.yaml SAM template.
 
-Create a folder with the same name in the tests folder, and add a python file with a test_ name to it. Start writing your unit tests there. Add a hooks.py file too if this lambda function needs to be contract tested (and you need to specify special hooks for dredd).
+Create a folder with the same name in the tests folder, and add a python file with a test_ name to it. Start writing your unit tests there. Add a hooks.py file too if this lambda function needs to be contract tested (and you need to specify some dredd hooks).
 
 Create a new folder with the name of your feature inside the src folder, and add a python file with an adecuate name to it. In this python file, define your lambda function handler.
 
