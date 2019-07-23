@@ -14,7 +14,7 @@ This template is opinionated, and makes use of:
 
 - [AWS SAM][sam] for the AWS resourses specification.
 - [AWS codebuild][codebuild] to setup CI/CD in your AWS account.
-- [cfn-python-lint][https://github.com/aws-cloudformation/cfn-python-lint] for cloudformation checking.
+- [cfn-python-lint][cfn-python-lint] for checking the cloudformation template.
 - [OpenApi 3][openapi-3] for the API contract specification.
 - The [Swagger CLI][swagger-cli] to validate the OpenAPI specification.
 - The Python [unittest][unittest] library for unit testing.
@@ -145,7 +145,7 @@ You can define your API contract in api-contract.yaml, as per the [OpenApi 3.0 s
 
 ### SAM template
 
-You can define your AWS resources in template.yaml, as per AWS's Serverless Application Model ([SAM][sam]).
+You can define your AWS resources in template.yaml, as per AWS's [Serverless Application Model][sam].
 
 ### Developer tools
 
@@ -158,7 +158,7 @@ Four small scripts have been added to ease the development process:
 
 ### Packager
 
-This is a custom tool that manages lambda dependencies so only the right common code and external dependencies are packaged with each lambda. The tool is used by the build process, but you can also run it [locally](#How-to-run-the-project-locally).
+This is a custom tool that manages lambda dependencies so only the right common code and external dependencies are packaged with each lambda. The tool is used by the build process only.
 
 The tool can work with json or yaml files. For each lambda, add a "dependencies.yaml" or "dependencies.json" in the lambda folder. In there, add all internal code dependencies in the "internal" array, and all the external packages needed by your lambda in the "external" array.
 
@@ -209,7 +209,7 @@ Nested OpenAPI contracts
 [swagger-cli]: https://www.npmjs.com/package/swagger-cli
 [unittest]: https://docs.python.org/3/library/unittest.html
 [coverage]: https://coverage.readthedocs.io/en/v4.5.x/
-[prospector]: https://coverage.readthedocs.io/en/v4.5.x/
+[prospector]: https://prospector.readthedocs.io/en/master/
 [pylint-quotes]: https://github.com/edaniszewski/pylint-quotes
 [pylint]: https://www.pylint.org/
 [bandit]: https://bandit.readthedocs.io/en/latest/
@@ -220,7 +220,8 @@ Nested OpenAPI contracts
 [lambda]: https://docs.aws.amazon.com/lambda/latest/dg/welcome.html
 [dredd-hooks]: https://dredd.org/en/latest/hooks/js.html
 [pip-and-ve]: https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/
-[tool-unit-tests]: https://github.com/gridsmartercities/python-serverless-template/unit-tests
-[tool-test]: https://github.com/gridsmartercities/python-serverless-template/test
-[tool-coverage]: https://github.com/gridsmartercities/python-serverless-template/coverage
-[tool-pre-push]: https://github.com/gridsmartercities/python-serverless-template/pre-push
+[tool-unit-tests]: https://github.com/gridsmartercities/python-serverless-template/blob/master/unit-tests
+[tool-test]: https://github.com/gridsmartercities/python-serverless-template/blob/master/test
+[tool-coverage]: https://github.com/gridsmartercities/python-serverless-template/blob/master/coverage
+[tool-pre-push]: https://github.com/gridsmartercities/python-serverless-template/blob/master/pre-push
+[cfn-python-lint]: https://github.com/aws-cloudformation/cfn-python-lint
