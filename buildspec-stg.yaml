@@ -23,7 +23,7 @@ phases:
       # Execute packager tool so every lambda gets just the code and dependencies it needs
       - bash ./packager -q
       # Build the SAM template
-      - sam build -s .build -t api-template.yaml
+      - sam build -s .build -t template.yaml
       # Package the build
       - sam package --s3-bucket $SAM_S3_BUCKET --output-template-file NewSamTemplate.yaml
       # Deploy the package
