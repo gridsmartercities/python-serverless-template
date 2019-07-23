@@ -133,6 +133,10 @@ Resources:
             Resource: "*"
           - Effect: Allow
             Action:
+              - lambda:CreateFunction
+            Resource: "*"
+          - Effect: Allow
+            Action:
               - apigateway:PUT
               - apigateway:POST
               - apigateway:PATCH
