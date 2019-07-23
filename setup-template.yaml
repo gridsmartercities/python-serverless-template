@@ -135,6 +135,8 @@ Resources:
           - Effect: Allow
             Action:
               - lambda:CreateFunction
+              - lambda:GetFunctionConfiguration
+              - lambda:DeleteFunction
             Resource: "*"
           - Effect: Allow
             Action:
