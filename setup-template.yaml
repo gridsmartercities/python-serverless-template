@@ -138,6 +138,7 @@ Resources:
               - lambda:GetFunctionConfiguration
               - lambda:DeleteFunction
               - lambda:AddPermission
+              - lambda:UpdateFunctionCode
             Resource: "*"
           - Effect: Allow
             Action:
