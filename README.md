@@ -44,7 +44,7 @@ This template is opinionated, and makes use of:
     - Click on *Next*.
     - Enter a stack name (for example, my-service-stack-setup)
     - In the *Parameters* section, enter:
-        - The email address where staging errors should be sent to.
+        - The email address where staging build errors should be sent to.
         - The full url to your GitHub repo (for example, https://github.com/gridsmartercities/python-serverless-template.git)
         - The name of your service (for example, my-service-name).
     - Click *Next*.
