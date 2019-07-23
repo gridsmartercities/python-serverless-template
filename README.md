@@ -8,13 +8,13 @@
 
 This is a Github Template to generate Serverless APIs (and more) in Python using AWS SAM.
  
-This template does not use the fantastic [Serverless Framework][serverless-framewor]. You might want to look at it too.
+This template does not use the fantastic [Serverless Framework][serverless-framework]. You might want to look at it too.
 
 This template is opinionated, and makes use of:
 
 - [AWS SAM][sam] for the AWS resourses specification.
 - [AWS codebuild][codebuild] to setup CI/CD in your AWS account.
-- [OpenApi 3][openapi-3] for defining the API contract.
+- [OpenApi 3][openapi-3] for defining the API coFntract.
 - The [Swagger CLI][swagger-cli] to validate the OpenAPI specification.
 - The Python [unittest][unittest] library for unit testing.
 - [Coverage][coverage], to ensure the Python code is 100% unit tested
@@ -144,7 +144,7 @@ You can define your API contract in api-contract.yaml, as per the [OpenApi 3.0 s
 
 ### SAM template
 
-You can define your AWS resources in api-template.yaml, as per AWS's Serverless Application Model ([SAM][sam]).
+You can define your AWS resources in template.yaml, as per AWS's Serverless Application Model ([SAM][sam]).
 
 ### Developer tools
 
@@ -182,7 +182,7 @@ Please note that if you run this packager locally, the .build folder might make 
 
 You can add a new endpoint (or a method to an endpoint) in the api-contract.yaml. 
 
-You can define your AWS Function resource (and any other resources needed: database, roles, policies, ...) in the api-template.yaml SAM template.
+You can define your AWS Function resource (and any other resources needed: database, roles, policies, ...) in the template.yaml SAM template.
 
 Create a folder with the same name in the tests folder, and add a python file with a test_ name to it. Start writing your unit tests there. Add a hooks.py file too if this lambda function needs to be contract tested (and you need to specify special hooks for dredd).
 
