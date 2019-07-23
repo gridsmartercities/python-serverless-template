@@ -206,6 +206,7 @@ or
 ```git push -u origin your_new_feature_branch_name```
  
  if this is the first push (it will trigger an automatic pre-push check if you have configured the optional point 5 of the developer set up process).
+ 
 7. Repeat 4-6 as many times as needed. When finished, raise a PR in GitHub. This will trigger a build of the *dev* codebuild project in your AWS account.
 8. If the build is green in GitHub, get your code reviewed (and approved if ok) by another contributor
 9. If approved, rebase and merge into master. This will trigger a build of the *stg* codebuild project in your AWS account, which will alert you by email in case of failure.
