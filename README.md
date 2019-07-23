@@ -61,7 +61,7 @@ This template is opinionated, and makes use of:
     - Follow the instructions on point 4, but for the *stg* codebuild project and webhook.
     - In the *Which events would you like to trigger this webhook?* select *Just the push event* option.
     - Click on *Update webhook* at the bottom.
-6. (Optional) To stop contributors from committing code directly to the master branch, setup a master branch protection rule in GitHub. Only Peer reviewed, approved Pull Requests will be allowed to be merged into the master branch.
+6. (Optional) To stop contributors from committing code directly to the master branch, setup a master branch protection rule in GitHub. Only peer reviewed, approved Pull Requests will be allowed to be merged into the master branch.
     - in your GitHub account, select *Settings*.
     - Go to the *Branches* section, and click on *Add rule*
     - In the Branch name pattern, enter *master*
@@ -87,19 +87,33 @@ To follow these instructions, you will need to be familiar with pip, and creatin
 1. Clone your new repo locally.
     - Change *python-serverless-template* to *your-project-name* everywhere in the repo.
 2. Create a Python virtual environment.
-3. Install the development requirements by running *pip install -r requirements.txt*.
-4. Install the swagger cli by running *npm install swagger-cli*
+3. Install the development requirements by running
+
+```pip install -r requirements.txt*```
+
+4. Install the swagger cli by running
+
+```npm install swagger-cli*```
+
 5. Take a look at the [Project Structure](#Project-Structure) section below, and start writing your code.
 6. (Optional) Set a pre-push Git hook to check your code before pushing it to your Github branch:
-    - copy pre-push script to .git/hooks folder (cp pre-push .git/hooks) folder
-    - give execute permissions to pre-push script (chmod u+x .git/hooks/pre-push)
+    - Copy pre-push script to .git/hooks folder (cp pre-push .git/hooks) folder.
+    - Give execute permissions to pre-push script (chmod u+x .git/hooks/pre-push).
     
 ### To run dredd locally:
 
-1. Install dredd locally by running *npm install dredd*
+1. Install dredd locally by running
+
+```npm install dredd```
+
 2. After creating a Pull Request, go to your AWS codebuild project and take a look at the BASE_URL in the codebuild logs (you can also get it from ApiGateway)
-3. Add the BASE_URL to your local environment variables by running *export BASE_URL=your-base-url-from-codebuild*
-4. Run dredd by typing *dredd api-contract.yaml $BASE_URL --hookfiles=tests/hooks.py --hookfiles=tests/*/hooks.py --language python*
+3. Add the BASE_URL to your local environment variables by running 
+
+```export BASE_URL=your-base-url-from-codebuild```
+
+4. Run dredd by typing 
+
+```dredd api-contract.yaml $BASE_URL --hookfiles=tests/hooks.py --hookfiles=tests/*/hooks.py --language python```
     
     
 ## Project Structure
@@ -137,9 +151,20 @@ You can define your AWS resources in template.yaml, as per AWS's [Serverless App
 Four small scripts have been added to ease the development process:
 
 - Run all unit tests ([unit-tests][tool-unit-tests])
+
+```./unit-tests```
+
 - Run individual unit tests ([test][tool-test])
+
+```./test tests.a_lambda.test_a_lambda.ALambdaTests.test_success```
+
 - Run test coverage ([coverage][tool-coverage])
+
+```./coverage```
+
 - Run swagger validation, cloudformation template validate, bandit, prospector, unittest and coverage in one command ([pre-push][tool-pre-push])
+
+```./pre-push```
 
 ### Packager
 
