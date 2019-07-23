@@ -4,9 +4,9 @@ Description: Build template for Dev and Staging projects
 
 Parameters:
   ServiceName:
-    Description: High level service name without environment details, used to autofill service names
+    Description: Enter a lower case, high level service name without environment details. Used to autofill service names
     Type: String
-    Default: {SERVICE}
+    Default: "{SERVICE}"
   GitRepo:
     Description: Source uri of git repo to clone
     Type: String
@@ -20,7 +20,7 @@ Resources:
   SamS3BucketParameter:
     Type: AWS::SSM::Parameter
     Properties:
-      Name: !Sub ${ServiceName}/build/SAM_S3_BUCKET
+      Name: !Sub /${ServiceName}/build/SAM_S3_BUCKET
       Type: String
       Value: !Sub ${ServiceName}-output-staging
   CodebuildOutputS3Bucket:
