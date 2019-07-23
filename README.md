@@ -14,7 +14,8 @@ This template is opinionated, and makes use of:
 
 - [AWS SAM][sam] for the AWS resourses specification.
 - [AWS codebuild][codebuild] to setup CI/CD in your AWS account.
-- [OpenApi 3][openapi-3] for defining the API coFntract.
+- [cfn-python-lint][https://github.com/aws-cloudformation/cfn-python-lint] for cloudformation checking.
+- [OpenApi 3][openapi-3] for the API contract specification.
 - The [Swagger CLI][swagger-cli] to validate the OpenAPI specification.
 - The Python [unittest][unittest] library for unit testing.
 - [Coverage][coverage], to ensure the Python code is 100% unit tested
@@ -195,7 +196,6 @@ If you add a dependency (to an internal file with common code, or to an external
 Adding cloudformation templates to setup the codebuild projects.
 Nested stacks and SAM
 Nested OpenAPI contracts
-Add cfn-lint
 
 
 [build-status]: https://codebuild.eu-west-2.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiTnE5ck1FRWpyK25SVm1tMTdnT3RBUENsRzBLWDREYjJ0ZUZsTkNacVAxMFFhUmxDaWxkeE43MWU1cnlzNnNESGw3QzJTdzduU25vVUFNaDN3UEE5bzFBPSIsIml2UGFyYW1ldGVyU3BlYyI6InB2LzE2MGRLY3czVXpmdlQiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master
