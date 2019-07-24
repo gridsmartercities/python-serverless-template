@@ -225,7 +225,7 @@ Create a new folder with the name of your feature inside the *src* folder, and a
 If you add a dependency (to an internal file with common code, or to an external python package), add a dependencies.json or dependencies.yaml file to your lambda folder, and specify the dependencies there.
 
 
-[build-status]: https://codebuild.eu-west-2.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiTnE5ck1FRWpyK25SVm1tMTdnT3RBUENsRzBLWDREYjJ0ZUZsTkNacVAxMFFhUmxDaWxkeE43MWU1cnlzNnNESGw3QzJTdzduU25vVUFNaDN3UEE5bzFBPSIsIml2UGFyYW1ldGVyU3BlYyI6InB2LzE2MGRLY3czVXpmdlQiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master
+[build-status]: https://codebuild.eu-west-2.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiemU0OGZ6VklFVjRIZ1p0UmtaRmhpRjY2b2tOTzRRSzIvZGo5TnZQdW0yQng3VW5UMzdKZEJlMVZUcGpTVDNueSs2bW9nU21wR1d3YXBuRkxVR0R1akprPSIsIml2UGFyYW1ldGVyU3BlYyI6IjhIeVM1RDFCZHJsdUNNdm4iLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master
 [mit-license-svg]: https://img.shields.io/badge/License-MIT-yellow.svg
 [mit-license]: https://opensource.org/licenses/MIT
 [release]: https://img.shields.io/github/release/gridsmartercities/python-serverless-template.svg?style=flat
