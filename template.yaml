@@ -55,3 +55,11 @@ Resources:
           Parameters:
             Location: !Sub s3://${S3Bucket}/api-contract.yaml
       StageName: Prod
+  ALambdaLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${ALambda}
+  BLambdaLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${BLambda}
