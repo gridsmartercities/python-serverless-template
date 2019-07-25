@@ -176,6 +176,7 @@ Resources:
             Action:
               - logs:CreateLogGroup
               - logs:CreateLogStream
+              - logs:DescribeLogGroups
               - logs:PutLogEvents
             Resource: !Sub arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/${ServiceName}-dev*
       Roles:
@@ -195,6 +196,7 @@ Resources:
             Action:
               - logs:CreateLogGroup
               - logs:CreateLogStream
+              - logs:DescribeLogGroups
               - logs:PutLogEvents
             Resource: !Sub arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/${ServiceName}-stg*
       Roles:
