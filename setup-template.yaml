@@ -162,28 +162,16 @@ Resources:
               - cloudformation:ExecuteChangeSet
               - cloudformation:DescribeChangeSet
             Resource: !Sub arn:aws:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/${ServiceName}-*
-      Roles:
-        - !Ref CodebuildDevRole
-        - !Ref CodebuildStgRole
-  CodebuildDevPolicy:
-    Type: AWS::IAM::Policy
-    Properties:
-      PolicyName: !Sub codebuild-${ServiceName}-dev-service-policy
-      PolicyDocument:
-        Version: 2012-10-17
-        Statement:
           - Effect: Allow
             Action:
               - logs:CreateLogGroup
               - logs:CreateLogStream
               - logs:PutLogEvents
-            Resource: !Sub arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/${ServiceName}-dev*
-          - Effect: Allow
-            Action:
               - logs:DescribeLogGroups
             Resource: "*"
       Roles:
         - !Ref CodebuildDevRole
+        - !Ref CodebuildStgRole
   CodebuildStgPolicy:
     Type: AWS::IAM::Policy
     Properties:
@@ -194,16 +182,6 @@ Resources:
           - Effect: Allow
             Action:
               - cloudformation:DeleteStack
-            Resource: "*"
-          - Effect: Allow
-            Action:
-              - logs:CreateLogGroup
-              - logs:CreateLogStream
-              - logs:PutLogEvents
-            Resource: !Sub arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/${ServiceName}-stg*
-          - Effect: Allow
-            Action:
-              - logs:DescribeLogGroups
             Resource: "*"
       Roles:
         - !Ref CodebuildStgRole
