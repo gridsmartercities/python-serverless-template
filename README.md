@@ -59,7 +59,7 @@ This template is opinionated, and makes use of:
     - In the *Which events would you like to trigger this webhook?* select *Let me select individual events.* and tick the *Pull requests* box only.
     - Click on *Update webhook* at the bottom.
 7. Update the *stg* webhook in Github to trigger the AWS codebuild on Push to the master branch only. 
-    - Follow the instructions on point 4, but for the *stg* codebuild project and webhook.
+    - Follow the instructions on point 6, but for the *stg* codebuild project and webhook.
     - In the *Which events would you like to trigger this webhook?* select *Just the push event* option.
     - Click on *Update webhook* at the bottom.
 8. (Optional) To stop contributors from committing code directly to the master branch, setup a master branch protection rule in GitHub. Only peer reviewed, approved Pull Requests will be allowed to be merged into the master branch.
