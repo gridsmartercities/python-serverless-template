@@ -10,7 +10,7 @@ phases:
   install:
     commands:
       - npm install -g hub-cli
-      - echo $GITHUB_TOKEN
+      - hub --version
       - hub pr list -s open -f %i
       # Installing swagger cli for OpenApi 3.0 validation
       - npm install -g -q swagger-cli
