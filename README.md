@@ -100,7 +100,7 @@ To follow these instructions, you will need to be familiar with pip, and creatin
 6. (Optional) Set a pre-push Git hook to check your code before pushing it to your Github branch:
     - Copy pre-push script to .git/hooks folder:
     
-    ```cp pre-push .git/hooks```
+    ```cp tools/dev/pre-push.sh .git/hooks/pre-push```
     
     - Give execute permissions to pre-push script:
     
