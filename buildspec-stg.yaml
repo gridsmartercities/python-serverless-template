@@ -8,6 +8,7 @@ env:
 phases:
   install:
     commands:
+      - apt install hub
       # Installing pip
       - pip install -U -q pip
       # Installing Python dependencies
@@ -16,6 +17,7 @@ phases:
       - curl -qL -o jq https://stedolan.github.io/jq/download/linux64/jq && chmod +x ./jq
   build:
     commands:
+      - hub pr list -s open -f %i
       # Copy the contract OpenApi 3.0 spec to the S3 bucket, so it can later be transformed into the SAM template
       - aws s3 cp api-contract.yaml s3://$SAM_S3_BUCKET/
       # Add execution permissions to the packager tool
