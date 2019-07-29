@@ -8,6 +8,8 @@ env:
 phases:
   install:
     commands:
+      # Add execution permissions to the build tools
+      - chmod u+x ./tools/build/*.sh
       # Installing pip
       - pip install -U -q pip
       # Installing Python dependencies
@@ -28,8 +30,6 @@ phases:
       - sam package --s3-bucket $SAM_S3_BUCKET --output-template-file NewSamTemplate.yaml
       # Deploy the package
       - sam deploy --s3-bucket $SAM_S3_BUCKET --no-fail-on-empty-changeset --capabilities CAPABILITY_NAMED_IAM --template-file NewSamTemplate.yaml --stack-name ${REPO_NAME}-stack --parameter-overrides RepoName=${REPO_NAME} S3Bucket=$SAM_S3_BUCKET
-      # Add execution permissions to the stack-remover tool
-      - chmod u+x ./tools/build/stack-remover.sh
       # Remove all unneded cloudformation stacks
-      - ./tools/build/stack-remover.sh $REPO_NAME
+      - bash ./tools/build/stack-remover.sh $REPO_NAME
       # Some integration tests could be run here and, if successful, trigger a production build in your production account
