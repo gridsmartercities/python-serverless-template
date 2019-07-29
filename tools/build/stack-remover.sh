@@ -1,6 +1,16 @@
 #!/bin/bash
 set -e
 
+function show_help() {
+    echo -e "\nUSAGE:\n\t./stack-remover.sh <REPO_NAME>"
+}
+
+if [[ $# -eq 0 ]]; then
+    echo "No arguments supplied"
+    show_help
+    exit 1
+fi
+
 repo_name=$1-stack-pr-
 
 # get stacks
