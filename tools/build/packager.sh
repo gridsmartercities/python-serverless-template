@@ -6,7 +6,7 @@ OPTIND=1         # Reset in case getopts has been used previously in the shell.
 debug_flag=1
 
 function show_help() {
-    echo -e "\nUSAGE:\n\t./packager -hq\n\nOPTIONS:\n\t-h\tShow help\n\t-q\tQuiet messages\n"
+    echo -e "\nUSAGE:\n\t./packager.sh -hq\n\nOPTIONS:\n\t-h\tShow help\n\t-q\tQuiet messages\n"
 }
 
 while getopts "hq?:" opt; do

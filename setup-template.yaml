@@ -15,8 +15,18 @@ Parameters:
     Description: Email address to send staging build alerts to, or example you@example.com
     Type: String
     Default: "{EMAIL}"
+  GitHubToken:
+    Description: The value of a GitHub Personal Access Token that has an API access to your repo
+    Type: String
+    Default: "{GITHUB_TOKEN}"
 
 Resources:
+  GitHubTokenParameter:
+    Type: "AWS::SSM::Parameter"
+    Properties:
+      Name: !Sub /${ServiceName}/build/GITHUB_TOKEN
+      Type: String
+      Value: !Sub ${GitHubToken}
   SamS3BucketParameter:
     Type: AWS::SSM::Parameter
     Properties:
@@ -139,6 +149,7 @@ Resources:
               - lambda:DeleteFunction
               - lambda:AddPermission
               - lambda:UpdateFunctionCode
+              - lambda:RemovePermission
             Resource: "*"
           - Effect: Allow
             Action:
@@ -154,6 +165,7 @@ Resources:
               - cloudformation:CreateChangeSet
               - cloudformation:GetTemplateSummary
               - cloudformation:ListStacks
+              - cloudformation:DeleteStack
             Resource: "*"
           - Effect: Allow
             Action:
@@ -168,6 +180,7 @@ Resources:
               - logs:CreateLogStream
               - logs:PutLogEvents
               - logs:DescribeLogGroups
+              - logs:DeleteLogGroup
             Resource: "*"
       Roles:
         - !Ref CodebuildDevRole

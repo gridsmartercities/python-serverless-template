@@ -5,7 +5,7 @@ set -e
 OPTIND=1         # Reset in case getopts has been used previously in the shell.
 
 function show_help() {
-    echo -e "\nUSAGE:\n\t./test -h\n\t./test tests.a_lambda.test_a_lambda.ALambdaTests.test_success\n\t./test tests.a_lambda.test_a_lambda.ALambdaTests\n\t./test tests.a_lambda.test_a_lambda\n\nOPTIONS:\n\t-h\tShow help\n"
+    echo -e "\nUSAGE:\n\t./test.sh -h\n\t./test.sh tests.a_lambda.test_a_lambda.ALambdaTests.test_success\n\t./test.sh tests.a_lambda.test_a_lambda.ALambdaTests\n\t./test.sh tests.a_lambda.test_a_lambda\n\nOPTIONS:\n\t-h\tShow help\n"
 }
 
 while getopts "h?:" opt; do
