@@ -24,7 +24,7 @@ Resources:
   GitHubTokenParameter:
     Type: "AWS::SSM::Parameter"
     Properties:
-      Name: /${ServiceName}/build/GITHUB_TOKEN
+      Name: !Sub /${ServiceName}/build/GITHUB_TOKEN
       Type: String
       Value: !Sub ${GitHubToken}
   SamS3BucketParameter:
