@@ -264,10 +264,10 @@ If you add a dependency (to an internal file with common code, or to an external
 [lambda]: https://docs.aws.amazon.com/lambda/latest/dg/welcome.html
 [dredd-hooks]: https://dredd.org/en/latest/hooks/js.html
 [pip-and-ve]: https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/
-[tool-unit-tests]: https://github.com/gridsmartercities/python-serverless-template/blob/master/unit-tests
-[tool-test]: https://github.com/gridsmartercities/python-serverless-template/blob/master/test
-[tool-coverage]: https://github.com/gridsmartercities/python-serverless-template/blob/master/coverage
-[tool-pre-push]: https://github.com/gridsmartercities/python-serverless-template/blob/master/pre-push
+[tool-unit-tests]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/dev/unit-tests
+[tool-test]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/dev/test
+[tool-coverage]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/dev/coverage
+[tool-pre-push]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/dev/pre-push
 [cfn-python-lint]: https://github.com/aws-cloudformation/cfn-python-lint
-[packager]: https://github.com/gridsmartercities/python-serverless-template/blob/master/packager
-[stack-remover]: https://github.com/gridsmartercities/python-serverless-template/blob/master/stack-remover
+[packager]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/build/packager
+[stack-remover]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/build/stack-remover
