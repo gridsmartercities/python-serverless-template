@@ -139,6 +139,7 @@ Resources:
               - lambda:DeleteFunction
               - lambda:AddPermission
               - lambda:UpdateFunctionCode
+              - lambda:RemovePermission
             Resource: "*"
           - Effect: Allow
             Action:
@@ -169,6 +170,7 @@ Resources:
               - logs:CreateLogStream
               - logs:PutLogEvents
               - logs:DescribeLogGroups
+              - logs:DeleteLogGroup
             Resource: "*"
       Roles:
         - !Ref CodebuildDevRole
