@@ -11,8 +11,6 @@ phases:
     commands:
       # Add execution permissions to build tools
       - chmod u+x ./tools/build/*.sh
-      # Install Hub CLI for GitHub
-      - bash ./tools/build/hub-installer.sh
       # Installing swagger cli for OpenApi 3.0 validation
       - npm install -g -q swagger-cli
       # Installing dredd contract testing tool
@@ -61,6 +59,3 @@ phases:
       - dredd api-contract.yaml $BASE_URL --hookfiles=tests/hooks.py --hookfiles=tests/*/hooks.py --language python
       # Run the integration tests
       - coverage run --branch --source='.' -m unittest it/test_*.py
-
-      # Remove all unneded cloudformation stacks
-      - bash ./tools/build/stack-remover.sh $REPO_NAME
