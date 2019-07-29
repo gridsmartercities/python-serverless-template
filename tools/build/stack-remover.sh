@@ -7,7 +7,7 @@ repo_name=$1-stack-pr-
 stack_names=$(aws cloudformation list-stacks --stack-status-filter CREATE_COMPLETE --query 'StackSummaries[?contains(StackName, `'$repo_name'`)].StackName' | jq -r '.[]')
 
 # get github's open prs
-open_pr_names=$(hub pr list -s open -f %i)
+open_pr_names=$(/opt/tools/hub/bin/hub pr list -s open -f %i)
 open_pr_names=${open_pr_names#?}
 IFS='#' read -ra open_prs <<< "$open_pr_names"
 
