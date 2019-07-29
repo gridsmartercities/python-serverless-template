@@ -9,9 +9,10 @@ env:
 phases:
   install:
     commands:
-      - add-apt-repository ppa:hub
-      - apt-get update
-      - apt-get install -y hub
+      - wget https://github.com/github/hub/releases/download/v2.12.3/hub-linux-amd64-2.12.3.tgz
+      - tar -xvzf hub-linux-amd64-2.12.3.tgz
+      - mv hub-linux-amd64-2.12.3 /opt/tools/hub
+      - export PATH="/opt/tools/hub/bin:$PATH"
       - hub --version
       - hub pr list -s open -f %i
       - exit 1

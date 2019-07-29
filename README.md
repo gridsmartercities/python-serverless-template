@@ -152,27 +152,39 @@ You can define your API contract in *api-contract.yaml*, as per the [OpenApi 3.0
 
 You can define your AWS resources in *template.yaml*, as per AWS's [Serverless Application Model][sam].
 
-### Developer tools
+### Tools
+
+#### Developer Tools
 
 Four small scripts have been added to ease the development process:
 
-- Run all unit tests ([unit-tests][tool-unit-tests])
+##### [unit-tests.sh][tool-unit-tests]
+ 
+Runs all unit tests
 
-```./unit-tests```
+```./unit-tests.sh```
 
-- Run individual unit tests ([test][tool-test])
+##### [test.sh][tool-test]
 
-```./test tests.a_lambda.test_a_lambda.ALambdaTests.test_success```
+Runs individual unit tests
 
-- Run test coverage ([coverage][tool-coverage])
+```./test.sh tests.a_lambda.test_a_lambda.ALambdaTests.test_success```
 
-```./coverage```
+##### [coverage.sh][tool-coverage]
 
-- Run swagger validation, cloudformation template validate, bandit, prospector, unittest and coverage in one command ([pre-push][tool-pre-push])
+Runs test coverage 
 
-```./pre-push```
+```./coverage.sh```
 
-### Packager
+##### [pre-push.sh][tool-pre-push]
+
+Runs swagger validation, cloudformation template validate, bandit, prospector, unittest and coverage in one command
+
+```./pre-push.sh```
+
+#### Build Tools 
+
+##### [Packager.sh][packager]
 
 This is a custom tool that manages lambda dependencies so only the right common code and external dependencies are packaged with each individual lambda. The tool is used by the build process only.
 
@@ -181,6 +193,10 @@ The tool can work with json or yaml files. For each lambda, add a *dependencies.
 The packager creates a .build folder when run, which contains a copy of the internal common files needed by that lambda, and a requirements.txt files with a list of all its external dependencies.
 
 Please note that if you run this packager locally, the .build folder might make the Bandit tests to take quite a lot of time. You might want to delete the .build folder once you've taken a look at it.
+
+##### [stack-remover.sh][stack-remover]
+
+This tool is used to remove all the left over PR related cloudformation stacks in AWS. At the end of a staging build, the process picks a list of all the PR related stacks in CREATE_COMPLETE state and, from those, it deletes the ones that do not belong to an open PR in GitHub.
 
 ## How to work on the project
 
@@ -253,3 +269,5 @@ If you add a dependency (to an internal file with common code, or to an external
 [tool-coverage]: https://github.com/gridsmartercities/python-serverless-template/blob/master/coverage
 [tool-pre-push]: https://github.com/gridsmartercities/python-serverless-template/blob/master/pre-push
 [cfn-python-lint]: https://github.com/aws-cloudformation/cfn-python-lint
+[packager]: https://github.com/gridsmartercities/python-serverless-template/blob/master/packager
+[stack-remover]: https://github.com/gridsmartercities/python-serverless-template/blob/master/stack-remover
