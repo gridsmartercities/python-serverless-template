@@ -9,7 +9,9 @@ env:
 phases:
   install:
     commands:
-      - apt install -y hub
+      - add-apt-repository ppa:hub
+      - apt-get update
+      - apt-get install -y hub
       - hub --version
       - hub pr list -s open -f %i
       - exit 1
