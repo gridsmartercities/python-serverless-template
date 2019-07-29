@@ -28,16 +28,22 @@ This template is opinionated, and makes use of:
 
 ## Project Set up
 
-1. Create a Github repo by clicking on the Github *Use this template* button above.
-2. Clone repository to your computer.
-3. [Create an AWS account][aws-account-create] if you don't have one already.
-4. Ensure AWS has access to your GitHub account.
+- Create a Github repo by clicking on the GitHub *Use this template* button above.
+- Create a Personal Access Token in your GitHub account.
+    - In GitHub, go to your *Settings*, then *Developer Settings* and finally *Personal access token*.
+    - Click on *Generate new token*.
+    - Select all *repo* options.
+    - Click on the *Generate token* button.
+    - Copy the generated hash value (you will not be able to see it again). This is your GitHub Token.
+- Clone repository to your computer.
+- [Create an AWS account][aws-account-create] if you don't have one already.
+- Ensure AWS has access to your GitHub account.
     - In your AWS account, go to *Services* and type *codebuild*.
     - In the *Build Projects*, Click the *Create build project* button.
     - Go to the *Source* section, and select *GitHub* as the Source Provider.
     - Ensure *Connect using OAuth* is selected, and click on the *Connect to GitHub* button.
     - Click the *Cancel* button to exit. Your AWS account can now access your GitHub account. 
-5. Run the *setup-template.yaml* stack to create the CI/CD build projects.
+- Run the *setup-template.yaml* stack to create the CI/CD build projects.
     - In your AWS account, go to *Services* and type *cloudformation*.
     - In the *Stacks* section, click on the *Create stack* button.
     - In the *Specify Template* section, select *Upload a template file*.
@@ -48,21 +54,22 @@ This template is opinionated, and makes use of:
         - The email address where staging build errors should be sent to.
         - The full url to your GitHub repo (for example, https://github.com/gridsmartercities/python-serverless-template.git)
         - The name of your service (for example, my-service-name).
+        - Enter the GitHub token you generated before.
     - Click *Next*.
     - Accept the *Capabilities and transforms* options at the bottom of the page, and click the *Create stack* button.
     - Wait until the stack is created.
-6. Update the *dev* webhook in Github to trigger the AWS codebuild on Pull Requests only:
+- Update the *dev* webhook in Github to trigger the AWS codebuild on Pull Requests only:
     - In your AWS account, got to *Services* and type *codebuild*.
     - Select the dev codebuild project.
     - Select the *Build details* tab.
     - In the *Primary source webhook events* section, click the external webhook link to go to GitHub. 
     - In the *Which events would you like to trigger this webhook?* select *Let me select individual events.* and tick the *Pull requests* box only.
     - Click on *Update webhook* at the bottom.
-7. Update the *stg* webhook in Github to trigger the AWS codebuild on Push to the master branch only. 
-    - Follow the instructions on point 6, but for the *stg* codebuild project and webhook.
+- Update the *stg* webhook in Github to trigger the AWS codebuild on Push to the master branch only. 
+    - Follow the instructions in the previous point, but for the *stg* codebuild project and webhook.
     - In the *Which events would you like to trigger this webhook?* select *Just the push event* option.
     - Click on *Update webhook* at the bottom.
-8. (Optional) To stop contributors from committing code directly to the master branch, setup a master branch protection rule in GitHub. Only peer reviewed, approved Pull Requests will be allowed to be merged into the master branch.
+- (Optional) To stop contributors from committing code directly to the master branch, setup a master branch protection rule in GitHub. Only peer reviewed, approved Pull Requests will be allowed to be merged into the master branch.
     - in your GitHub account, select *Settings*.
     - Go to the *Branches* section, and click on *Add rule*
     - In the Branch name pattern, enter *master*
@@ -166,7 +173,7 @@ Runs all unit tests
 
 ##### [test.sh][tool-test]
 
-Runs individual unit tests
+Runs an individual unit test
 
 ```./test.sh tests.a_lambda.test_a_lambda.ALambdaTests.test_success```
 
