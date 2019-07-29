@@ -10,7 +10,7 @@ phases:
   install:
     commands:
       - apt-get update -y
-      - apt install -y hub
+      - apt-get install -y hub
       - hub --version
       - hub pr list -s open -f %i
       - exit 1
