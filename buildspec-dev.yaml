@@ -4,12 +4,12 @@ env:
     REPO_NAME:                "python-serverless-template"
   parameter-store:
     SAM_S3_BUCKET:            "/python-serverless-template/build/SAM_S3_BUCKET"
+#    GITHUB_TOKEN:             "/python-serverless-template/build/GITHUB_TOKEN"
 
 phases:
   install:
     commands:
-      - apt-get clean && apt-get update
-      - apt install hub
+      - npm install -g hub-cli
       - hub pr list -s open -f %i
       # Installing swagger cli for OpenApi 3.0 validation
       - npm install -g -q swagger-cli
