@@ -14,7 +14,7 @@ IFS='#' read -ra open_prs <<< "$open_pr_names"
 for stack_name in $stack_names
 do
     if [[ "${open_prs[@]}" != *"${stack_name//[!0-9]/}"* ]]; then
-        # aws cloudformation delete-stack --stack-name $stack_name
+        aws cloudformation delete-stack --stack-name $stack_name
         echo "... removed $stack_name"
     fi
 done

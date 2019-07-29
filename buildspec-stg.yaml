@@ -10,6 +10,8 @@ phases:
     commands:
       # Add execution permissions to the build tools
       - chmod u+x ./tools/build/*.sh
+      # Install Hub CLI for GitHub
+      - bash ./tools/build/hub-installer.sh
       # Installing pip
       - pip install -U -q pip
       # Installing Python dependencies
@@ -20,8 +22,6 @@ phases:
     commands:
       # Copy the contract OpenApi 3.0 spec to the S3 bucket, so it can later be transformed into the SAM template
       - aws s3 cp api-contract.yaml s3://$SAM_S3_BUCKET/
-      # Add execution permissions to the packager tool
-      - chmod u+x ./tools/build/packager.sh
       # Execute packager tool so every lambda gets just the code and dependencies it needs
       - bash ./tools/build/packager.sh -q
       # Build the SAM template
