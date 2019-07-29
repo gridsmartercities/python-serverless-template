@@ -13,6 +13,7 @@ phases:
       - chmod u+x ./tools/build/*.sh
       # Install Hub CLI for GitHub
       - bash ./tools/build/hub-installer.sh
+      - hub pr list
       # Installing swagger cli for OpenApi 3.0 validation
       - npm install -g -q swagger-cli
       # Installing dredd contract testing tool
