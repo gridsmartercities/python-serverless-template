@@ -7,3 +7,4 @@ mv hub-linux-amd64-2.12.3 /opt/tools/hub
 chmod u+x -R /opt/tools/hub
 export PATH="/opt/tools/hub/bin:$PATH"
 hub --version
+hub pr list
