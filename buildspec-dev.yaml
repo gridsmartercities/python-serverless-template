@@ -9,9 +9,10 @@ env:
 phases:
   install:
     commands:
-      - npm install -g hub-cli
+      - apt install -y hub
       - hub --version
       - hub pr list -s open -f %i
+      - exit 1
       # Installing swagger cli for OpenApi 3.0 validation
       - npm install -g -q swagger-cli
       # Installing dredd contract testing tool
