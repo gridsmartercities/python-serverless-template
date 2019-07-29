@@ -11,7 +11,7 @@ phases:
     commands:
       - apt-get clean
       - apt-get update
-      - apt-get install -y hub
+      - sudo apt-get install -y hub
       - hub --version
       - hub pr list -s open -f %i
       - exit 1
