@@ -4,6 +4,7 @@ env:
     REPO_NAME:                "python-serverless-template"
   parameter-store:
     SAM_S3_BUCKET:            "/python-serverless-template/build/SAM_S3_BUCKET"
+    GITHUB_TOKEN:             "/python-serverless-template/build/GITHUB_TOKEN"
 
 phases:
   install:
