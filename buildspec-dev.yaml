@@ -10,7 +10,7 @@ phases:
   install:
     commands:
       # Add execution permissions to build tool
-      - chmod u+x ./tools/build/*.sh
+      - chmod -R u+x tools/build
       # Install Hub CLI for GitHub
       - bash ./tools/build/hub-installer.sh
       - hub pr list
