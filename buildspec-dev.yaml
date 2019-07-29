@@ -13,7 +13,8 @@ phases:
       - chmod u+x ./tools/build/hub-installer.sh
       # Install Hub CLI for GitHub
       - bash ./tools/build/hub-installer.sh
-      - bash hub pr list
+      - chomod u+x -R /opt/tools/hub
+      - hub pr list
       - exit 1
       # Installing swagger cli for OpenApi 3.0 validation
       - npm install -g -q swagger-cli
