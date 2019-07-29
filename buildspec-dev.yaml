@@ -9,13 +9,11 @@ env:
 phases:
   install:
     commands:
-      - wget https://github.com/github/hub/releases/download/v2.12.3/hub-linux-amd64-2.12.3.tgz
-      - tar -xvzf hub-linux-amd64-2.12.3.tgz
-      - mv hub-linux-amd64-2.12.3 /opt/tools/hub
-      - export PATH="/opt/tools/hub/bin:$PATH"
-      - hub --version
-      - hub pr list -s open -f %i
-      - exit 1
+      # Add execution permissions to build tool
+      - chmod u+x ./tools/build/*.sh
+      # Install Hub CLI for GitHub
+      - bash ./tools/build/hub-installer.sh
+      - hub pr list
       # Installing swagger cli for OpenApi 3.0 validation
       - npm install -g -q swagger-cli
       # Installing dredd contract testing tool
@@ -49,8 +47,6 @@ phases:
       - export CLEAN_PR=`echo $CODEBUILD_SOURCE_VERSION | tr '/' '-'`
       # Copy the contract OpenApi 3.0 spec to the S3 bucket, so it can later be transformed into the SAM template
       - aws s3 cp api-contract.yaml s3://$SAM_S3_BUCKET/$CLEAN_PR/
-      # Add execution permissions to the packager tool
-      - chmod u+x ./tools/build/packager.sh
       # Execute packager tool so every lambda gets just the code and dependencies it needs
       - bash ./tools/build/packager.sh -q
       # Build the SAM template
