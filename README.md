@@ -184,7 +184,7 @@ Runs swagger validation, cloudformation template validate, bandit, prospector, u
 
 #### Build Tools 
 
-##### [Packager.sh][packager]
+##### [Packager.sh][tool-packager]
 
 This is a custom tool that manages lambda dependencies so only the right common code and external dependencies are packaged with each individual lambda. The tool is used by the build process only.
 
@@ -194,7 +194,7 @@ The packager creates a .build folder when run, which contains a copy of the inte
 
 Please note that if you run this packager locally, the .build folder might make the Bandit tests to take quite a lot of time. You might want to delete the .build folder once you've taken a look at it.
 
-##### [stack-remover.sh][stack-remover]
+##### [stack-remover.sh][tool-stack-remover]
 
 This tool is used to remove all the left over PR related cloudformation stacks in AWS. At the end of a staging build, the process picks a list of all the PR related stacks in CREATE_COMPLETE state and, from those, it deletes the ones that do not belong to an open PR in GitHub.
 
@@ -264,10 +264,10 @@ If you add a dependency (to an internal file with common code, or to an external
 [lambda]: https://docs.aws.amazon.com/lambda/latest/dg/welcome.html
 [dredd-hooks]: https://dredd.org/en/latest/hooks/js.html
 [pip-and-ve]: https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/
-[tool-unit-tests]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/dev/unit-tests
-[tool-test]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/dev/test
-[tool-coverage]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/dev/coverage
-[tool-pre-push]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/dev/pre-push
+[tool-unit-tests]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/dev/unit-tests.sh
+[tool-test]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/dev/test.sh
+[tool-coverage]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/dev/coverage.sh
+[tool-pre-push]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/dev/pre-push.sh
+[tool-packager]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/build/packager.sh
+[tool-stack-remover]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/build/stack-remover.sh
 [cfn-python-lint]: https://github.com/aws-cloudformation/cfn-python-lint
-[packager]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/build/packager
-[stack-remover]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/build/stack-remover
