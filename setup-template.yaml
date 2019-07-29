@@ -150,6 +150,9 @@ Resources:
               - lambda:AddPermission
               - lambda:UpdateFunctionCode
               - lambda:RemovePermission
+              - lambda:ListTags
+              - lambda:TagResource
+              - lambda:UntagResource
             Resource: "*"
           - Effect: Allow
             Action:
