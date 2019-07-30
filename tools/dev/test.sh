@@ -6,6 +6,7 @@ function show_help() {
 }
 
 if [[ $# == 0 ]]; then
+    echo "No arguments supplied"
     show_help
     exit 0
 fi
