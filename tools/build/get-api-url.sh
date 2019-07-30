@@ -8,7 +8,7 @@ function show_help() {
 if [[ $# -eq 0 ]]; then
     echo "No arguments supplied"
     show_help
-    exit 1
+    exit 0
 fi
 
 api_id=`aws apigateway get-rest-apis --query "items[?name=='$1'].id" | jq first | tr -d '"'`
