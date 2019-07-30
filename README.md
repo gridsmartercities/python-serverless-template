@@ -104,14 +104,14 @@ To follow these instructions, you will need to be familiar with pip, and creatin
 ```npm install swagger-cli```
 
 5. Take a look at the [Project Structure](#Project-Structure) section below, and start writing your code.
-6. (Optional) Set a pre-push Git hook to check your code before pushing it to your Github branch:
-    - Copy pre-push script to .git/hooks folder:
+6. (Optional) Set a pre-build-checks Git hook to check your code before pushing it to your Github branch:
+    - Copy pre-build-checks script to .git/hooks folder:
     
-    ```cp tools/dev/pre-push.sh .git/hooks/pre-push```
+    ```cp tools/build/pre-build-checks.sh .git/hooks/pre-push```
     
-    - Give execute permissions to pre-push script:
+    - Give execute permissions to pre-build-checks script:
     
-    ```chmod u+x .git/hooks/pre-push```
+    ```chmod u+x .git/hooks/pre-build-checks```
     
 ### To run dredd locally:
 
@@ -183,13 +183,13 @@ Runs test coverage
 
 ```./coverage.sh```
 
-##### [pre-push.sh][tool-pre-push]
+#### Build Tools 
+
+##### [pre-build-checks.sh][tool-pre-build-checks]
 
 Runs swagger validation, cloudformation template validate, bandit, prospector, unittest and coverage in one command
 
-```./pre-push.sh```
-
-#### Build Tools 
+```./pre-build-checks.sh```
 
 ##### [Packager.sh][tool-packager]
 
@@ -204,6 +204,10 @@ Please note that if you run this packager locally, the .build folder might make 
 ##### [stack-remover.sh][tool-stack-remover]
 
 This tool is used to remove all the left over PR related cloudformation stacks in AWS. At the end of a staging build, the process picks a list of all the PR related stacks in CREATE_COMPLETE state and, from those, it deletes the ones that do not belong to an open PR in GitHub.
+
+##### [get-api-url.sh][tool-get-api-url]
+
+Gets the AWS API URL from the API Name. 
 
 ## How to work on the project
 
@@ -220,7 +224,7 @@ This tool is used to remove all the left over PR related cloudformation stacks i
 ```git checkout -b your_new_feature_branch_name```
 
 4. make your feature changes
-5. run checks with the pre-push, unit-tests, test or coverage tools, or run them individually (swagger, cfn-lint, cloudformation validation, bandit, prospector, unittest, coverage - you can find the commands in the buildspec-dev.yaml file, and in the pre-push script).
+5. run checks with the pre-build-checks, unit-tests, test or coverage tools, or run them individually (swagger, cfn-lint, cloudformation validation, bandit, prospector, unittest, coverage - you can find the commands in the buildspec-dev.yaml file, and in the pre-build-checks script).
 6. Push to remote repo: 
 
 ```git push```
@@ -229,7 +233,7 @@ or
 
 ```git push -u origin your_new_feature_branch_name```
  
- if this is the first push (it will trigger an automatic pre-push check if you have configured the optional point 5 of the developer set up process).
+ if this is the first push (it will trigger an automatic pre-build-checks check if you have configured the optional point 5 of the developer set up process).
  
 7. Repeat 4-6 as many times as needed. When finished, raise a PR in GitHub. This will trigger a build of the *dev* codebuild project in your AWS account.
 8. If the build is green in GitHub, get your code reviewed (and approved if ok) by another contributor
@@ -274,7 +278,8 @@ If you add a dependency (to an internal file with common code, or to an external
 [tool-unit-tests]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/dev/unit-tests.sh
 [tool-test]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/dev/test.sh
 [tool-coverage]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/dev/coverage.sh
-[tool-pre-push]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/dev/pre-push.sh
+[tool-pre-build-checks]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/build/pre-build-checks.sh
 [tool-packager]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/build/packager.sh
 [tool-stack-remover]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/build/stack-remover.sh
+[tool-get-api-url]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/build/get-api-url.sh
 [cfn-python-lint]: https://github.com/aws-cloudformation/cfn-python-lint

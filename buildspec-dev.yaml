@@ -23,37 +23,24 @@ phases:
       - curl -qL -o jq https://stedolan.github.io/jq/download/linux64/jq && chmod +x ./jq
   pre_build:
     commands:
-      # Validate the SAM template
-      - aws cloudformation validate-template --template-body file://template.yaml
-      # Checking the SAM template
-      - cfn-lint template.yaml
-      # Validate the OpenApi 3.0 specification
-      - swagger-cli validate api-contract.yaml
-      # Running all prospector tools for code quality analysis
-      - prospector
-      # Running bandit for security testing
-      - bandit -r -q .
-      # Running all unittests
-      - coverage run --branch --source='.' -m unittest tests/test_*.py
-      - coverage run --branch --source='.' -m unittest tests/*/test_*.py
-      # Checking that the code is 100% covered by unit tests
-      - coverage report -m --skip-covered --fail-under=100 --omit=tests/*,it/*
+      # Run all pre-build checks
+      - ./tools/build/pre-build-checks.sh
   build:
     commands:
       # Get the Pull Request number from GitHub as pr-#
-      - export CLEAN_PR=`echo $CODEBUILD_SOURCE_VERSION | tr '/' '-'`
+      - export CLEAN_PR=$(echo $CODEBUILD_SOURCE_VERSION | tr '/' '-')
       # Copy the contract OpenApi 3.0 spec to the S3 bucket, so it can later be transformed into the SAM template
       - aws s3 cp api-contract.yaml s3://$SAM_S3_BUCKET/$CLEAN_PR/
       # Execute packager tool so every lambda gets just the code and dependencies it needs
-      - bash ./tools/build/packager.sh -q
+      - ./tools/build/packager.sh -q
       # Build the SAM template
       - sam build -s .build
       # Package the build
       - sam package --s3-bucket $SAM_S3_BUCKET --s3-prefix $CLEAN_PR --output-template-file NewSamTemplate.yaml
       # Deploy the package
-      - sam deploy --s3-bucket $SAM_S3_BUCKET --no-fail-on-empty-changeset --capabilities CAPABILITY_NAMED_IAM --template-file NewSamTemplate.yaml --stack-name ${REPO_NAME}-stack-${CLEAN_PR} --parameter-overrides RepoName=${REPO_NAME} ApiNameSuffix=-$CLEAN_PR S3Bucket=$SAM_S3_BUCKET/$CLEAN_PR
+      - sam deploy --s3-bucket $SAM_S3_BUCKET --no-fail-on-empty-changeset --capabilities CAPABILITY_NAMED_IAM --template-file NewSamTemplate.yaml --stack-name $REPO_NAME-stack-$CLEAN_PR --parameter-overrides RepoName=$REPO_NAME ApiNameSuffix=-$CLEAN_PR S3Bucket=$SAM_S3_BUCKET/$CLEAN_PR
       # Get the ApiGateway Base URL
-      - export BASE_URL=https://`aws apigateway get-rest-apis --query "items[?name=='${REPO_NAME}-apis-${CLEAN_PR}'].id" | jq first | tr -d '"'`.execute-api.${AWS_REGION}.amazonaws.com/Prod
+      - export BASE_URL=$(./tools/build/get-api-url.sh $REPO_NAME-apis-$CLEAN_PR)
       - echo BASE_URL is $BASE_URL
       # Run API Contract Tests against the Base URL
       - dredd api-contract.yaml $BASE_URL --hookfiles=tests/hooks.py --hookfiles=tests/*/hooks.py --language python

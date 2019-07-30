@@ -44,5 +44,6 @@ if [[ $? != 0 ]]; then
     exit 1
 fi
 
-echo -e "\n... SUCCESS - PUSHING TO GITHUB!\n"
+echo -e "\n... SUCCESS!\n"
+
 exit 0
