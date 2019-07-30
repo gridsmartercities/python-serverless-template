@@ -24,7 +24,7 @@ phases:
   pre_build:
     commands:
       # Run all pre-build checks
-      - bash ./tools/build/pre-build-checks.sh
+      - ./tools/build/pre-build-checks.sh
   build:
     commands:
       # Get the Pull Request number from GitHub as pr-#
@@ -32,7 +32,7 @@ phases:
       # Copy the contract OpenApi 3.0 spec to the S3 bucket, so it can later be transformed into the SAM template
       - aws s3 cp api-contract.yaml s3://$SAM_S3_BUCKET/$CLEAN_PR/
       # Execute packager tool so every lambda gets just the code and dependencies it needs
-      - bash ./tools/build/packager.sh -q
+      - ./tools/build/packager.sh -q
       # Build the SAM template
       - sam build -s .build
       # Package the build
@@ -40,7 +40,7 @@ phases:
       # Deploy the package
       - sam deploy --s3-bucket $SAM_S3_BUCKET --no-fail-on-empty-changeset --capabilities CAPABILITY_NAMED_IAM --template-file NewSamTemplate.yaml --stack-name $REPO_NAME-stack-$CLEAN_PR --parameter-overrides RepoName=$REPO_NAME ApiNameSuffix=-$CLEAN_PR S3Bucket=$SAM_S3_BUCKET/$CLEAN_PR
       # Get the ApiGateway Base URL
-      - export BASE_URL=$(bash ./tools/build/get-api-url.sh $REPO_NAME-apis-$CLEAN_PR)
+      - export BASE_URL=$(./tools/build/get-api-url.sh $REPO_NAME-apis-$CLEAN_PR)
       - echo BASE_URL is $BASE_URL
       # Run API Contract Tests against the Base URL
       - dredd api-contract.yaml $BASE_URL --hookfiles=tests/hooks.py --hookfiles=tests/*/hooks.py --language python
