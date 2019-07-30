@@ -51,9 +51,10 @@ phases:
       # Package the build
       - sam package --s3-bucket $SAM_S3_BUCKET --s3-prefix $CLEAN_PR --output-template-file NewSamTemplate.yaml
       # Deploy the package
-      - sam deploy --s3-bucket $SAM_S3_BUCKET --no-fail-on-empty-changeset --capabilities CAPABILITY_NAMED_IAM --template-file NewSamTemplate.yaml --stack-name ${REPO_NAME}-stack-${CLEAN_PR} --parameter-overrides RepoName=${REPO_NAME} ApiNameSuffix=-$CLEAN_PR S3Bucket=$SAM_S3_BUCKET/$CLEAN_PR
+      - sam deploy --s3-bucket $SAM_S3_BUCKET --no-fail-on-empty-changeset --capabilities CAPABILITY_NAMED_IAM --template-file NewSamTemplate.yaml --stack-name $REPO_NAME-stack-$CLEAN_PR --parameter-overrides RepoName=$REPO_NAME ApiNameSuffix=-$CLEAN_PR S3Bucket=$SAM_S3_BUCKET/$CLEAN_PR
       # Get the ApiGateway Base URL
-      - export BASE_URL=https://`aws apigateway get-rest-apis --query "items[?name=='${REPO_NAME}-apis-${CLEAN_PR}'].id" | jq first | tr -d '"'`.execute-api.${AWS_REGION}.amazonaws.com/Prod
+      - api_id=`aws apigateway get-rest-apis --query "items[?name=='$REPO_NAME-apis-$CLEAN_PR'].id" | jq first | tr -d '"'`
+      - export BASE_URL=https://$api_id.execute-api.$AWS_REGION.amazonaws.com/Prod
       - echo BASE_URL is $BASE_URL
       # Run API Contract Tests against the Base URL
       - dredd api-contract.yaml $BASE_URL --hookfiles=tests/hooks.py --hookfiles=tests/*/hooks.py --language python
