@@ -11,8 +11,6 @@ if [[ $# -eq 0 ]]; then
     exit 1
 fi
 
-api_name=$1
-
 api_id=`aws apigateway get-rest-apis --query "items[?name=='$1'].id" | jq first | tr -d '"'`
 echo https://$api_id.execute-api.$AWS_REGION.amazonaws.com/Prod
 
