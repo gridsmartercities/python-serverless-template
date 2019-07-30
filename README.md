@@ -205,6 +205,10 @@ Please note that if you run this packager locally, the .build folder might make 
 
 This tool is used to remove all the left over PR related cloudformation stacks in AWS. At the end of a staging build, the process picks a list of all the PR related stacks in CREATE_COMPLETE state and, from those, it deletes the ones that do not belong to an open PR in GitHub.
 
+##### [get-api-url.sh][tool-get-api-url]
+
+Gets the AWS API URL from the API Name. 
+
 ## How to work on the project
 
 1. Change to master branch: 
@@ -277,4 +281,5 @@ If you add a dependency (to an internal file with common code, or to an external
 [tool-pre-build-checks]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/build/pre-build-checks.sh
 [tool-packager]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/build/packager.sh
 [tool-stack-remover]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/build/stack-remover.sh
+[tool-get-api-url]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/build/get-api-url.sh
 [cfn-python-lint]: https://github.com/aws-cloudformation/cfn-python-lint
