@@ -2,7 +2,7 @@
 set -e
 
 function show_help() {
-    echo -e "\nUSAGE:\n\t./tagit.sh <COMMIT_SHA> <CONTEXT> <COMMAND>"
+    echo -e "\nUSAGE:\n\t./update-commit-status.sh <COMMIT_SHA> <CONTEXT> <COMMAND>"
     echo -e "\n\tThis script requires the following environment variables: REPO_NAME, GITHUB_TOKEN, AWS_REGION, CODEBUILD_BUILD_ID\n"
 }
 
@@ -20,7 +20,7 @@ COMMAND=$3
 
 
 function create_commit_status() {
-    /opt/tools/hub/bin/hub api "https://api.github.com/repos/$OWNER/$REPO_NAME/statuses/$COMMIT?access_token=$GITHUB_TOKEN" \
+    hub api "https://api.github.com/repos/$OWNER/$REPO_NAME/statuses/$COMMIT?access_token=$GITHUB_TOKEN" \
         -H Content-Type:application/json \
         -X POST \
         -f state="$1" \
