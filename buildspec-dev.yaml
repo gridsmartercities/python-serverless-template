@@ -26,9 +26,7 @@ phases:
   pre_build:
     commands:
       # Set an alias to the update-commit-status, which create commit statuses in GitHub
-      - TAG="./tools/build/update-commit-status.sh $COMMIT_SHA"
-      # Gets the name of the current commit
-      - export COMMIT_SHA=`git rev-parse HEAD`
+      - TAG="./tools/build/update-commit-status.sh"
       # Validate the SAM template
       - $TAG "SAM validation" "aws cloudformation validate-template --template-body file://template.yaml"
       # Checking the SAM template

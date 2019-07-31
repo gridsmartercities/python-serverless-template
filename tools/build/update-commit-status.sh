@@ -12,6 +12,7 @@ if [[ $# -ne 3 ]]; then
     exit 0
 fi
 
+COMMIT=`git rev-parse HEAD`
 OWNER="gridsmartercities"
 
 # User Inputs
