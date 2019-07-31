@@ -2,30 +2,35 @@
 set -e
 
 function show_help() {
-    echo -e "\nUSAGE:\n\t./report-status.sh <REPO_NAME> <COMMIT_SHA> <CONTEXT> <COMMAND>"
+    echo -e "\nUSAGE:\n\t./report-status.sh <COMMIT_SHA> <CONTEXT> <COMMAND>"
+    echo -e "\n\tThis script requires the following environment variables: REPO_NAME, GITHUB_TOKEN, AWS_REGION, CODEBUILD_BUILD_ID\n"
 }
 
-if [[ $# -ne 4 ]]; then
+if [[ $# -ne 3 ]]; then
     echo "Invalid arguments"
     show_help
     exit 0
 fi
 
-CONTEXT=$3
-COMMAND=$4
-
-URL="https://api.github.com/repos/$1/statuses/$2?access_token=$GITHUB_TOKEN"
-TARGET_URL="https://$AWS_REGION.console.aws.amazon.com/codebuild/home?region=$AWS_REGION#/builds/$CODEBUILD_BUILD_ID/view/new"
-HEADERS="Content-Type: application/json"
+OWNER="gridsmartercities"
+# User Inputs
+COMMIT=$1
+CONTEXT=$2
+COMMAND=$3
 
 
 function create_commit_status() {
-    PAYLOAD="{\"state\": \"$1\", \"description\": \"$2\", \"context\": \"$3\", \"target_url\": \"$TARGET_URL\"}"
-    echo curl $URL -H $HEADERS -X POST -d $PAYLOAD
+    /opt/tools/hub/bin/hub api "https://api.github.com/repos/$OWNER/$REPO_NAME/statuses/$COMMIT?access_token=$GITHUB_TOKEN" \
+        -H Content-Type:application/json \
+        -X POST \
+        -f state="$1" \
+        -f description="$2" \
+        -f context="$CONTEXT" \
+        -f target_url="https://$AWS_REGION.console.aws.amazon.com/codebuild/home?region=$AWS_REGION#/builds/$CODEBUILD_BUILD_ID/view/new"
 }
 
 # Create a Pending commit status
-create_commit_status $REPO_NAME $COMMIT_SHA "pending" "job starting" $CONTEXT
+create_commit_status "pending" "job starting"
 
 STATE="success"
 DESCRIPTION="job succeeded"
@@ -40,6 +45,6 @@ fi
 set -e
 
 # Create a Success or Failure commit status
-create_commit_status $STATE $DESCRIPTION $CONTEXT
+create_commit_status "$STATE" "$DESCRIPTION"
 
 exit 0
