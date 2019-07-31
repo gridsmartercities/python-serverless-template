@@ -11,6 +11,8 @@ phases:
     commands:
       # Add execution permissions to build tools
       - chmod u+x ./tools/build/*.sh
+      # Set an alias to the update-commit-status, which create commit statuses in GitHub
+      - TAG="./tools/build/update-commit-status.sh"
       # Install Hub CLI for GitHub
       - ./tools/build/hub-installer.sh
       # Installing swagger cli for OpenApi 3.0 validation
@@ -25,8 +27,6 @@ phases:
       - curl -qL -o jq https://stedolan.github.io/jq/download/linux64/jq && chmod +x ./jq
   pre_build:
     commands:
-      # Set an alias to the update-commit-status, which create commit statuses in GitHub
-      - TAG="./tools/build/update-commit-status.sh"
       # Validate the SAM template
       - $TAG "SAM validation" "aws cloudformation validate-template --template-body file://template.yaml"
       # Checking the SAM template

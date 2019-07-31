@@ -2,11 +2,12 @@
 set -e
 
 function show_help() {
-    echo -e "\nUSAGE:\n\t./update-commit-status.sh <COMMIT_SHA> <CONTEXT> <COMMAND>"
+    echo -e "\nUSAGE:\n\t./update-commit-status.sh <CONTEXT> <COMMAND>"
     echo -e "\n\tThis script requires the following environment variables: REPO_NAME, GITHUB_TOKEN, AWS_REGION, CODEBUILD_BUILD_ID\n"
+    echo -e "\n\tThe script automatically picks up the current COMMIT SHA"
 }
 
-if [[ $# -ne 3 ]]; then
+if [[ $# -ne 2 ]]; then
     echo "Invalid arguments"
     show_help
     exit 0
@@ -16,9 +17,8 @@ COMMIT=`git rev-parse HEAD`
 OWNER="gridsmartercities"
 
 # User Inputs
-COMMIT=$1
-CONTEXT=$2
-COMMAND=$3
+CONTEXT=$1
+COMMAND=$2
 
 
 function create_commit_status() {
