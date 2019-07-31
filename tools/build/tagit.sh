@@ -2,7 +2,7 @@
 set -e
 
 function show_help() {
-    echo -e "\nUSAGE:\n\t./report-status.sh <COMMIT_SHA> <CONTEXT> <COMMAND>"
+    echo -e "\nUSAGE:\n\t./tagit.sh <COMMIT_SHA> <CONTEXT> <COMMAND>"
     echo -e "\n\tThis script requires the following environment variables: REPO_NAME, GITHUB_TOKEN, AWS_REGION, CODEBUILD_BUILD_ID\n"
 }
 
