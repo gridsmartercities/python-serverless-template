@@ -11,13 +11,17 @@ if [[ $# -ne 4 ]]; then
     exit 0
 fi
 
-REPO_NAME=$1
-COMMIT_SHA=$2
 CONTEXT=$3
 COMMAND=$4
 
+URL="https://api.github.com/repos/$1/statuses/$2?access_token=$GITHUB_TOKEN"
+TARGET_URL="https://$AWS_REGION.console.aws.amazon.com/codebuild/home?region=$AWS_REGION#/builds/$CODEBUILD_BUILD_ID/view/new"
+HEADERS="Content-Type: application/json"
+
+
 function create_commit_status() {
-    echo "creating commit status $1 $2 $3 $4 $5"
+    PAYLOAD="{\"state\": \"$1\", \"description\": \"$2\", \"context\": \"$3\", \"target_url\": \"$TARGET_URL\"}"
+    echo curl $URL -H $HEADERS -X POST -d $PAYLOAD
 }
 
 # Create a Pending commit status
@@ -36,6 +40,6 @@ fi
 set -e
 
 # Create a Success or Failure commit status
-create_commit_status $REPO_NAME $COMMIT_SHA $STATE $DESCRIPTION $CONTEXT
+create_commit_status $STATE $DESCRIPTION $CONTEXT
 
 exit 0
