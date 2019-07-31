@@ -21,13 +21,13 @@ COMMAND=$3
 
 
 function create_commit_status() {
-    /opt/tools/hub/bin/hub api "https://api.github.com/repos/$OWNER/$REPO_NAME/statuses/$COMMIT?access_token=$GITHUB_TOKEN" \
+    HUB_RESULT=`/opt/tools/hub/bin/hub api "https://api.github.com/repos/$OWNER/$REPO_NAME/statuses/$COMMIT?access_token=$GITHUB_TOKEN" \
         -H Content-Type:application/json \
         -X POST \
         -f state="$1" \
         -f description="$2" \
         -f context="$CONTEXT" \
-        -f target_url="https://$AWS_REGION.console.aws.amazon.com/codebuild/home?region=$AWS_REGION#/builds/$CODEBUILD_BUILD_ID/view/new"
+        -f target_url="https://$AWS_REGION.console.aws.amazon.com/codebuild/home?region=$AWS_REGION#/builds/$CODEBUILD_BUILD_ID/view/new"`
 }
 
 # Create a Pending commit status

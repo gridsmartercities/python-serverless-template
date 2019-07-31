@@ -27,7 +27,6 @@ phases:
     commands:
       # Gets the name of the current commit
       - export COMMIT_SHA=`git rev-parse HEAD`
-      - echo $COMMIT_SHA
       # Validate the SAM template
       - ./tools/build/update-commit-status.sh $COMMIT_SHA "SAM validation" "aws cloudformation validate-template --template-body file://template.yaml"
       # Checking the SAM template
