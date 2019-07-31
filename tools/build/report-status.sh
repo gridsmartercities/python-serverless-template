@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 
 function show_help() {
     echo -e "\nUSAGE:\n\t./report-status.sh <REPO_NAME> <COMMIT_SHA> <CONTEXT> <COMMAND>"
@@ -16,20 +17,25 @@ CONTEXT=$3
 COMMAND=$4
 
 function create_commit_status() {
-    echo "creating commit status $1 $2 $3 $4"
+    echo "creating commit status $1 $2 $3 $4 $5"
 }
 
-create_commit_status $COMMIT_SHA "pending" "job starting" $CONTEXT
+# Create a Pending commit status
+create_commit_status $REPO_NAME $COMMIT_SHA "pending" "job starting" $CONTEXT
 
 STATE="success"
 DESCRIPTION="job succeeded"
 
+# Execute the command (do not immediately exit on failure)
+set +e
 $COMMAND
 if [[ $? -ne 0 ]]; then
     STATE="failure"
     DESCRIPTION="job failed"
 fi
+set -e
 
-create_commit_status $COMMIT_SHA $STATE $DESCRIPTION $CONTEXT
+# Create a Success or Failure commit status
+create_commit_status $REPO_NAME $COMMIT_SHA $STATE $DESCRIPTION $CONTEXT
 
 exit 0
