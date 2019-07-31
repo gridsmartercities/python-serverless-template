@@ -11,7 +11,7 @@ phases:
     commands:
       # Add execution permissions to build tools
       - chmod u+x ./tools/build/*.sh
-      # Set an alias to the update-commit-status, which create commit statuses in GitHub
+      # Set an alias to the update-commit-status, which creates commit statuses in GitHub
       - TAG="./tools/build/update-commit-status.sh"
       # Install Hub CLI for GitHub
       - ./tools/build/hub-installer.sh
@@ -30,7 +30,7 @@ phases:
       # Validate the SAM template
       - $TAG "SAM validation" "aws cloudformation validate-template --template-body file://template.yaml"
       # Checking the SAM template
-      - $TAG "Cfn Lint" "cfn-lint template.yaml"
+      - $TAG "Cfn Linting" "cfn-lint template.yaml"
       # Validate the OpenApi 3.0 specification
       - $TAG "Swagger validation" "swagger-cli validate api-contract.yaml"
       # Running all prospector tools for code quality analysis
