@@ -12,7 +12,7 @@ if [[ $# -ne 1 ]]; then
 fi
 
 # get github's open prs
-open_pr_names=$(/opt/tools/hub/bin/hub pr list -s open -f %i)
+open_pr_names=$(hub pr list -s open -f %i)
 open_pr_names=${open_pr_names#?}
 IFS='#' read -ra open_prs <<< "$open_pr_names"
 
