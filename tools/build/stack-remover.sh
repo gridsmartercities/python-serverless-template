@@ -5,8 +5,8 @@ function show_help() {
     echo -e "\nUSAGE:\n\t./stack-remover.sh <STACK_SUBSTR>\tIt will remove all stacks where name contains <STACK_SUBSTR>"
 }
 
-if [[ $# -eq 0 ]]; then
-    echo "No arguments supplied"
+if [[ $# -ne 1 ]]; then
+    echo "Invalid argument"
     show_help
     exit 0
 fi

@@ -1,12 +1,12 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e
 
 function show_help() {
-    echo -e "\nUSAGE:\n\t./get-api-url.sh <API_NAME>"
+    echo -e "\nUSAGE:\n\t./report-status.sh <REPO_NAME> <COMMIT_SHA> <CONTEXT> <COMMAND>"
 }
 
-if [[ $# -ne 1 ]]; then
-    echo "Invalid argument"
+if [[ $# -ne 4 ]]; then
+    echo "Invalid arguments"
     show_help
     exit 0
 fi
