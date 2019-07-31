@@ -13,6 +13,7 @@ if [[ $# -ne 3 ]]; then
 fi
 
 OWNER="gridsmartercities"
+
 # User Inputs
 COMMIT=$1
 CONTEXT=$2
@@ -20,7 +21,7 @@ COMMAND=$3
 
 
 function create_commit_status() {
-    hub api "https://api.github.com/repos/$OWNER/$REPO_NAME/statuses/$COMMIT?access_token=$GITHUB_TOKEN" \
+    /opt/tools/hub/bin/hub api "https://api.github.com/repos/$OWNER/$REPO_NAME/statuses/$COMMIT?access_token=$GITHUB_TOKEN" \
         -H Content-Type:application/json \
         -X POST \
         -f state="$1" \

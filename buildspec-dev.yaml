@@ -23,8 +23,24 @@ phases:
       - curl -qL -o jq https://stedolan.github.io/jq/download/linux64/jq && chmod +x ./jq
   pre_build:
     commands:
-      # Run all pre-build checks
-      - ./tools/build/pre-build-checks.sh
+      # Gets the name of the current commit
+      - export COMMIT_SHA=`git rev-parse HEAD`
+      - echo $COMMIT_SHA
+      # Validate the SAM template
+      - ./tools/build/update-commit-status.sh $COMMIT_SHA "SAM validation" "aws cloudformation validate-template --template-body file://template.yaml"
+      # Checking the SAM template
+      - cfn-lint template.yaml
+      # Validate the OpenApi 3.0 specification
+      - swagger-cli validate api-contract.yaml
+      # Running all prospector tools for code quality analysis
+      - prospector
+      # Running bandit for security testing
+      - bandit -r -q .
+      # Running all unittests
+      - coverage run --branch --source='.' -m unittest tests/test_*.py
+      - coverage run --branch --source='.' -m unittest tests/*/test_*.py
+      # Checking that the code is 100% covered by unit tests
+      - coverage report -m --skip-covered --fail-under=100 --omit=tests/*,it/*
   build:
     commands:
       # Get the Pull Request number from GitHub as pr-#
