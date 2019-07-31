@@ -34,19 +34,17 @@ function create_commit_status() {
 # Create a Pending commit status
 create_commit_status "pending" "job starting"
 
-STATE="success"
-DESCRIPTION="job succeeded"
-
 # Execute the command (do not immediately exit on failure)
 set +e
 $COMMAND
-if [[ $? -ne 0 ]]; then
-    STATE="failure"
-    DESCRIPTION="job failed"
-fi
+CMD_RES=$?
 set -e
 
 # Create a Success or Failure commit status
-create_commit_status "$STATE" "$DESCRIPTION"
+if [[ $CMD_RES -ne 0 ]]; then
+    create_commit_status "failure" "job failed"
+    exit 0
+fi
 
+create_commit_status "success" "job succeeded"
 exit 0
