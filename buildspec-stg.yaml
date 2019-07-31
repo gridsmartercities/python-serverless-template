@@ -13,6 +13,7 @@ phases:
       - chmod u+x ./tools/build/*.sh
       # Install Hub CLI for GitHub
       - ./tools/build/hub-installer.sh
+      - PATH=$PATH:/opt/tools/hub/bin
       # Installing pip
       - pip install -U -q pip
       # Installing Python dependencies

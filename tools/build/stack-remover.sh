@@ -5,14 +5,14 @@ function show_help() {
     echo -e "\nUSAGE:\n\t./stack-remover.sh <STACK_SUBSTR>\tIt will remove all stacks where name contains <STACK_SUBSTR>"
 }
 
-if [[ $# -eq 0 ]]; then
-    echo "No arguments supplied"
+if [[ $# -ne 1 ]]; then
+    echo "Invalid argument"
     show_help
     exit 0
 fi
 
 # get github's open prs
-open_pr_names=$(/opt/tools/hub/bin/hub pr list -s open -f %i)
+open_pr_names=$(hub pr list -s open -f %i)
 open_pr_names=${open_pr_names#?}
 IFS='#' read -ra open_prs <<< "$open_pr_names"
 

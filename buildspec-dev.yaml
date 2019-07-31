@@ -11,6 +11,11 @@ phases:
     commands:
       # Add execution permissions to build tools
       - chmod u+x ./tools/build/*.sh
+      # Set an alias to the update-commit-status, which creates commit statuses in GitHub
+      - TAG="./tools/build/update-commit-status.sh"
+      # Install Hub CLI for GitHub
+      - ./tools/build/hub-installer.sh
+      - PATH=$PATH:/opt/tools/hub/bin
       # Installing swagger cli for OpenApi 3.0 validation
       - npm install -g -q swagger-cli
       # Installing dredd contract testing tool
@@ -23,8 +28,20 @@ phases:
       - curl -qL -o jq https://stedolan.github.io/jq/download/linux64/jq && chmod +x ./jq
   pre_build:
     commands:
-      # Run all pre-build checks
-      - ./tools/build/pre-build-checks.sh
+      # Validate the SAM template
+      - $TAG "SAM validation" "aws cloudformation validate-template --template-body file://template.yaml"
+      # Checking the SAM template
+      - $TAG "Cloudformation linting" "cfn-lint template.yaml"
+      # Validate the OpenApi 3.0 specification
+      - $TAG "Swagger validation" "swagger-cli validate api-contract.yaml"
+      # Running all prospector tools for code quality analysis
+      - $TAG "Prospector checks" "prospector"
+      # Running bandit for security testing
+      - $TAG "Bandit tests" "bandit -r -q ."
+      # Running all unittests
+      - $TAG "Unit tests" "./tools/dev/unit-tests.sh"
+      # Checking that the code is 100% covered by unit tests
+      - $TAG "Coverage check" "coverage report -m --skip-covered --fail-under=100 --omit=tests/*,it/*"
   build:
     commands:
       # Get the Pull Request number from GitHub as pr-#
@@ -34,15 +51,15 @@ phases:
       # Execute packager tool so every lambda gets just the code and dependencies it needs
       - ./tools/build/packager.sh -q
       # Build the SAM template
-      - sam build -s .build
+      - $TAG "SAM build" "sam build -s .build"
       # Package the build
-      - sam package --s3-bucket $SAM_S3_BUCKET --s3-prefix $CLEAN_PR --output-template-file NewSamTemplate.yaml
+      - $TAG "SAM package" "sam package --s3-bucket $SAM_S3_BUCKET --s3-prefix $CLEAN_PR --output-template-file NewSamTemplate.yaml"
       # Deploy the package
-      - sam deploy --s3-bucket $SAM_S3_BUCKET --no-fail-on-empty-changeset --capabilities CAPABILITY_NAMED_IAM --template-file NewSamTemplate.yaml --stack-name $REPO_NAME-stack-$CLEAN_PR --parameter-overrides RepoName=$REPO_NAME ApiNameSuffix=-$CLEAN_PR S3Bucket=$SAM_S3_BUCKET/$CLEAN_PR
+      - $TAG "SAM deploy" "sam deploy --s3-bucket $SAM_S3_BUCKET --no-fail-on-empty-changeset --capabilities CAPABILITY_NAMED_IAM --template-file NewSamTemplate.yaml --stack-name $REPO_NAME-stack-$CLEAN_PR --parameter-overrides RepoName=$REPO_NAME ApiNameSuffix=-$CLEAN_PR S3Bucket=$SAM_S3_BUCKET/$CLEAN_PR"
       # Get the ApiGateway Base URL
       - export BASE_URL=$(./tools/build/get-api-url.sh $REPO_NAME-apis-$CLEAN_PR)
       - echo BASE_URL is $BASE_URL
       # Run API Contract Tests against the Base URL
-      - dredd api-contract.yaml $BASE_URL --hookfiles=tests/hooks.py --hookfiles=tests/*/hooks.py --language python
+      - $TAG "Dredd contract tests" "dredd api-contract.yaml $BASE_URL --hookfiles=tests/hooks.py --hookfiles=tests/*/hooks.py --language python"
       # Run the integration tests
-      - coverage run --branch --source='.' -m unittest it/test_*.py
+      - $TAG "Integration tests" "coverage run --branch --source='.' -m unittest it/test_*.py"
