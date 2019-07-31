@@ -25,23 +25,24 @@ phases:
       - curl -qL -o jq https://stedolan.github.io/jq/download/linux64/jq && chmod +x ./jq
   pre_build:
     commands:
+      # Set an alias to the update-commit-status, which create commit statuses in GitHub
+      - TAG="./tools/build/update-commit-status.sh $COMMIT_SHA"
       # Gets the name of the current commit
       - export COMMIT_SHA=`git rev-parse HEAD`
       # Validate the SAM template
-      - ./tools/build/update-commit-status.sh $COMMIT_SHA "SAM validation" "aws cloudformation validate-template --template-body file://template.yaml"
+      - $TAG "SAM validation" "aws cloudformation validate-template --template-body file://template.yaml"
       # Checking the SAM template
-      - cfn-lint template.yaml
+      - $TAG "Cfn Lint" "cfn-lint template.yaml"
       # Validate the OpenApi 3.0 specification
-      - swagger-cli validate api-contract.yaml
+      - $TAG "Swagger validation" "swagger-cli validate api-contract.yaml"
       # Running all prospector tools for code quality analysis
-      - prospector
+      - $TAG "Prospector checks" "prospector"
       # Running bandit for security testing
-      - bandit -r -q .
+      - $TAG "Bandit tests" "bandit -r -q ."
       # Running all unittests
-      - coverage run --branch --source='.' -m unittest tests/test_*.py
-      - coverage run --branch --source='.' -m unittest tests/*/test_*.py
+      - $TAG "Unit tests" "./tools/dev/unit-tests.sh"
       # Checking that the code is 100% covered by unit tests
-      - coverage report -m --skip-covered --fail-under=100 --omit=tests/*,it/*
+      - $TAG "Coverage report" "coverage report -m --skip-covered --fail-under=100 --omit=tests/*,it/*"
   build:
     commands:
       # Get the Pull Request number from GitHub as pr-#
