@@ -11,6 +11,8 @@ phases:
     commands:
       # Add execution permissions to build tools
       - chmod u+x ./tools/build/*.sh
+      # Install Hub CLI for GitHub
+      - ./tools/build/hub-installer.sh
       # Installing swagger cli for OpenApi 3.0 validation
       - npm install -g -q swagger-cli
       # Installing dredd contract testing tool
