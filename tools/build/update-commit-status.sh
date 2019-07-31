@@ -37,11 +37,11 @@ create_commit_status "pending" "job starting"
 # Execute the command (do not immediately exit on failure)
 set +e
 $COMMAND
-CMD_RES=$?
+CMD_RESULT=$?
 set -e
 
 # Create a Success or Failure commit status
-if [[ $CMD_RES -ne 0 ]]; then
+if [[ $CMD_RESULT -ne 0 ]]; then
     create_commit_status "failure" "job failed"
     exit 0
 fi
