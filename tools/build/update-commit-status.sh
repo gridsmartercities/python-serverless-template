@@ -22,7 +22,7 @@ command=$2
 
 
 function create_commit_status() {
-    HUB_RESULT=`hub api "https://api.github.com/repos/$owner/$REPO_NAME/statuses/$commit?access_token=$GITHUB_TOKEN" \
+    result=`hub api "https://api.github.com/repos/$owner/$REPO_NAME/statuses/$commit?access_token=$GITHUB_TOKEN" \
         -H Content-Type:application/json \
         -X POST \
         -f state="$1" \
