@@ -13,8 +13,7 @@ fi
 
 # get github's open prs
 open_prs=$(hub pr list -s open -f %i)
-open_prs=${open_prs#?}
-IFS='#' read -ra open_prs <<< "$open_prs"
+IFS='#' read -ra open_prs <<< "${open_prs#?}"
 
 # get aws stacks where stack name contains STACK_SUBSTR
 stack_names=$(aws cloudformation list-stacks --stack-status-filter CREATE_COMPLETE UPDATE_COMPLETE --query 'StackSummaries[?contains(StackName, `'$1'`)].StackName' | jq -r '.[]')
