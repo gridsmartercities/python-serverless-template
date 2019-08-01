@@ -80,11 +80,11 @@ This template is opinionated, and makes use of:
         - select *Include administrators*.
         - click on the *Create* button.
         
-### A NOTE ON PERMISSIONS
+#### A NOTE ON PERMISSIONS
 
 As you add AWS services to your project, you will likely need to update the codebuild policies to allow for the creation of those new resources (dynamodb tables, sqs, sns, ...)
 
-### A NOTE ON COSTS:
+#### A NOTE ON COSTS:
 
 - [Codebuild has a cost][codebuild-cost] of around $1 per 200 build minutes beyond the first 100 free-tier minutes.
 - You might need a GitHub Pro ($7 per month) account to setup branch protection rules.
@@ -145,37 +145,31 @@ You can define your AWS resources in *template.yaml*, as per AWS's [Serverless A
 
 ### Tools
 
-#### Developer Tools
-
-Four small scripts have been added to ease the development process:
-
-##### [unit-tests.sh][tool-unit-tests]
+#### [unit-tests.sh][tool-unit-tests]
  
 Runs all unit tests
 
 ```./unit-tests.sh```
 
-##### [test.sh][tool-test]
+#### [test.sh][tool-test]
 
 Runs an individual unit test
 
 ```./test.sh tests.a_lambda.test_a_lambda.ALambdaTests.test_success```
 
-##### [coverage.sh][tool-coverage]
+#### [coverage.sh][tool-coverage]
 
 Runs test coverage 
 
 ```./coverage.sh```
 
-#### Build Tools 
-
-##### [pre-build-checks.sh][tool-pre-build-checks]
+#### [pre-build-checks.sh][tool-pre-build-checks]
 
 Runs swagger validation, cloudformation template validate, bandit, prospector, unittest and coverage in one command
 
 ```./pre-build-checks.sh```
 
-##### [packager.sh][tool-packager]
+#### [packager.sh][tool-packager]
 
 This is a custom tool that manages lambda dependencies so only the right common code and external dependencies are packaged with each individual lambda. The tool is used by the build process only.
 
@@ -185,15 +179,15 @@ The packager creates a .build folder when run, which contains a copy of the inte
 
 Please note that if you run this packager locally, the .build folder might make the Bandit tests to take quite a lot of time. You might want to delete the .build folder once you've taken a look at it.
 
-##### [stack-remover.sh][tool-stack-remover]
+#### [stack-remover.sh][tool-stack-remover]
 
 This tool is used to remove all the left over PR related cloudformation stacks in AWS. At the end of a staging build, the process picks a list of all the PR related stacks in CREATE_COMPLETE state and, from those, it deletes the ones that do not belong to an open PR in GitHub.
 
-##### [get-api-url.sh][tool-get-api-url]
+#### [get-api-url.sh][tool-get-api-url]
 
 Gets the AWS API URL from the API Name. 
 
-##### [update-commit-status.sh][tool-update-commit-status]
+#### [update-commit-status.sh][tool-update-commit-status]
 
 This tool creates a commit status of *pending* in the current GitHub commit before running a command in the [buildspec-dev.yaml][buildspec-dev] file (look for a $TAG line in the buildspec for an example). A success or failure status is then created after the command runs, depending on the outcome of the run. In this way, you get instant feedback of the build progress in GitHub:
  
