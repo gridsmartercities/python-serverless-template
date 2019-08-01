@@ -7,4 +7,4 @@ prospector==1.1.6.2
 pylint_quotes
 yq
 aws-lambda-decorators
-pyyaml==3.13
+cfn-lint
