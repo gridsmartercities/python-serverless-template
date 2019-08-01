@@ -24,7 +24,7 @@ This template is opinionated, and makes use of:
 - [Bandit][bandit], a security testing tool.
 - [Dredd][dredd], for contract testing against the OpenAPI definition, with hooks written in Python.
 - A custom packaging tool to ease the sharing of code between [lambda functions][lambda].
-- A custom tool to notify GitHub of build progress on each command.
+- A custom tool to notify GitHub of build progress on each build command.
 
 
 ## Project Set up
