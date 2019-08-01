@@ -17,8 +17,6 @@ phases:
       - pip install -U -q pip
       # Installing Python dependencies
       - pip install -q awscli aws-sam-cli aws-lambda-decorators yq
-      # Installing jq, to be able to easily parse json (and yaml through the yq Python package) from the terminal
-      - curl -qL -o jq https://stedolan.github.io/jq/download/linux64/jq && chmod +x ./jq
   build:
     commands:
       # Copy the contract OpenApi 3.0 spec to the S3 bucket, so it can later be transformed into the SAM template
