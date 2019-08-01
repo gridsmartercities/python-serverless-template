@@ -214,9 +214,11 @@ Gets the AWS API URL from the API Name.
 
 This tool creates a commit status of *pending* in the current GitHub commit before running a command in the [buildspec-dev.yaml][buildspec-dev] file (look for a $TAG line in the buildspec for an example). A success or failure status is then created after the command runs, depending on the outcome of the run. In this way, you get instant feedback of the build progress in GitHub:
  
+![build-progress](images/build-progress.png)
  
 You can also make some (or all) of these steps required in GitHub, by going to *Branches* in the *Settings* section in GitHub and adding (or updating) a branch protection rule (on the master branch):
 
+![branch-protection](images/branch-protection.png)
 
 ## How to work on the project
 
