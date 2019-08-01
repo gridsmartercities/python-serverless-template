@@ -113,22 +113,6 @@ To follow these instructions, you will need to be familiar with pip, and creatin
     
     ```chmod u+x .git/hooks/pre-build-checks```
     
-### To run dredd locally:
-
-- Install dredd locally by running
-
-```npm install dredd```
-
-- After creating a Pull Request, go to your AWS codebuild project and take a look at the BASE_URL in the codebuild logs (you can also get it from ApiGateway)
-- Add the BASE_URL to your local environment variables by running 
-
-```export BASE_URL=your-base-url-from-codebuild```
-
-- Run dredd by typing 
-
-```dredd api-contract.yaml $BASE_URL --hookfiles=tests/hooks.py --hookfiles=tests/*/hooks.py --language python```
-    
-    
 ## Project Structure
 
 ### Code
@@ -262,7 +246,22 @@ Create a new folder with the name of your feature inside the *src* folder, and a
 
 If you add a dependency (to an internal file with common code, or to an external python package), add a dependencies.json or dependencies.yaml file to your lambda folder, and specify the dependencies there.
 
+### To run dredd locally:
 
+- Install dredd locally by running
+
+```npm install dredd```
+
+- After creating a Pull Request, go to your AWS codebuild project and take a look at the BASE_URL in the codebuild logs (you can also get it from ApiGateway)
+- Add the BASE_URL to your local environment variables by running 
+
+```export BASE_URL=your-base-url-from-codebuild```
+
+- Run dredd by typing 
+
+```dredd api-contract.yaml $BASE_URL --hookfiles=tests/hooks.py --hookfiles=tests/*/hooks.py --language python```
+    
+    
 [build-status]: https://codebuild.eu-west-2.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiemU0OGZ6VklFVjRIZ1p0UmtaRmhpRjY2b2tOTzRRSzIvZGo5TnZQdW0yQng3VW5UMzdKZEJlMVZUcGpTVDNueSs2bW9nU21wR1d3YXBuRkxVR0R1akprPSIsIml2UGFyYW1ldGVyU3BlYyI6IjhIeVM1RDFCZHJsdUNNdm4iLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master
 [mit-license-svg]: https://img.shields.io/badge/License-MIT-yellow.svg
 [mit-license]: https://opensource.org/licenses/MIT
