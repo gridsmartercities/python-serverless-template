@@ -199,6 +199,11 @@ Resources:
             Action:
               - cloudformation:DeleteStack
             Resource: "*"
+          - Effect: Allow
+            Action:
+              - s3:ListObjectsV2
+              - s3:DeleteObject
+            Resource: "*"
       Roles:
         - !Ref CodebuildStgRole
   CodebuildDevRole:

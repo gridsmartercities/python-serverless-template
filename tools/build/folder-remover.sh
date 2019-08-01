@@ -12,14 +12,14 @@ if [[ $# -ne 1 ]]; then
     exit 0
 fi
 
-FOLDER_SUBSTR=$1
+folder_substr=$1
 
 # get github's open prs
 open_prs=$(hub pr list -s open -f %i)
 IFS='#' read -ra open_prs <<< "${open_prs#?}"
 
 # get aws s3 folders inside the SAM_S3_BUCKET bucket where folder name contains FOLDER_SUBSTR
-folders=$(aws s3 ls s3://$SAM_S3_BUCKET/$FOLDER_SUBSTR | tr -d 'PRE \n')
+folders=$(aws s3 ls s3://$SAM_S3_BUCKET/$folder_substr | tr -d 'PRE \n')
 IFS='/' read -ra folders <<< "$folders"
 
 # delete folders one by one
