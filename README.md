@@ -287,4 +287,5 @@ If you add a dependency (to an internal file with common code, or to an external
 [tool-get-api-url]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/build/get-api-url.sh
 [tool-update-commit-status]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/build/update-commit-status.sh
 [cfn-python-lint]: https://github.com/aws-cloudformation/cfn-python-lint
+
 [buildspec-dev]: https://github.com/gridsmartercities/python-serverless-template/blob/master/buildspec-dev.yaml
