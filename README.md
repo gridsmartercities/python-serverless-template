@@ -36,6 +36,8 @@ This template is opinionated, and makes use of:
     - Select all *repo* options.
     - Click on the *Generate token* button.
     - Copy the generated hash value (you will not be able to see it again). This is your GitHub Token.
+    
+    
 - Clone repository to your computer.
 - [Create an AWS account][aws-account-create] if you don't have one already.
 - Ensure AWS has access to your GitHub account.
