@@ -24,6 +24,7 @@ This template is opinionated, and makes use of:
 - [Bandit][bandit], a security testing tool.
 - [Dredd][dredd], for contract testing against the OpenAPI definition, with hooks written in Python.
 - A custom packaging tool to ease the sharing of code between [lambda functions][lambda].
+- A custom tool to notify GitHub of build progress on each build command.
 
 
 ## Project Set up
@@ -75,36 +76,35 @@ This template is opinionated, and makes use of:
     - In the Branch name pattern, enter *master*
     - In the Rule settings:
         - select *Require pull request reviews before merging*, and *Dismiss stale pull request approvals when new commits are pushed*.
-        - select *Require status checks to pass before merging*, and *Require branches to be up to date before merging*. After running your first build (when raising your first Pull Request), you should be able to make the codebuild run required in the *status checks* area of this section.
+        - select *Require status checks to pass before merging*, and *Require branches to be up to date before merging*. After running your first build (when raising your first Pull Request), you should be able to make the codebuild run (and any other build commands run via the update-commit-status.sh tool) required in the *status checks* area of this section.
         - select *Include administrators*.
         - click on the *Create* button.
         
-### A NOTE ON PERMISSIONS
+#### A note on permissions
 
 As you add AWS services to your project, you will likely need to update the codebuild policies to allow for the creation of those new resources (dynamodb tables, sqs, sns, ...)
 
-### A NOTE ON COSTS:
+#### A note on costs
 
-1. [Codebuild has a cost][codebuild-cost] of around $1 per 200 build minutes beyond the first 100 free-tier minutes.
-2. You might need a GitHub Pro ($7 per month) account to setup branch protection rules.
+- [Codebuild has a cost][codebuild-cost] of around $1 per 200 build minutes beyond the first 100 free-tier minutes.
+- You might need a GitHub Pro ($7 per month) account to setup branch protection rules.
 
 ## Developer Set up
 
 To follow these instructions, you will need to be familiar with pip, and creating and managing Python virtual environments. If you are not, take a look at [this][pip-and-ve].
 
-1. Clone your new repo locally.
-    - Change *python-serverless-template* to *your-project-name* everywhere in the repo.
-2. Create a Python virtual environment.
-3. Install the development requirements by running
+- Clone your new repo locally and change *python-serverless-template* to *your-project-name* everywhere in the repo.
+- Create a Python virtual environment.
+- Install the development requirements by running
 
 ```pip install -r requirements.txt```
 
-4. Install the swagger cli by running
+- Install the swagger cli by running
 
 ```npm install swagger-cli```
 
-5. Take a look at the [Project Structure](#Project-Structure) section below, and start writing your code.
-6. (Optional) Set a pre-build-checks Git hook to check your code before pushing it to your Github branch:
+- Take a look at the [Project Structure](#Project-Structure) section below, and start writing your code.
+- (Optional) Set a pre-build-checks Git hook to check your code before pushing it to your Github branch:
     - Copy pre-build-checks script to .git/hooks folder:
     
     ```cp tools/build/pre-build-checks.sh .git/hooks/pre-push```
@@ -112,22 +112,6 @@ To follow these instructions, you will need to be familiar with pip, and creatin
     - Give execute permissions to pre-build-checks script:
     
     ```chmod u+x .git/hooks/pre-build-checks```
-    
-### To run dredd locally:
-
-1. Install dredd locally by running
-
-```npm install dredd```
-
-2. After creating a Pull Request, go to your AWS codebuild project and take a look at the BASE_URL in the codebuild logs (you can also get it from ApiGateway)
-3. Add the BASE_URL to your local environment variables by running 
-
-```export BASE_URL=your-base-url-from-codebuild```
-
-4. Run dredd by typing 
-
-```dredd api-contract.yaml $BASE_URL --hookfiles=tests/hooks.py --hookfiles=tests/*/hooks.py --language python```
-    
     
 ## Project Structure
 
@@ -161,39 +145,33 @@ You can define your AWS resources in *template.yaml*, as per AWS's [Serverless A
 
 ### Tools
 
-#### Developer Tools
-
-Four small scripts have been added to ease the development process:
-
-##### [unit-tests.sh][tool-unit-tests]
+#### [unit-tests.sh][tool-unit-tests]
  
 Runs all unit tests
 
 ```./unit-tests.sh```
 
-##### [test.sh][tool-test]
+#### [test.sh][tool-test]
 
 Runs an individual unit test
 
 ```./test.sh tests.a_lambda.test_a_lambda.ALambdaTests.test_success```
 
-##### [coverage.sh][tool-coverage]
+#### [coverage.sh][tool-coverage]
 
 Runs test coverage 
 
 ```./coverage.sh```
 
-#### Build Tools 
-
-##### [pre-build-checks.sh][tool-pre-build-checks]
+#### [pre-build-checks.sh][tool-pre-build-checks]
 
 Runs swagger validation, cloudformation template validate, bandit, prospector, unittest and coverage in one command
 
 ```./pre-build-checks.sh```
 
-##### [Packager.sh][tool-packager]
+#### [packager.sh][tool-packager]
 
-This is a custom tool that manages lambda dependencies so only the right common code and external dependencies are packaged with each individual lambda. The tool is used by the build process only.
+This is a custom build tool that manages lambda dependencies so only the right common code and external dependencies are packaged with each individual lambda. The tool is used by the build process only.
 
 The tool can work with json or yaml files. For each lambda, add a *dependencies.yaml* or *dependencies.json* in the lambda folder (the tool will skip folders without a dependencies file). In there, add all internal code dependencies in the *internal* array, and all the external packages needed by your lambda in the *external* array.
 
@@ -201,13 +179,23 @@ The packager creates a .build folder when run, which contains a copy of the inte
 
 Please note that if you run this packager locally, the .build folder might make the Bandit tests to take quite a lot of time. You might want to delete the .build folder once you've taken a look at it.
 
-##### [stack-remover.sh][tool-stack-remover]
+#### [stack-remover.sh][tool-stack-remover]
 
-This tool is used to remove all the left over PR related cloudformation stacks in AWS. At the end of a staging build, the process picks a list of all the PR related stacks in CREATE_COMPLETE state and, from those, it deletes the ones that do not belong to an open PR in GitHub.
+This build tool is used to remove all the left over PR related cloudformation stacks in AWS. At the end of a staging build, the process picks a list of all the PR related stacks in CREATE_COMPLETE state and, from those, it deletes the ones that do not belong to an open PR in GitHub.
 
-##### [get-api-url.sh][tool-get-api-url]
+#### [get-api-url.sh][tool-get-api-url]
 
-Gets the AWS API URL from the API Name. 
+Allows the build to get the AWS API URL from the API Name. 
+
+#### [update-commit-status.sh][tool-update-commit-status]
+
+This build tool creates a commit status of *pending* in the current GitHub commit before running a command in the [buildspec-dev.yaml][buildspec-dev] file (look for a $TAG line in the buildspec for an example). A success or failure status is then created after the command runs, depending on the outcome of the run. In this way, you get instant feedback of the build progress in GitHub:
+ 
+![build-progress](images/build-progress.png)
+ 
+You can also make some (or all) of these steps required in GitHub, by going to *Branches* in the *Settings* section in GitHub and adding (or updating) a branch protection rule (on the master branch):
+
+![branch-protection](images/branch-protection.png)
 
 ## How to work on the project
 
@@ -252,7 +240,22 @@ Create a new folder with the name of your feature inside the *src* folder, and a
 
 If you add a dependency (to an internal file with common code, or to an external python package), add a dependencies.json or dependencies.yaml file to your lambda folder, and specify the dependencies there.
 
+### To run dredd locally:
 
+- Install dredd locally by running
+
+```npm install dredd```
+
+- After creating a Pull Request, go to your AWS codebuild project and take a look at the BASE_URL in the codebuild logs (you can also get it from ApiGateway)
+- Add the BASE_URL to your local environment variables by running 
+
+```export BASE_URL=your-base-url-from-codebuild```
+
+- Run dredd by typing 
+
+```dredd api-contract.yaml $BASE_URL --hookfiles=tests/hooks.py --hookfiles=tests/*/hooks.py --language python```
+    
+    
 [build-status]: https://codebuild.eu-west-2.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiemU0OGZ6VklFVjRIZ1p0UmtaRmhpRjY2b2tOTzRRSzIvZGo5TnZQdW0yQng3VW5UMzdKZEJlMVZUcGpTVDNueSs2bW9nU21wR1d3YXBuRkxVR0R1akprPSIsIml2UGFyYW1ldGVyU3BlYyI6IjhIeVM1RDFCZHJsdUNNdm4iLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master
 [mit-license-svg]: https://img.shields.io/badge/License-MIT-yellow.svg
 [mit-license]: https://opensource.org/licenses/MIT
@@ -282,4 +285,6 @@ If you add a dependency (to an internal file with common code, or to an external
 [tool-packager]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/build/packager.sh
 [tool-stack-remover]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/build/stack-remover.sh
 [tool-get-api-url]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/build/get-api-url.sh
+[tool-update-commit-status]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/build/update-commit-status.sh
 [cfn-python-lint]: https://github.com/aws-cloudformation/cfn-python-lint
+[buildspec-dev]: https://github.com/gridsmartercities/python-serverless-template/blob/master/buildspec-dev.yaml
