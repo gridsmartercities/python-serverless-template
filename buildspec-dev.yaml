@@ -10,12 +10,11 @@ phases:
   install:
     commands:
       # Add execution permissions to build tools
-      - chmod u+x ./tools/build/*.sh
+      - chmod +x ./tools/build/*.sh
       # Set an alias to the update-commit-status, which creates commit statuses in GitHub
       - TAG="./tools/build/update-commit-status.sh"
       # Install Hub CLI for GitHub
-      - ./tools/build/hub-installer.sh
-      - PATH=$PATH:/opt/tools/hub/bin
+      - ./tools/build/hub-installer.sh && PATH=$PATH:/opt/tools/hub/bin
       # Installing swagger cli for OpenApi 3.0 validation
       - npm install -g -q swagger-cli
       # Installing dredd contract testing tool
