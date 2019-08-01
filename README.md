@@ -24,6 +24,7 @@ This template is opinionated, and makes use of:
 - [Bandit][bandit], a security testing tool.
 - [Dredd][dredd], for contract testing against the OpenAPI definition, with hooks written in Python.
 - A custom packaging tool to ease the sharing of code between [lambda functions][lambda].
+- A custom tool to notify GitHub of build progress on each command.
 
 
 ## Project Set up
@@ -75,7 +76,7 @@ This template is opinionated, and makes use of:
     - In the Branch name pattern, enter *master*
     - In the Rule settings:
         - select *Require pull request reviews before merging*, and *Dismiss stale pull request approvals when new commits are pushed*.
-        - select *Require status checks to pass before merging*, and *Require branches to be up to date before merging*. After running your first build (when raising your first Pull Request), you should be able to make the codebuild run required in the *status checks* area of this section.
+        - select *Require status checks to pass before merging*, and *Require branches to be up to date before merging*. After running your first build (when raising your first Pull Request), you should be able to make the codebuild run (and any other build commands run via the [update-commit-status.sh](#update-commit-status.sh) tool) required in the *status checks* area of this section.
         - select *Include administrators*.
         - click on the *Create* button.
         
@@ -209,6 +210,14 @@ This tool is used to remove all the left over PR related cloudformation stacks i
 
 Gets the AWS API URL from the API Name. 
 
+##### [update-commit-status.sh][tool-update-commit-status]
+
+This tool creates a commit status of *pending* in the current GitHub commit before running a command in the [buildspec-dev.yaml][buildspec-dev] file (look for a $TAG line in the buildspec for an example). A success or failure status is then created after the command runs, depending on the outcome of the run. In this way, you get instant feedback of the build progress in GitHub:
+ 
+ 
+You can also make some (or all) of these steps required in GitHub, by going to *Branches* in the *Settings* section in GitHub and adding (or updating) a branch protection rule (on the master branch):
+
+
 ## How to work on the project
 
 1. Change to master branch: 
@@ -283,3 +292,4 @@ If you add a dependency (to an internal file with common code, or to an external
 [tool-stack-remover]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/build/stack-remover.sh
 [tool-get-api-url]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/build/get-api-url.sh
 [cfn-python-lint]: https://github.com/aws-cloudformation/cfn-python-lint
+[buildspec-dev]: https://github.com/gridsmartercities/python-serverless-template/blob/master/buildspec-dev.yaml
