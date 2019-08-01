@@ -62,4 +62,4 @@ phases:
       # Run API Contract Tests against the Base URL
       - $TAG "Dredd contract tests" "dredd api-contract.yaml $BASE_URL --hookfiles=tests/hooks.py --hookfiles=tests/*/hooks.py --language python"
       # Run the integration tests
-      - $TAG "Integration tests" "coverage run --branch --source='.' -m unittest it/test_*.py"
+      - $TAG "Integration tests" "python -m unittest it/test_*.py"
