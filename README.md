@@ -14,6 +14,7 @@ This template is opinionated, and makes use of:
 
 - [AWS SAM][sam] for the AWS resourses specification.
 - [AWS codebuild][codebuild] to setup CI/CD in your AWS account.
+- [cfn-python-lint][cfn-python-lint] for checking the cloudformation template.
 - [OpenApi 3][openapi-3] for the API contract specification.
 - The [Swagger CLI][swagger-cli] to validate the OpenAPI specification.
 - The Python [unittest][unittest] library for unit testing.
@@ -223,7 +224,7 @@ Gets the AWS API URL from the API Name.
 ```git checkout -b your_new_feature_branch_name```
 
 4. make your feature changes
-5. run checks with the pre-build-checks, unit-tests, test or coverage tools, or run them individually (swagger, cloudformation validation, bandit, prospector, unittest, coverage - you can find the commands in the buildspec-dev.yaml file, and in the pre-build-checks script).
+5. run checks with the pre-build-checks, unit-tests, test or coverage tools, or run them individually (swagger, cfn-lint, cloudformation validation, bandit, prospector, unittest, coverage - you can find the commands in the buildspec-dev.yaml file, and in the pre-build-checks script).
 6. Push to remote repo: 
 
 ```git push```
@@ -281,3 +282,4 @@ If you add a dependency (to an internal file with common code, or to an external
 [tool-packager]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/build/packager.sh
 [tool-stack-remover]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/build/stack-remover.sh
 [tool-get-api-url]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/build/get-api-url.sh
+[cfn-python-lint]: https://github.com/aws-cloudformation/cfn-python-lint

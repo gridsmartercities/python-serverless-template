@@ -22,13 +22,15 @@ phases:
       # Installing pip
       - pip install -U -q pip
       # Installing Python dependencies
-      - pip install -q awscli aws-sam-cli bandit coverage dredd-hooks prospector==1.1.6.2 pylint_quotes aws-lambda-decorators yq pyyaml~=3.13
+      - pip install -q awscli aws-sam-cli bandit coverage dredd-hooks prospector==1.1.6.2 pylint_quotes aws-lambda-decorators yq cfn-lint
       # Installing jq, to be able to easily parse json (and yaml through the yq Python package) from the terminal
       - curl -qL -o jq https://stedolan.github.io/jq/download/linux64/jq && chmod +x ./jq
   pre_build:
     commands:
       # Validate the SAM template
       - $TAG "SAM validation" "aws cloudformation validate-template --template-body file://template.yaml"
+      # Checking the SAM template
+      - $TAG "Cloudformation linting" "cfn-lint template.yaml"
       # Validate the OpenApi 3.0 specification
       - $TAG "Swagger validation" "swagger-cli validate api-contract.yaml"
       # Running all prospector tools for code quality analysis

@@ -10,6 +10,12 @@ if [[ ! $(aws cloudformation validate-template --template-body file://template.y
     show_failure
 fi
 
+echo "... checking sam template"
+cfn-lint template.yaml
+if [[ $? != 0 ]]; then
+    show_failure
+fi
+
 echo "... validating OpenApi specification"
 if [[ ! $(swagger-cli validate api-contract.yaml) ]]; then
     show_failure
