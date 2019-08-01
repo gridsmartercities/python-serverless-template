@@ -80,11 +80,11 @@ This template is opinionated, and makes use of:
         - select *Include administrators*.
         - click on the *Create* button.
         
-#### A NOTE ON PERMISSIONS
+#### A note on permissions
 
 As you add AWS services to your project, you will likely need to update the codebuild policies to allow for the creation of those new resources (dynamodb tables, sqs, sns, ...)
 
-#### A NOTE ON COSTS:
+#### A note on costs
 
 - [Codebuild has a cost][codebuild-cost] of around $1 per 200 build minutes beyond the first 100 free-tier minutes.
 - You might need a GitHub Pro ($7 per month) account to setup branch protection rules.
