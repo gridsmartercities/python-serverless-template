@@ -76,7 +76,7 @@ This template is opinionated, and makes use of:
     - In the Branch name pattern, enter *master*
     - In the Rule settings:
         - select *Require pull request reviews before merging*, and *Dismiss stale pull request approvals when new commits are pushed*.
-        - select *Require status checks to pass before merging*, and *Require branches to be up to date before merging*. After running your first build (when raising your first Pull Request), you should be able to make the codebuild run (and any other build commands run via the [update-commit-status.sh](#update-commit-status.sh) tool) required in the *status checks* area of this section.
+        - select *Require status checks to pass before merging*, and *Require branches to be up to date before merging*. After running your first build (when raising your first Pull Request), you should be able to make the codebuild run (and any other build commands run via the update-commit-status.sh tool) required in the *status checks* area of this section.
         - select *Include administrators*.
         - click on the *Create* button.
         
@@ -86,26 +86,26 @@ As you add AWS services to your project, you will likely need to update the code
 
 ### A NOTE ON COSTS:
 
-1. [Codebuild has a cost][codebuild-cost] of around $1 per 200 build minutes beyond the first 100 free-tier minutes.
-2. You might need a GitHub Pro ($7 per month) account to setup branch protection rules.
+- [Codebuild has a cost][codebuild-cost] of around $1 per 200 build minutes beyond the first 100 free-tier minutes.
+- You might need a GitHub Pro ($7 per month) account to setup branch protection rules.
 
 ## Developer Set up
 
 To follow these instructions, you will need to be familiar with pip, and creating and managing Python virtual environments. If you are not, take a look at [this][pip-and-ve].
 
-1. Clone your new repo locally.
+- Clone your new repo locally.
     - Change *python-serverless-template* to *your-project-name* everywhere in the repo.
-2. Create a Python virtual environment.
-3. Install the development requirements by running
+- Create a Python virtual environment.
+- Install the development requirements by running
 
 ```pip install -r requirements.txt```
 
-4. Install the swagger cli by running
+- Install the swagger cli by running
 
 ```npm install swagger-cli```
 
-5. Take a look at the [Project Structure](#Project-Structure) section below, and start writing your code.
-6. (Optional) Set a pre-build-checks Git hook to check your code before pushing it to your Github branch:
+- Take a look at the [Project Structure](#Project-Structure) section below, and start writing your code.
+- (Optional) Set a pre-build-checks Git hook to check your code before pushing it to your Github branch:
     - Copy pre-build-checks script to .git/hooks folder:
     
     ```cp tools/build/pre-build-checks.sh .git/hooks/pre-push```
@@ -116,16 +116,16 @@ To follow these instructions, you will need to be familiar with pip, and creatin
     
 ### To run dredd locally:
 
-1. Install dredd locally by running
+- Install dredd locally by running
 
 ```npm install dredd```
 
-2. After creating a Pull Request, go to your AWS codebuild project and take a look at the BASE_URL in the codebuild logs (you can also get it from ApiGateway)
-3. Add the BASE_URL to your local environment variables by running 
+- After creating a Pull Request, go to your AWS codebuild project and take a look at the BASE_URL in the codebuild logs (you can also get it from ApiGateway)
+- Add the BASE_URL to your local environment variables by running 
 
 ```export BASE_URL=your-base-url-from-codebuild```
 
-4. Run dredd by typing 
+- Run dredd by typing 
 
 ```dredd api-contract.yaml $BASE_URL --hookfiles=tests/hooks.py --hookfiles=tests/*/hooks.py --language python```
     
@@ -192,7 +192,7 @@ Runs swagger validation, cloudformation template validate, bandit, prospector, u
 
 ```./pre-build-checks.sh```
 
-##### [Packager.sh][tool-packager]
+##### [packager.sh][tool-packager]
 
 This is a custom tool that manages lambda dependencies so only the right common code and external dependencies are packaged with each individual lambda. The tool is used by the build process only.
 
