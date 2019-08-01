@@ -171,7 +171,7 @@ Runs swagger validation, cloudformation template validate, bandit, prospector, u
 
 #### [packager.sh][tool-packager]
 
-This is a custom tool that manages lambda dependencies so only the right common code and external dependencies are packaged with each individual lambda. The tool is used by the build process only.
+This is a custom build tool that manages lambda dependencies so only the right common code and external dependencies are packaged with each individual lambda. The tool is used by the build process only.
 
 The tool can work with json or yaml files. For each lambda, add a *dependencies.yaml* or *dependencies.json* in the lambda folder (the tool will skip folders without a dependencies file). In there, add all internal code dependencies in the *internal* array, and all the external packages needed by your lambda in the *external* array.
 
@@ -181,15 +181,15 @@ Please note that if you run this packager locally, the .build folder might make 
 
 #### [stack-remover.sh][tool-stack-remover]
 
-This tool is used to remove all the left over PR related cloudformation stacks in AWS. At the end of a staging build, the process picks a list of all the PR related stacks in CREATE_COMPLETE state and, from those, it deletes the ones that do not belong to an open PR in GitHub.
+This build tool is used to remove all the left over PR related cloudformation stacks in AWS. At the end of a staging build, the process picks a list of all the PR related stacks in CREATE_COMPLETE state and, from those, it deletes the ones that do not belong to an open PR in GitHub.
 
 #### [get-api-url.sh][tool-get-api-url]
 
-Gets the AWS API URL from the API Name. 
+Allows the build to get the AWS API URL from the API Name. 
 
 #### [update-commit-status.sh][tool-update-commit-status]
 
-This tool creates a commit status of *pending* in the current GitHub commit before running a command in the [buildspec-dev.yaml][buildspec-dev] file (look for a $TAG line in the buildspec for an example). A success or failure status is then created after the command runs, depending on the outcome of the run. In this way, you get instant feedback of the build progress in GitHub:
+This build tool creates a commit status of *pending* in the current GitHub commit before running a command in the [buildspec-dev.yaml][buildspec-dev] file (look for a $TAG line in the buildspec for an example). A success or failure status is then created after the command runs, depending on the outcome of the run. In this way, you get instant feedback of the build progress in GitHub:
  
 ![build-progress](images/build-progress.png)
  
