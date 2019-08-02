@@ -167,12 +167,12 @@ Resources:
           - Effect: Allow
             Action:
               - cloudformation:ValidateTemplate
+              - cloudformation:GetTemplateSummary
+              - cloudformation:ListStacks
             Resource: "*"
           - Effect: Allow
             Action:
               - cloudformation:CreateChangeSet
-              - cloudformation:GetTemplateSummary
-              - cloudformation:ListStacks
               - cloudformation:DescribeStacks
               - cloudformation:ExecuteChangeSet
               - cloudformation:DescribeChangeSet

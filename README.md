@@ -93,7 +93,6 @@ As you add AWS services to your project, you will likely need to update the code
 
 To follow these instructions, you will need to be familiar with pip, and creating and managing Python virtual environments. If you are not, take a look at [this][pip-and-ve].
 
-- Clone your new repo locally and change *python-serverless-template* to *your-project-name* everywhere in the repo.
 - Create a Python virtual environment.
 - Install the development requirements by running
 
