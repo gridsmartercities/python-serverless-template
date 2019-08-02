@@ -184,7 +184,7 @@ Resources:
               - logs:PutLogEvents
               - logs:DescribeLogGroups
               - logs:DeleteLogGroup
-            Resource: !Sub arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/*/${ServiceName}-*
+            Resource: "*"
       Roles:
         - !Ref CodebuildDevRole
         - !Ref CodebuildStgRole
