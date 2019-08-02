@@ -169,10 +169,10 @@ Resources:
               - cloudformation:ValidateTemplate
               - cloudformation:GetTemplateSummary
               - cloudformation:ListStacks
+              - cloudformation:CreateChangeSet
             Resource: "*"
           - Effect: Allow
             Action:
-              - cloudformation:CreateChangeSet
               - cloudformation:DescribeStacks
               - cloudformation:ExecuteChangeSet
               - cloudformation:DescribeChangeSet
