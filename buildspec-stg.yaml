@@ -8,6 +8,9 @@ env:
 
 phases:
   install:
+    runtime-versions:
+      python: 3.7
+      nodejs: 10
     commands:
       # Add execution permissions to the build tools
       - chmod +x ./tools/build/*.sh

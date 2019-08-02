@@ -43,7 +43,7 @@ set -e
 # Create a Success or Failure commit status
 if [[ $cmd_result -ne 0 ]]; then
     create_commit_status "failure" "job failed"
-    exit 0
+    exit 1
 fi
 
 create_commit_status "success" "job succeeded"
