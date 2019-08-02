@@ -1,7 +1,7 @@
 version: 0.2
 env:
   variables:
-    SERVICE_NAME:             "python-serv-temp"
+    REPO_NAME:                "python-serv-temp"
   parameter-store:
     SAM_S3_BUCKET:            "/python-serv-temp/build/SAM_S3_BUCKET"
     GITHUB_TOKEN:             "/python-serv-temp/build/GITHUB_TOKEN"
