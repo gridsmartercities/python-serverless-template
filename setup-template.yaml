@@ -185,11 +185,6 @@ Resources:
               - logs:DescribeLogGroups
               - logs:DeleteLogGroup
             Resource: "*"
-          - Effect: Allow
-            Action:
-              - s3:List*
-              - s3:DeleteObject
-            Resource: "*"
       Roles:
         - !Ref CodebuildDevRole
         - !Ref CodebuildStgRole
@@ -204,8 +199,27 @@ Resources:
             Action:
               - cloudformation:DeleteStack
             Resource: "*"
+          - Effect: Allow
+            Action:
+              - s3:List*
+              - s3:DeleteObject
+            Resource: !Sub arn:aws:s3:::${ServiceName}-output/stg/*
       Roles:
         - !Ref CodebuildStgRole
+  CodebuildDevPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: !Sub codebuild-${ServiceName}-dev-service-policy
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - s3:List*
+              - s3:DeleteObject
+            Resource: !Sub arn:aws:s3:::${ServiceName}-output/dev/*
+      Roles:
+        - !Ref CodebuildDevRole
   CodebuildDevRole:
     Type: AWS::IAM::Role
     Properties:
