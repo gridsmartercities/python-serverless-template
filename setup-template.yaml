@@ -63,7 +63,7 @@ Resources:
   CodebuildAlarmTopic:
     Type: AWS::SNS::Topic
     Properties:
-      DisplayName: !Sub codebuild-${ServiceName}-alarms
+      DisplayName: !Sub ${ServiceName}-codebuild-alarms
       Subscription:
         - Endpoint: !Sub ${AlertEmail}
           Protocol: email
@@ -118,21 +118,23 @@ Resources:
   CodeBuildSharedPolicy:
     Type: AWS::IAM::Policy
     Properties:
-      PolicyName: !Sub codebuild-${ServiceName}-shared-service-policy
+      PolicyName: !Sub ${ServiceName}-codebuild-shared-service-policy
       PolicyDocument:
         Version: 2012-10-17
         Statement:
           - Effect: Allow
             Action: ssm:GetParameters
-            Resource: !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/build/SAM_S3_BUCKET
+            Resource: !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${ServiceName}/build/SAM_S3_BUCKET
+          - Effect: Allow
+            Action: ssm:GetParameters
+            Resource: !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${ServiceName}/build/GITHUB_TOKEN
           - Effect: Allow
             Action:
               - s3:PutObject
               - s3:GetObject
+              - s3:List*
+              - s3:DeleteObject
             Resource: !Sub arn:aws:s3:::${ServiceName}-output/*
-          - Effect: Allow
-            Action: ssm:GetParameters
-            Resource: "*"
           - Effect: Allow
             Action:
               - iam:GetRole
@@ -141,7 +143,7 @@ Resources:
               - iam:AttachRolePolicy
               - iam:DetachRolePolicy
               - iam:PassRole
-            Resource: "*"
+            Resource: !Sub arn:aws:iam::${AWS::AccountId}:role/${ServiceName}-*
           - Effect: Allow
             Action:
               - lambda:CreateFunction
@@ -153,7 +155,7 @@ Resources:
               - lambda:ListTags
               - lambda:TagResource
               - lambda:UntagResource
-            Resource: "*"
+            Resource: !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${ServiceName}-stack-*
           - Effect: Allow
             Action:
               - apigateway:PUT
@@ -168,12 +170,7 @@ Resources:
               - cloudformation:CreateChangeSet
               - cloudformation:GetTemplateSummary
               - cloudformation:ListStacks
-              - cloudformation:DeleteStack
-            Resource: "*"
-          - Effect: Allow
-            Action:
               - cloudformation:DescribeStacks
-              - cloudformation:CreateChangeSet
               - cloudformation:ExecuteChangeSet
               - cloudformation:DescribeChangeSet
             Resource: !Sub arn:aws:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/${ServiceName}-*
@@ -184,46 +181,27 @@ Resources:
               - logs:PutLogEvents
               - logs:DescribeLogGroups
               - logs:DeleteLogGroup
-            Resource: "*"
+            Resource: !Sub arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/*/${ServiceName}-*
       Roles:
         - !Ref CodebuildDevRole
         - !Ref CodebuildStgRole
   CodebuildStgPolicy:
     Type: AWS::IAM::Policy
     Properties:
-      PolicyName: !Sub codebuild-${ServiceName}-stg-service-policy
+      PolicyName: !Sub ${ServiceName}-codebuild-stg-service-policy
       PolicyDocument:
         Version: 2012-10-17
         Statement:
           - Effect: Allow
             Action:
               - cloudformation:DeleteStack
-            Resource: "*"
-          - Effect: Allow
-            Action:
-              - s3:List*
-              - s3:DeleteObject
-            Resource: !Sub arn:aws:s3:::${ServiceName}-output/stg/*
+            Resource: !Sub arn:aws:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/${ServiceName}-*
       Roles:
         - !Ref CodebuildStgRole
-  CodebuildDevPolicy:
-    Type: AWS::IAM::Policy
-    Properties:
-      PolicyName: !Sub codebuild-${ServiceName}-dev-service-policy
-      PolicyDocument:
-        Version: 2012-10-17
-        Statement:
-          - Effect: Allow
-            Action:
-              - s3:List*
-              - s3:DeleteObject
-            Resource: !Sub arn:aws:s3:::${ServiceName}-output/dev/*
-      Roles:
-        - !Ref CodebuildDevRole
   CodebuildDevRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !Sub codebuild-${ServiceName}-dev-service-role
+      RoleName: !Sub ${ServiceName}-codebuild-dev-service-role
       AssumeRolePolicyDocument:
           Version: 2012-10-17
           Statement:
@@ -236,7 +214,7 @@ Resources:
   CodebuildStgRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !Sub codebuild-${ServiceName}-stg-service-role
+      RoleName: !Sub ${ServiceName}-codebuild-stg-service-role
       AssumeRolePolicyDocument:
           Version: 2012-10-17
           Statement:
