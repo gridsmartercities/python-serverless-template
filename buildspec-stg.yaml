@@ -20,7 +20,7 @@ phases:
   build:
     commands:
       # Copy the contract OpenApi 3.0 spec to the S3 bucket, so it can later be transformed into the SAM template
-      - aws s3 cp api-contract.yaml s3://$SAM_S3_BUCKET/
+      - aws s3 cp api-contract.yaml s3://$SAM_S3_BUCKET/stg
       # Execute packager tool so every lambda gets just the code and dependencies it needs
       - ./tools/build/packager.sh -q
       # Build the SAM template
