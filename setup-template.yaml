@@ -32,11 +32,11 @@ Resources:
     Properties:
       Name: !Sub /${ServiceName}/build/SAM_S3_BUCKET
       Type: String
-      Value: !Sub ${ServiceName}-output-stg
+      Value: !Sub ${ServiceName}-output
   CodebuildOutputS3Bucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Sub ${ServiceName}-output-stg
+      BucketName: !Sub ${ServiceName}-output
       PublicAccessBlockConfiguration:
         BlockPublicAcls: true
         BlockPublicPolicy: true
