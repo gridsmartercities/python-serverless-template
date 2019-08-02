@@ -129,7 +129,7 @@ Resources:
             Action:
               - s3:PutObject
               - s3:GetObject
-            Resource: !Sub arn:aws:s3:::${ServiceName}-output-stg/*
+            Resource: !Sub arn:aws:s3:::${ServiceName}-output/*
           - Effect: Allow
             Action: ssm:GetParameters
             Resource: "*"
