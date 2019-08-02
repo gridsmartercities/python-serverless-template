@@ -46,7 +46,6 @@ phases:
     commands:
       # Get the Pull Request number from GitHub as pr-#
       - export CLEAN_PR=$(echo $CODEBUILD_SOURCE_VERSION | tr '/' '-')
-      - blasdlsasdafasd
       # Copy the contract OpenApi 3.0 spec to the S3 bucket, so it can later be transformed into the SAM template
       - aws s3 cp api-contract.yaml s3://$SAM_S3_BUCKET/dev/$CLEAN_PR/
       # Execute packager tool so every lambda gets just the code and dependencies it needs
