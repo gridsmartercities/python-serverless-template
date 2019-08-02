@@ -185,6 +185,11 @@ Resources:
               - logs:DescribeLogGroups
               - logs:DeleteLogGroup
             Resource: "*"
+          - Effect: Allow
+            Action:
+              - s3:List*
+              - s3:DeleteObject
+            Resource: "*"
       Roles:
         - !Ref CodebuildDevRole
         - !Ref CodebuildStgRole
@@ -198,11 +203,6 @@ Resources:
           - Effect: Allow
             Action:
               - cloudformation:DeleteStack
-            Resource: "*"
-          - Effect: Allow
-            Action:
-              - s3:List*
-              - s3:DeleteObject
             Resource: "*"
       Roles:
         - !Ref CodebuildStgRole
