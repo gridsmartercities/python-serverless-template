@@ -224,3 +224,11 @@ Resources:
                   - codebuild.amazonaws.com
               Action:
                 - sts:AssumeRole
+  CodebuildDevLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /aws/codebuild/${CodebuildDevProject}
+  CodebuildStgLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /aws/codebuild/${CodebuildStgProject}
