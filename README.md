@@ -36,7 +36,7 @@ This template is opinionated, and makes use of:
     - Select all *repo* options.
     - Click on the *Generate token* button.
     - Copy the generated hash value (you will not be able to see it again). This is your GitHub Token.
-- Clone repository to your computer, and change all references to *python-serverless-template* to *your-project-name*.
+- Clone repository to your computer, and change all references to *python-serverless-template* to *your-service-name*.
 - [Create an AWS account][aws-account-create] if you don't have one already.
 - Ensure AWS has access to your GitHub account.
     - In your AWS account, go to *Services* and type *codebuild*.
@@ -50,11 +50,11 @@ This template is opinionated, and makes use of:
     - In the *Specify Template* section, select *Upload a template file*.
     - Click on the *Choose file* button, and select the *setup-template.yaml* cloudformation template located in this repository.
     - Click on *Next*.
-    - Enter a stack name (for example, your-project-name-stack-setup)
+    - Enter a stack name (for example, your-service-name-stack-setup)
     - In the *Parameters* section, enter:
         - The email address where staging build errors should be sent to.
         - The full url to your GitHub repo (for example, https://github.com/gridsmartercities/python-serverless-template.git)
-        - The name of your service (for example, *your-project-name*).
+        - The name of your service (for example, *your-service-name*).
         - Enter the GitHub token you generated before.
     - Click *Next*.
     - Accept the *Capabilities and transforms* options at the bottom of the page, and click the *Create stack* button.

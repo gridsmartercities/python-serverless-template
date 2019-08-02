@@ -4,7 +4,7 @@ Description: Build template for Dev and Staging projects
 
 Parameters:
   ServiceName:
-    Description: Enter a lower case, high level service name without environment details. Used to autofill service names. For example, your-project-name
+    Description: Enter a lower case, high level service name without environment details. Used to autofill service names. For example, your-service-name
     Type: String
     Default: "{SERVICE}"
   GitRepo:
