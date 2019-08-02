@@ -4,7 +4,7 @@ Description: Build template for Dev and Staging projects
 
 Parameters:
   ServiceName:
-    Description: Enter a lower case, high level service name without environment details. Used to autofill service names. For example, my-service-name
+    Description: Enter a lower case, high level service name without environment details. Used to autofill service names. For example, your-project-name
     Type: String
     Default: "{SERVICE}"
   GitRepo:
@@ -167,6 +167,9 @@ Resources:
           - Effect: Allow
             Action:
               - cloudformation:ValidateTemplate
+            Resource: "*"
+          - Effect: Allow
+            Action:
               - cloudformation:CreateChangeSet
               - cloudformation:GetTemplateSummary
               - cloudformation:ListStacks
