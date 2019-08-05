@@ -29,6 +29,7 @@ This template is opinionated, and makes use of:
 
 ## Project Set up
 
+- Install AWS CLI, and AWS SAM CLI following [these instructions][aws-sam-cli-installation].
 - Create a Github repo by clicking on the GitHub *Use this template* button above.
 - Create a Personal Access Token in your GitHub account.
     - In GitHub, go to your *Settings*, then *Developer Settings* and finally *Personal access token*.
@@ -287,3 +288,4 @@ If you add a dependency (to an internal file with common code, or to an external
 [tool-update-commit-status]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/build/update-commit-status.sh
 [cfn-python-lint]: https://github.com/aws-cloudformation/cfn-python-lint
 [buildspec-dev]: https://github.com/gridsmartercities/python-serverless-template/blob/master/buildspec-dev.yaml
+[aws-sam-cli-installation]: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html
