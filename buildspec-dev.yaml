@@ -22,10 +22,8 @@ phases:
       - npm install -g -q swagger-cli
       # Installing dredd contract testing tool
       - npm install -g -q dredd --unsafe-perm=true
-      # Installing pip
-      - pip install -U -q pip
       # Installing Python dependencies
-      - pip install -q awscli aws-sam-cli bandit coverage dredd-hooks prospector==1.1.6.2 pylint_quotes aws-lambda-decorators yq cfn-lint
+      - pip3 install -q aws-sam-cli bandit coverage dredd-hooks prospector==1.1.6.2 pylint_quotes aws-lambda-decorators yq cfn-lint
   pre_build:
     commands:
       # Validate the SAM template
