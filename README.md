@@ -12,7 +12,7 @@ This template does not use the fantastic [Serverless Framework][serverless-frame
 
 This template is opinionated, and makes use of:
 
-- [AWS SAM][sam] for the AWS resourses specification.
+- [AWS SAM][sam] for the AWS resourses specification (instructions on [how to install the cli][aws-sam-cli-install]).
 - [AWS codebuild][codebuild] to setup CI/CD in your AWS account.
 - [cfn-python-lint][cfn-python-lint] for checking the cloudformation template.
 - [OpenApi 3][openapi-3] for the API contract specification.
@@ -287,3 +287,4 @@ If you add a dependency (to an internal file with common code, or to an external
 [tool-update-commit-status]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/build/update-commit-status.sh
 [cfn-python-lint]: https://github.com/aws-cloudformation/cfn-python-lint
 [buildspec-dev]: https://github.com/gridsmartercities/python-serverless-template/blob/master/buildspec-dev.yaml
+[aws-sam-cli-install]: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html
