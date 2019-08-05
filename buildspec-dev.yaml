@@ -18,6 +18,8 @@ phases:
       - TAG="./tools/build/update-commit-status.sh"
       # Install Hub CLI for GitHub
       - ./tools/build/hub-installer.sh && PATH=$PATH:/opt/tools/hub/bin
+      # Install aws sam CLI
+      - ./tools/build/aws-sam-cli-installer.sh
       # Installing swagger cli for OpenApi 3.0 validation
       - npm install -g -q swagger-cli
       # Installing dredd contract testing tool
@@ -25,7 +27,7 @@ phases:
       # Installing pip
       - pip install -U -q pip
       # Installing Python dependencies
-      - pip install -q awscli aws-sam-cli bandit coverage dredd-hooks prospector==1.1.6.2 pylint_quotes aws-lambda-decorators yq cfn-lint
+      - pip install -q bandit coverage dredd-hooks prospector==1.1.6.2 pylint_quotes aws-lambda-decorators yq cfn-lint
   pre_build:
     commands:
       # Validate the SAM template
