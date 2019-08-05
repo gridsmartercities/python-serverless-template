@@ -19,7 +19,7 @@ phases:
       # Install Hub CLI for GitHub
       - ./tools/build/hub-installer.sh && PATH=$PATH:/opt/tools/hub/bin
       # Install aws sam CLI
-      - ./tools/build/aws-sam-cli-installer.sh
+      - ./tools/build/aws-sam-cli-installer.sh && PATH=$PATH:/usr/local/bin/aws
       # Installing swagger cli for OpenApi 3.0 validation
       - npm install -g -q swagger-cli
       # Installing dredd contract testing tool
