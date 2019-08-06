@@ -9,7 +9,7 @@ paths:
       description: gets something
       responses:
         "200":
-          description: Profile Created
+          description: success
           content:
             application/json:
               schema:
@@ -31,7 +31,7 @@ paths:
       description: gets something
       responses:
         "200":
-          description: Profile Created
+          description: success
           content:
             application/json:
               schema:
