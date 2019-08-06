@@ -37,7 +37,7 @@ phases:
       # Running bandit for security testing
       - $TAG "Bandit tests" "bandit -r -q ."
       # Running all unittests
-      - $TAG "Unit tests" "./tools/dev/unit-tests.sh"
+      - $TAG "Unit tests" "./tools/build/unit-tests.sh"
       # Checking that the code is 100% covered by unit tests
       - $TAG "Coverage check" "coverage report -m --skip-covered --fail-under=100 --omit=tests/*,it/*"
   build:

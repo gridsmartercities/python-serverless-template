@@ -278,7 +278,7 @@ If you add a dependency (to an internal file with common code, or to an external
 [lambda]: https://docs.aws.amazon.com/lambda/latest/dg/welcome.html
 [dredd-hooks]: https://dredd.org/en/latest/hooks/js.html
 [pip-and-ve]: https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/
-[tool-unit-tests]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/dev/unit-tests.sh
+[tool-unit-tests]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/build/unit-tests.sh
 [tool-test]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/dev/test.sh
 [tool-coverage]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/dev/coverage.sh
 [tool-pre-build-checks]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/build/pre-build-checks.sh
