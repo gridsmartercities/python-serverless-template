@@ -109,9 +109,9 @@ To follow these instructions, you will need to be familiar with pip, and creatin
     
     ```cp tools/build/pre-build-checks.sh .git/hooks/pre-push```
     
-    - Give execute permissions to pre-build-checks script:
+    - Give execute permissions to pre-push script:
     
-    ```chmod u+x .git/hooks/pre-build-checks```
+    ```chmod u+x .git/hooks/pre-push```
     
 ## Project Structure
 
