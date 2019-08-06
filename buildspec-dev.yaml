@@ -4,6 +4,8 @@ env:
     SERVICE_NAME:             "python-serverless-template"
   parameter-store:
     SAM_S3_BUCKET:            "/python-serverless-template/build/SAM_S3_BUCKET"
+    GITHUB_OWNER:             "/python-serverless-template/build/GITHUB_OWNER"
+    GITHUB_REPO:              "/python-serverless-template/build/GITHUB_REPO"
     GITHUB_TOKEN:             "/python-serverless-template/build/GITHUB_TOKEN"
 
 phases:
@@ -12,8 +14,6 @@ phases:
       python: 3.7
       nodejs: 10
     commands:
-      # Add execution permissions to build tools
-      - chmod +x ./tools/build/*.sh
       # Set an alias to the update-commit-status, which creates commit statuses in GitHub
       - TAG="./tools/build/update-commit-status.sh"
       # Install Hub CLI for GitHub
@@ -37,7 +37,7 @@ phases:
       # Running bandit for security testing
       - $TAG "Bandit tests" "bandit -r -q ."
       # Running all unittests
-      - $TAG "Unit tests" "./tools/dev/unit-tests.sh"
+      - $TAG "Unit tests" "./tools/build/unit-tests.sh"
       # Checking that the code is 100% covered by unit tests
       - $TAG "Coverage check" "coverage report -m --skip-covered --fail-under=100 --omit=tests/*,it/*"
   build:

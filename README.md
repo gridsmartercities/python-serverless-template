@@ -53,9 +53,10 @@ This template is opinionated, and makes use of:
     - Click on *Next*.
     - Enter a stack name (for example, your-service-name-stack-setup)
     - In the *Parameters* section, enter:
+        - The name of your service (for example, *your-service-name*). 
         - The email address where staging build errors should be sent to.
-        - The full url to your GitHub repo (for example, https://github.com/gridsmartercities/python-serverless-template.git)
-        - The name of your service (for example, *your-service-name*).
+        - The GitHub Owner (for example, for repo https://github.com/gridsmartercities/python-serverless-template.git, it would be *gridsmartercities*)
+        - The GitHub Repo name (for repo https://github.com/gridsmartercities/python-serverless-template.git, it would be *python-serverless-template*)
         - Enter the GitHub token you generated before.
     - Click *Next*.
     - Accept the *Capabilities and transforms* options at the bottom of the page, and click the *Create stack* button.
@@ -278,7 +279,7 @@ If you add a dependency (to an internal file with common code, or to an external
 [lambda]: https://docs.aws.amazon.com/lambda/latest/dg/welcome.html
 [dredd-hooks]: https://dredd.org/en/latest/hooks/js.html
 [pip-and-ve]: https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/
-[tool-unit-tests]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/dev/unit-tests.sh
+[tool-unit-tests]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/build/unit-tests.sh
 [tool-test]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/dev/test.sh
 [tool-coverage]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/dev/coverage.sh
 [tool-pre-build-checks]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/build/pre-build-checks.sh
