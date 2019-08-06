@@ -13,7 +13,7 @@ phases:
       nodejs: 10
     commands:
       # Add execution permissions to the build tools
-#      - chmod +x ./tools/build/*.sh
+      - chmod +x ./tools/build/*.sh
       # Install Hub CLI for GitHub
       - ./tools/build/hub-installer.sh && PATH=$PATH:/opt/tools/hub/bin
       # Installing Python dependencies
