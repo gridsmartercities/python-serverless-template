@@ -3,7 +3,7 @@ set -e
 
 function show_help() {
     echo -e "\nUSAGE:\n\t./update-commit-status.sh <CONTEXT> <COMMAND>"
-    echo -e "\n\tThis script requires the following environment variables: GITHUB_OWNER, SERVICE_NAME, GITHUB_TOKEN, AWS_REGION, CODEBUILD_BUILD_ID\n"
+    echo -e "\n\tThis script requires the following environment variables: GITHUB_OWNER, GITHUB_REPO, GITHUB_TOKEN, AWS_REGION, CODEBUILD_BUILD_ID\n"
     echo -e "\n\tThe script automatically picks up the current COMMIT SHA"
 }
 
@@ -21,7 +21,7 @@ command=$2
 
 
 function create_commit_status() {
-    result=`hub api "https://api.github.com/repos/$GITHUB_OWNER/$SERVICE_NAME/statuses/$commit?access_token=$GITHUB_TOKEN" \
+    result=`hub api "https://api.github.com/repos/$GITHUB_OWNER/$GITHUB_REPO/statuses/$commit?access_token=$GITHUB_TOKEN" \
         -H Content-Type:application/json \
         -X POST \
         -f state="$1" \

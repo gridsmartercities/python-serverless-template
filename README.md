@@ -53,9 +53,10 @@ This template is opinionated, and makes use of:
     - Click on *Next*.
     - Enter a stack name (for example, your-service-name-stack-setup)
     - In the *Parameters* section, enter:
+        - The name of your service (for example, *your-service-name*). 
         - The email address where staging build errors should be sent to.
-        - The full url to your GitHub repo (for example, https://github.com/gridsmartercities/python-serverless-template.git)
-        - The name of your service (for example, *your-service-name*).
+        - The GitHub Owner (for example, for repo https://github.com/gridsmartercities/python-serverless-template.git, it would be *gridsmartercities*)
+        - The GitHub Repo name (for repo https://github.com/gridsmartercities/python-serverless-template.git, it would be *python-serverless-template*)
         - Enter the GitHub token you generated before.
     - Click *Next*.
     - Accept the *Capabilities and transforms* options at the bottom of the page, and click the *Create stack* button.

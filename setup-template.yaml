@@ -7,20 +7,36 @@ Parameters:
     Description: Enter a lower case, high level service name without environment details. Used to autofill service names. For example, your-service-name
     Type: String
     Default: "{SERVICE}"
-  GitRepo:
-    Description: Source uri of git repo to clone, for example https://github.com/gridsmartercities/python-serverless-template.git
-    Type: String
-    Default: "{REPO}"
   AlertEmail:
     Description: Email address to send staging build alerts to, or example you@example.com
     Type: String
     Default: "{EMAIL}"
+  GitHubOwner:
+    Description: Owner of git repo to clone, for example gridsmartercities
+    Type: String
+    Default: "{GITHUB_OWNER}"
+  GitHubRepo:
+    Description: Repo to clone, for example python-serverless-template
+    Type: String
+    Default: "{GITHUB_REPO}"
   GitHubToken:
     Description: The value of a GitHub Personal Access Token that has an API access to your repo
     Type: String
     Default: "{GITHUB_TOKEN}"
 
 Resources:
+  GitHubOwnerParameter:
+    Type: "AWS::SSM::Parameter"
+    Properties:
+      Name: !Sub /${ServiceName}/build/GITHUB_OWNER
+      Type: String
+      Value: !Sub ${GitHubOwner}
+  GitHubRepoParameter:
+    Type: "AWS::SSM::Parameter"
+    Properties:
+      Name: !Sub /${ServiceName}/build/GITHUB_REPO
+      Type: String
+      Value: !Sub ${GitHubRepo}
   GitHubTokenParameter:
     Type: "AWS::SSM::Parameter"
     Properties:
@@ -81,7 +97,7 @@ Resources:
       Source:
         Auth:
           Type: OAUTH
-        Location: !Sub ${GitRepo}
+        Location: !Sub https://github.com/${GitHubOwner}/${GitHubRepo}.git
         Type: GITHUB
         BuildSpec: buildspec-dev.yaml
       Triggers:
@@ -104,7 +120,7 @@ Resources:
       Source:
         Auth:
           Type: OAUTH
-        Location: !Sub ${GitRepo}
+        Location: !Sub https://github.com/${GitHubOwner}/${GitHubRepo}.git
         Type: GITHUB
         BuildSpec: buildspec-stg.yaml
       Triggers:
@@ -124,10 +140,11 @@ Resources:
         Statement:
           - Effect: Allow
             Action: ssm:GetParameters
-            Resource: !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${ServiceName}/build/SAM_S3_BUCKET
-          - Effect: Allow
-            Action: ssm:GetParameters
-            Resource: !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${ServiceName}/build/GITHUB_TOKEN
+            Resource:
+              - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${ServiceName}/build/SAM_S3_BUCKET
+              - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${ServiceName}/build/GITHUB_OWNER
+              - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${ServiceName}/build/GITHUB_REPO
+              - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${ServiceName}/build/GITHUB_TOKEN
           - Effect: Allow
             Action:
               - s3:PutObject
