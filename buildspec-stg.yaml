@@ -29,7 +29,7 @@ phases:
       # Package the build
       - sam package --s3-bucket $SAM_S3_BUCKET --s3-prefix stg --output-template-file NewSamTemplate.yaml
       # Deploy the package
-      - sam deploy --s3-bucket $SAM_S3_BUCKET --s3-prefix stg --no-fail-on-empty-changeset --capabilities CAPABILITY_NAMED_IAM --template-file NewSamTemplate.yaml --stack-name $SERVICE_NAME-stack --parameter-overrides RepoName=$SERVICE_NAME S3Bucket=$SAM_S3_BUCKET/stg
+      - sam deploy --s3-bucket $SAM_S3_BUCKET --s3-prefix stg --no-fail-on-empty-changeset --capabilities CAPABILITY_NAMED_IAM --template-file NewSamTemplate.yaml --stack-name $SERVICE_NAME-stack --parameter-overrides ServiceName=$SERVICE_NAME S3Bucket=$SAM_S3_BUCKET/stg
       # Remove all unneeded cloudformation stacks
       - ./tools/build/stack-remover.sh $SERVICE_NAME-stack-pr-
       # Remove all unneeded s3 folders inside SAM_S3_BUCKET
