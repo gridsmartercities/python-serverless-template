@@ -9,7 +9,7 @@ Parameters:
     Type: String
     Default: -prod
   S3Bucket:
-    Type : String
+    Type: String
     Default: bucket value will be overriden in buildspec
 Globals:
   Function:
