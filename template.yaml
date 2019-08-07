@@ -2,7 +2,7 @@ AWSTemplateFormatVersion: 2010-09-09
 Transform: AWS::Serverless-2016-10-31
 Description: An AWS Serverless Specification template for the AWS Python Serverless Template
 Parameters:
-  RepoName:
+  ServiceName:
     Type: String
     Default: serverless
   ApiNameSuffix:
@@ -46,7 +46,7 @@ Resources:
   ApiGateway:
     Type: AWS::Serverless::Api
     Properties:
-      Name: !Sub ${RepoName}-apis${ApiNameSuffix}
+      Name: !Sub ${ServiceName}-apis${ApiNameSuffix}
       EndpointConfiguration: REGIONAL
       TracingEnabled: true
       DefinitionBody:
