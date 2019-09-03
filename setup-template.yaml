@@ -2,27 +2,48 @@ AWSTemplateFormatVersion: 2010-09-09
 Transform: AWS::Serverless-2016-10-31
 Description: Build template for Dev and Staging projects
 
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: "Service"
+        Parameters:
+          - ServiceName
+          - AlertEmail
+      - Label:
+          default: "GitHub Configuration"
+        Parameters:
+          - GitHubOwner
+          - GitHubRepo
+          - GitHubToken
+    ParameterLabels:
+      ServiceName:
+        default: Service Name
+      AlertEmail:
+        default: Email
+      GitHubOwner:
+        default: Repo Owner
+      GitHubRepo:
+        default: Repo Name
+      GitHubToken:
+        default: Personal Access Token
+
 Parameters:
   ServiceName:
     Description: Enter a lower case, high level service name without environment details. Used to autofill service names. For example, your-service-name
     Type: String
-    Default: "{SERVICE}"
   AlertEmail:
     Description: Email address to send staging build alerts to, or example you@example.com
     Type: String
-    Default: "{EMAIL}"
   GitHubOwner:
     Description: Owner of git repo to clone, for example gridsmartercities
     Type: String
-    Default: "{GITHUB_OWNER}"
   GitHubRepo:
     Description: Repo to clone, for example python-serverless-template
     Type: String
-    Default: "{GITHUB_REPO}"
   GitHubToken:
     Description: The value of a GitHub Personal Access Token that has an API access to your repo
     Type: String
-    Default: "{GITHUB_TOKEN}"
 
 Resources:
   GitHubOwnerParameter:
