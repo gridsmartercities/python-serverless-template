@@ -131,6 +131,7 @@ Resources:
     Type: AWS::CodeBuild::Project
     Properties:
       Name: !Sub ${ServiceName}-stg
+      BadgeEnabled: true
       ServiceRole: !GetAtt CodebuildRole.Arn
       Artifacts:
         Type: no_artifacts
