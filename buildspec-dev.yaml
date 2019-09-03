@@ -14,6 +14,8 @@ phases:
       python: 3.7
       nodejs: 10
     commands:
+      # Give execute permissions to all build scripts
+      - chmod +x ./tools/build/*.sh
       # Set an alias to the update-commit-status, which creates commit statuses in GitHub
       - TAG="./tools/build/update-commit-status.sh"
       # Install Hub CLI for GitHub
