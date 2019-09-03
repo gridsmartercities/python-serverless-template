@@ -257,7 +257,7 @@ If you add a dependency (to an internal file with common code, or to an external
 ```dredd api-contract.yaml $BASE_URL --hookfiles=tests/hooks.py --hookfiles=tests/*/hooks.py --language python```
     
     
-[build-status]: https://codebuild.eu-west-2.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiTnJJTXU0cFhKdW53d2pNSGJTOGh0bWE3YlpuOHNienhnaDZ4c3R2bEc2YUtEc2g5RUMzYnJzeEZtc0VySk00dkR6ajBNVjRoL0dlZnFaZ3VRMi9sUVd3PSIsIml2UGFyYW1ldGVyU3BlYyI6InpKa2J1R2xmRWVpL0RWWnciLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master
+[build-status]: https://codebuild.eu-west-2.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiYWNqUHZHVUFaR0NWYUtsYndvUWVkbGkyL240OCtYVlBMaVJ3SkU2cVZYN1hKeVRtdkllSHU4ZDlCdzJsK1NSczYxVCtXVGZhSEs2QkxzTWlpYlpDdnJBPSIsIml2UGFyYW1ldGVyU3BlYyI6Ik1haWpIZE5RYlNGWS9vZnUiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master
 [mit-license-svg]: https://img.shields.io/badge/License-MIT-yellow.svg
 [mit-license]: https://opensource.org/licenses/MIT
 [release]: https://img.shields.io/github/release/gridsmartercities/python-serverless-template.svg?style=flat
