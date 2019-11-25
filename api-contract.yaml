@@ -57,4 +57,4 @@ components:
       properties:
         message:
           type: string
-          title: The Error message
+          description: The Error message

@@ -46,6 +46,8 @@ Parameters:
     Type: String
 
 Resources:
+
+  # Parameters
   GitHubOwnerParameter:
     Type: "AWS::SSM::Parameter"
     Properties:
@@ -70,6 +72,8 @@ Resources:
       Name: !Sub /${ServiceName}/build/SAM_S3_BUCKET
       Type: String
       Value: !Sub ${ServiceName}-output
+
+  # S3
   CodebuildOutputS3Bucket:
     Type: AWS::S3::Bucket
     Properties:
@@ -79,6 +83,8 @@ Resources:
         BlockPublicPolicy: true
         IgnorePublicAcls: true
         RestrictPublicBuckets: true
+
+  # Code Build Failure rule
   CodebuildFailedBuildEventRule:
     Type: AWS::Events::Rule
     Properties:
@@ -97,6 +103,8 @@ Resources:
       Targets:
         - Arn: !Ref CodebuildAlarmTopic
           Id: !Sub ${ServiceName}-build-event-rule-target
+
+  # Code Buld Alarms
   CodebuildAlarmTopic:
     Type: AWS::SNS::Topic
     Properties:
@@ -104,6 +112,8 @@ Resources:
       Subscription:
         - Endpoint: !Ref AlertEmail
           Protocol: email
+
+  # Code Build Projects
   CodebuildDevProject:
     Type: AWS::CodeBuild::Project
     Properties:
@@ -153,6 +163,8 @@ Resources:
             - Type: HEAD_REF
               Pattern: ^refs/heads/master$
       TimeoutInMinutes: 10
+
+  # Permissions
   CodeBuildSharedPolicy:
     Type: AWS::IAM::Policy
     Properties:
@@ -187,6 +199,10 @@ Resources:
               - iam:AttachRolePolicy
               - iam:DetachRolePolicy
               - iam:PassRole
+              - iam:PutRolePolicy
+              - iam:GetRolePolicy
+              - iam:DeleteRolePolicy
+              - iam:UpdateAssumeRolePolicy
             Resource: !Sub arn:aws:iam::${AWS::AccountId}:role/${ServiceName}-*
           - Effect: Allow
             Action:
@@ -199,6 +215,7 @@ Resources:
               - lambda:ListTags
               - lambda:TagResource
               - lambda:UntagResource
+              - lambda:UpdateFunctionConfiguration
             Resource: !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${ServiceName}-stack-*
           - Effect: Allow
             Action:
@@ -230,6 +247,18 @@ Resources:
               - logs:DescribeLogGroups
               - logs:DeleteLogGroup
             Resource: "*"
+          - Effect: Allow
+            Action:
+              - SNS:CreateTopic
+              - SNS:GetTopicAttributes
+              - SNS:Subscribe
+              - SNS:DeleteTopic
+            Resource: "*"
+          - Effect: Allow
+            Action:
+              - cloudwatch:PutMetricAlarm
+              - cloudwatch:DeleteAlarms
+            Resource: "*"
       Roles:
         - !Ref CodebuildRole
   CodebuildRole:
@@ -245,6 +274,29 @@ Resources:
                   - codebuild.amazonaws.com
               Action:
                 - sts:AssumeRole
+  AmazonAPIGatewayPushToCloudWatchLogs:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub ${ServiceName}-${AWS::Region}-logs-apigateway-role
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - apigateway.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs
+
+  # Api Gateway Account
+  Account:
+    Type: AWS::ApiGateway::Account
+    Properties:
+      CloudWatchRoleArn: !GetAtt AmazonAPIGatewayPushToCloudWatchLogs.Arn
+
+  # Log Groups
   CodebuildDevLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
@@ -253,3 +305,7 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub /aws/codebuild/${CodebuildStgProject}
+  ApiGatewayLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: /aws/apigateway/welcome
