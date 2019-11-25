@@ -256,6 +256,14 @@ If you add a dependency (to an internal file with common code, or to an external
 
 ```dredd api-contract.yaml $BASE_URL --hookfiles=tests/hooks.py --hookfiles=tests/*/hooks.py --language python```
     
+# A Note on __init__ files in the tests folder
+
+The unittest library needs at least one __init__ at the tests folder root level.
+
+Prospector works fine if you have no __init__ files, or if you have __init__ files in every folder, but it does not like having just one __init__ (it will miss some issues on those folders).
+
+Until the unittest library is fixed (and no __init__ files are needed), __init__ are needed in all tests folders.
+
     
 [build-status]: https://codebuild.eu-west-2.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiYWNqUHZHVUFaR0NWYUtsYndvUWVkbGkyL240OCtYVlBMaVJ3SkU2cVZYN1hKeVRtdkllSHU4ZDlCdzJsK1NSczYxVCtXVGZhSEs2QkxzTWlpYlpDdnJBPSIsIml2UGFyYW1ldGVyU3BlYyI6Ik1haWpIZE5RYlNGWS9vZnUiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master
 [mit-license-svg]: https://img.shields.io/badge/License-MIT-yellow.svg
