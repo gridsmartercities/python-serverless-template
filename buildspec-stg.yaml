@@ -14,6 +14,8 @@ phases:
       python: 3.7
       nodejs: 10
     commands:
+      # Disable SAM TELEMETRY
+      - export SAM_CLI_TELEMETRY=0
       # Give execute permissions to all build scripts
       - chmod +x ./tools/build/*.sh
       # Install Hub CLI for GitHub
@@ -29,12 +31,14 @@ phases:
       # Build the SAM template
       - sam build -s .build
       # Package the build
-      - sam package --s3-bucket $SAM_S3_BUCKET --s3-prefix stg --output-template-file NewSamTemplate.yaml
+      - sam package --s3-bucket $SAM_S3_BUCKET --s3-prefix stg --output-template-file NewSamTemplate.yaml > /dev/null
       # Deploy the package
       - sam deploy --s3-bucket $SAM_S3_BUCKET --s3-prefix stg --no-fail-on-empty-changeset --capabilities CAPABILITY_NAMED_IAM --template-file NewSamTemplate.yaml --stack-name $SERVICE_NAME-stack --parameter-overrides ServiceName=$SERVICE_NAME S3Bucket=$SAM_S3_BUCKET/stg
       # Remove all unneeded cloudformation stacks
       - ./tools/build/stack-remover.sh $SERVICE_NAME-stack-pr-
       # Remove all unneeded s3 folders inside SAM_S3_BUCKET
-      - aws s3 rm s3://$SAM_S3_BUCKET/stg --recursive
-      # Some integration tests could be run here and, if successful, trigger a production build in your production account
-      # ...
+      - aws s3 rm s3://$SAM_S3_BUCKET/stg --recursive > /dev/null
+      # Get the ApiGateway Base URL
+      - export BASE_URL=$(./tools/build/get-api-url.sh $SERVICE_NAME-prod-apis)
+      # Run the integration tests
+      - python -m unittest it/test_*.py
