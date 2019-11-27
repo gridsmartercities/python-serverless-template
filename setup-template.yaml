@@ -69,11 +69,11 @@ Resources:
     Properties:
       Name: !Sub /${ServiceName}/build/SAM_S3_BUCKET
       Type: String
-      Value: !Sub ${ServiceName}-output
+      Value: !Sub ${ServiceName}-${AWS::Region}-output
   CodebuildOutputS3Bucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Sub ${ServiceName}-output
+      BucketName: !Sub ${ServiceName}-${AWS::Region}-output
       PublicAccessBlockConfiguration:
         BlockPublicAcls: true
         BlockPublicPolicy: true
@@ -218,6 +218,7 @@ Resources:
           - Effect: Allow
             Action:
               - cloudformation:DescribeStacks
+              - cloudformation:DescribeStackEvents
               - cloudformation:ExecuteChangeSet
               - cloudformation:DescribeChangeSet
               - cloudformation:DeleteStack
