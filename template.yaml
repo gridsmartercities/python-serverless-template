@@ -7,7 +7,7 @@ Parameters:
     Default: serverless
   ApiNameSuffix:
     Type: String
-    Default: -prod
+    Default: prod
   S3Bucket:
     Type: String
     Default: bucket value will be overriden in buildspec
@@ -46,7 +46,7 @@ Resources:
   ApiGateway:
     Type: AWS::Serverless::Api
     Properties:
-      Name: !Sub ${ServiceName}-apis${ApiNameSuffix}
+      Name: !Sub ${ServiceName}-apis-${ApiNameSuffix}
       EndpointConfiguration: REGIONAL
       TracingEnabled: true
       DefinitionBody:

@@ -14,6 +14,8 @@ phases:
       python: 3.7
       nodejs: 10
     commands:
+      # Disable SAM TELEMETRY
+      - export SAM_CLI_TELEMETRY=0
       # Give execute permissions to all build scripts
       - chmod +x ./tools/build/*.sh
       # Set an alias to the update-commit-status, which creates commit statuses in GitHub
@@ -25,21 +27,23 @@ phases:
       # Installing dredd contract testing tool
       - npm install -g -q dredd --unsafe-perm=true
       # Installing Python dependencies
-      - pip3 install -q aws-sam-cli bandit coverage dredd-hooks prospector==1.1.6.2 pylint_quotes aws-lambda-decorators yq cfn-lint
+      - pip3 install -q aws-sam-cli bandit coverage dredd-hooks prospector pylint_quotes aws-lambda-decorators yq cfn-lint
   pre_build:
     commands:
+      # Disable tests log info and error messages
+      - export LOG_LEVEL=CRITICAL
       # Validate the SAM template
-      - $TAG "SAM validation" "aws cloudformation validate-template --template-body file://template.yaml"
+      - $TAG "SAM validation" "aws cloudformation validate-template --template-body file://template.yaml" > /dev/null
       # Checking the SAM template
       - $TAG "Cloudformation linting" "cfn-lint template.yaml"
       # Validate the OpenApi 3.0 specification
-      - $TAG "Swagger validation" "swagger-cli validate api-contract.yaml"
+      - $TAG "Swagger validation" "swagger-cli validate api-contract.yaml" > /dev/null
       # Running all prospector tools for code quality analysis
       - $TAG "Prospector checks" "prospector"
       # Running bandit for security testing
       - $TAG "Bandit tests" "bandit -r -q ."
       # Running all unittests
-      - $TAG "Unit tests" "./tools/build/unit-tests.sh"
+      - $TAG "Unit tests" "coverage run --branch --include=src/*.py,src/*/*.py,src/*/*/*.py -m unittest tests/test_*.py tests/*/test_*.py tests/*/*/test_*.py"
       # Checking that the code is 100% covered by unit tests
       - $TAG "Coverage check" "coverage report -m --skip-covered --fail-under=100 --omit=tests/*,it/*"
   build:
@@ -51,17 +55,17 @@ phases:
       # Execute packager tool so every lambda gets just the code and dependencies it needs
       - ./tools/build/packager.sh -q
       # Build the SAM template
-      - $TAG "SAM build" "sam build -s .build"
+      - $TAG "SAM build" "sam build -s .build" > /dev/null 2>&1
       # Package the build
-      - $TAG "SAM package" "sam package --s3-bucket $SAM_S3_BUCKET --s3-prefix dev/$CLEAN_PR --output-template-file NewSamTemplate.yaml"
+      - $TAG "SAM package" "sam package --s3-bucket $SAM_S3_BUCKET --s3-prefix dev/$CLEAN_PR --output-template-file NewSamTemplate.yaml" > /dev/null 2>&1
       # Deploy the package
-      - $TAG "SAM deploy" "sam deploy --s3-bucket $SAM_S3_BUCKET --s3-prefix dev/$CLEAN_PR --capabilities CAPABILITY_NAMED_IAM --template-file NewSamTemplate.yaml --stack-name $SERVICE_NAME-stack-$CLEAN_PR --parameter-overrides ServiceName=$SERVICE_NAME ApiNameSuffix=-$CLEAN_PR S3Bucket=$SAM_S3_BUCKET/dev/$CLEAN_PR" > /dev/null 2>&1
+      - $TAG "SAM deploy" "sam deploy --s3-bucket $SAM_S3_BUCKET --s3-prefix dev/$CLEAN_PR --capabilities CAPABILITY_NAMED_IAM --template-file NewSamTemplate.yaml --stack-name $SERVICE_NAME-stack-$CLEAN_PR --parameter-overrides ServiceName=$SERVICE_NAME ApiNameSuffix=$CLEAN_PR S3Bucket=$SAM_S3_BUCKET/dev/$CLEAN_PR" > /dev/null 2>&1
       # Get the ApiGateway Base URL
       - export BASE_URL=$(./tools/build/get-api-url.sh $SERVICE_NAME-apis-$CLEAN_PR)
       - echo BASE_URL is $BASE_URL
       # Run API Contract Tests against the Base URL
-      - $TAG "Dredd contract tests" "dredd api-contract.yaml $BASE_URL --hookfiles=tests/hooks.py --hookfiles=tests/*/hooks.py --language python"
+      - $TAG "Dredd contract tests" "dredd api-contract.yaml $BASE_URL --hookfiles=tests/hooks.py --hookfiles=tests/*/hooks.py --language python --no-color"
       # Run the integration tests
       - $TAG "Integration tests" "python -m unittest it/test_*.py"
       # Remove all unneeded s3 folders inside SAM_S3_BUCKET
-      - $TAG "Clean up" "aws s3 rm s3://$SAM_S3_BUCKET/dev/$CLEAN_PR --recursive"
+      - $TAG "Clean up" "aws s3 rm s3://$SAM_S3_BUCKET/dev/$CLEAN_PR --recursive" > /dev/null
