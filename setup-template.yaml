@@ -134,7 +134,7 @@ Resources:
       Name: !Sub ${ServiceName}-dev
       ServiceRole: !GetAtt CodebuildRole.Arn
       Artifacts:
-        Type: no_artifacts
+        Type: NO_ARTIFACTS
       Environment:
         Type: LINUX_CONTAINER
         ComputeType: BUILD_GENERAL1_SMALL
@@ -161,7 +161,7 @@ Resources:
       BadgeEnabled: true
       ServiceRole: !GetAtt CodebuildRole.Arn
       Artifacts:
-        Type: no_artifacts
+        Type: NO_ARTIFACTS
       Environment:
         Type: LINUX_CONTAINER
         ComputeType: BUILD_GENERAL1_SMALL
