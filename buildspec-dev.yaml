@@ -69,3 +69,7 @@ phases:
       - $TAG "Integration tests" "python -m unittest it/test_*.py"
       # Remove all unneeded s3 folders inside SAM_S3_BUCKET
       - $TAG "Clean up" "aws s3 rm s3://$SAM_S3_BUCKET/dev/$CLEAN_PR --recursive" > /dev/null
+
+cache:
+  paths:
+    - "/root/.cache/pip/**/*"

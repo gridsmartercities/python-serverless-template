@@ -72,10 +72,26 @@ Resources:
       Name: !Sub /${ServiceName}/build/SAM_S3_BUCKET
       Type: String
       Value: !Sub ${ServiceName}-${AWS::Region}-output
+
+  # S3
   CodebuildOutputS3Bucket:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: !Sub ${ServiceName}-${AWS::Region}-output
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+  CodebuildCachingS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub ${ServiceName}-${AWS::Region}-pip-cache
+      LifecycleConfiguration:
+        Rules:
+          - Id: CacheExpiry
+            Status: Enabled
+            ExpirationInDays: 03
       PublicAccessBlockConfiguration:
         BlockPublicAcls: true
         BlockPublicPolicy: true
@@ -129,6 +145,9 @@ Resources:
         Location: !Sub https://github.com/${GitHubOwner}/${GitHubRepo}.git
         Type: GITHUB
         BuildSpec: buildspec-dev.yaml
+      Cache:
+        Type: S3
+        Location: !Ref CodebuildCachingS3Bucket
       Triggers:
         Webhook: true
         FilterGroups:
