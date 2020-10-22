@@ -1,39 +1,63 @@
 AWSTemplateFormatVersion: 2010-09-09
 Transform: AWS::Serverless-2016-10-31
-Description: Build template for Dev and Staging projects
+Description: Build template for Dev, Staging and Production for a serverless template.
 
 Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
       - Label:
-          default: "Service"
+          default: Service
         Parameters:
           - ServiceName
           - AlertEmail
+          - Environment
+          - RelatedAccountId
       - Label:
-          default: "GitHub Configuration"
+          default: GitHub Configuration
         Parameters:
           - GitHubOwner
           - GitHubRepo
           - GitHubToken
+      - Label:
+          default: Primary Build Region
+          Parameters:
+            - BuildRegion
     ParameterLabels:
       ServiceName:
         default: Service Name
       AlertEmail:
         default: Email
+      Environment:
+        default: Environment
+      RelatedAccountId:
+        default: Related Account Id
       GitHubOwner:
         default: Repo Owner
       GitHubRepo:
         default: Repo Name
       GitHubToken:
         default: Personal Access Token
+      BuildRegion:
+        default: AWS Build Region
 
 Parameters:
   ServiceName:
     Description: Enter a lower case, high level service name without environment details. Used to autofill service names. For example, your-service-name
     Type: String
+    Default: python serverless template
   AlertEmail:
     Description: Email address to send staging build alerts to, or example you@example.com
+    Type: String
+  Environment:
+    Description: The service environment (production / staging / development)
+    Type: String
+    Default: stg
+    AllowedValues:
+      - prod
+      - stg
+      - dev
+  RelatedAccountId:
+    Description: The ID of the Related Account (for "stg" enter the production account id, for "prod" enter the staging account id)
     Type: String
   GitHubOwner:
     Description: Owner of git repo to clone, for example gridsmartercities
@@ -44,43 +68,123 @@ Parameters:
   GitHubToken:
     Description: The value of a GitHub Personal Access Token that has an API access to your repo
     Type: String
+  BuildRegion:
+    Description: The AWS region of the staging account that will build this production environment
+    Type: String
+    Default: eu-west-1
+
+Conditions:
+  IsProduction: !Equals [ !Ref Environment, prod ]
+  NotProduction: !Not [ !Equals [ !Ref Environment, prod ] ]
+  IsStaging: !Equals [ !Ref Environment, stg ]
+  IsDev: !Equals [ !Ref Environment,  dev ]
 
 Resources:
 
   # Parameters
+  AccountEmailParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: !Sub /${ServiceName}/account/EMAIL
+      Type: String
+      Value: !Ref AlertEmail
   GitHubOwnerParameter:
-    Type: "AWS::SSM::Parameter"
+    Type: AWS::SSM::Parameter
+    Condition: NotProduction
     Properties:
       Name: !Sub /${ServiceName}/build/GITHUB_OWNER
       Type: String
       Value: !Sub ${GitHubOwner}
   GitHubRepoParameter:
-    Type: "AWS::SSM::Parameter"
+    Type: AWS::SSM::Parameter
+    Condition: NotProduction
     Properties:
       Name: !Sub /${ServiceName}/build/GITHUB_REPO
       Type: String
       Value: !Sub ${GitHubRepo}
   GitHubTokenParameter:
-    Type: "AWS::SSM::Parameter"
+    Type: AWS::SSM::Parameter
+    Condition: NotProduction
     Properties:
       Name: !Sub /${ServiceName}/build/GITHUB_TOKEN
       Type: String
       Value: !Sub ${GitHubToken}
+  TemplateS3BucketParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: !Sub /${ServiceName}/build/TEMPLATE_S3_BUCKET
+      Type: String
+      Value: !Ref TemplateValidationS3Bucket
   SamS3BucketParameter:
     Type: AWS::SSM::Parameter
     Properties:
       Name: !Sub /${ServiceName}/build/SAM_S3_BUCKET
       Type: String
-      Value: !Sub ${ServiceName}-${AWS::Region}-output
-  CodebuildOutputS3Bucket:
+      Value: !Ref CodebuildOutputS3Bucket
+  ProdAccountIdParameter:
+    Type: AWS::SSM::Parameter
+    Condition: NotProduction
+    Properties:
+      Name: !Sub /${ServiceName}/build/PROD_ACCOUNT_ID
+      Type: String
+      Value: !Ref RelatedAccountId
+  ServiceNameParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: /service_name
+      Type: String
+      Value: !Sub ${ServiceName}
+  ProdBuildRegionsParameter:
+    Type: AWS::SSM::Parameter
+    Condition: NotProduction
+    Properties:
+      Name: !Sub /${ServiceName}/build/PROD_BUILD_REGIONS
+      Type: StringList
+      Value: !Sub ${AWS::Region}
+
+  #S3
+  TemplateValidationS3Bucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Sub ${ServiceName}-${AWS::Region}-output
+      BucketName: !Sub ${ServiceName}-${AWS::Region}-${Environment}-template
       PublicAccessBlockConfiguration:
         BlockPublicAcls: true
         BlockPublicPolicy: true
         IgnorePublicAcls: true
         RestrictPublicBuckets: true
+  CodebuildOutputS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub ${ServiceName}-${AWS::Region}-${Environment}-output
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+  CodebuildCachingS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub ${ServiceName}-${AWS::Region}-${Environment}-pip-cache
+      LifecycleConfiguration:
+        Rules:
+          - Id: CacheExpiry
+            Status: Enabled
+            ExpirationInDays: 03
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+  WebsocketDocsS3Bucket:
+    Type: AWS::S3::Bucket
+    Condition: NotProduction
+    Properties:
+      BucketName: !Sub ${ServiceName}-${AWS::Region}-websocket-docs
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
 
   # Code Build Failure rule
   CodebuildFailedBuildEventRule:
@@ -92,17 +196,17 @@ Resources:
         source:
           - aws.codebuild
         detail-type:
-          - Codebuild Build State Change
+          - CodeBuild Build State Change
         detail:
           build-status:
             - FAILED
           project-name:
-            - !Ref CodebuildStgProject
+            - !If [IsProduction, !Ref CodebuildProdProject, !If [IsStaging, !Ref CodebuildStgProject, !Ref CodebuildDevProject]]
       Targets:
         - Arn: !Ref CodebuildAlarmTopic
           Id: !Sub ${ServiceName}-build-event-rule-target
 
-  # Code Buld Alarms
+  # Code Build Alarms
   CodebuildAlarmTopic:
     Type: AWS::SNS::Topic
     Properties:
@@ -114,39 +218,44 @@ Resources:
   # Code Build Projects
   CodebuildDevProject:
     Type: AWS::CodeBuild::Project
+    Condition: IsDev
     Properties:
       Name: !Sub ${ServiceName}-dev
       ServiceRole: !GetAtt CodebuildRole.Arn
       Artifacts:
-        Type: no_artifacts
+        Type: NO_ARTIFACTS
       Environment:
         Type: LINUX_CONTAINER
         ComputeType: BUILD_GENERAL1_SMALL
-        Image: aws/codebuild/standard:2.0
+        Image: aws/codebuild/amazonlinux2-x86_64-standard:3.0
       Source:
         Auth:
           Type: OAUTH
         Location: !Sub https://github.com/${GitHubOwner}/${GitHubRepo}.git
         Type: GITHUB
         BuildSpec: buildspec-dev.yaml
+      Cache:
+        Type: S3
+        Location: !Ref CodebuildCachingS3Bucket
       Triggers:
         Webhook: true
         FilterGroups:
           - - Type: EVENT
               Pattern: PULL_REQUEST_CREATED,PULL_REQUEST_UPDATED,PULL_REQUEST_REOPENED
-      TimeoutInMinutes: 10
+      TimeoutInMinutes: 20
   CodebuildStgProject:
     Type: AWS::CodeBuild::Project
+    Condition: IsStaging
     Properties:
       Name: !Sub ${ServiceName}-stg
       BadgeEnabled: true
       ServiceRole: !GetAtt CodebuildRole.Arn
       Artifacts:
-        Type: no_artifacts
+        Type: NO_ARTIFACTS
       Environment:
         Type: LINUX_CONTAINER
         ComputeType: BUILD_GENERAL1_SMALL
-        Image: aws/codebuild/standard:2.0
+        Image: aws/codebuild/amazonlinux2-x86_64-standard:3.0
       Source:
         Auth:
           Type: OAUTH
@@ -160,13 +269,33 @@ Resources:
               Pattern: PUSH
             - Type: HEAD_REF
               Pattern: ^refs/heads/master$
-      TimeoutInMinutes: 10
+      TimeoutInMinutes: 20
+  CodebuildProdProject:
+    Condition: IsProduction
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Name: !Sub ${ServiceName}-prod
+      BadgeEnabled: true
+      ServiceRole: !GetAtt CodebuildRole.Arn
+      Artifacts:
+        Type: NO_ARTIFACTS
+      Environment:
+        Type: LINUX_CONTAINER
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: aws/codebuild/amazonlinux2-x86_64-standard:3.0
+      Source:
+        Auth:
+          Type: OAUTH
+        Location: !Sub https://github.com/${GitHubOwner}/${GitHubRepo}.git
+        Type: GITHUB
+        BuildSpec: buildspec-prod.yaml
+      TimeoutInMinutes: 20
 
   # Permissions
   CodeBuildSharedPolicy:
     Type: AWS::IAM::Policy
     Properties:
-      PolicyName: !Sub ${ServiceName}-codebuild-shared-service-policy
+      PolicyName: !Sub ${ServiceName}-${AWS::Region}-${Environment}-codebuild-shared-service-policy
       PolicyDocument:
         Version: 2012-10-17
         Statement:
@@ -177,17 +306,18 @@ Resources:
               - !Sub arn:aws:iam::${AWS::AccountId}:role/aws-service-role/ops.apigateway.amazonaws.com/AWSServiceRoleForAPIGateway
           - Effect: Allow
             Action: ssm:GetParameters
-            Resource:
-              - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${ServiceName}/build/SAM_S3_BUCKET
-              - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${ServiceName}/build/GITHUB_OWNER
-              - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${ServiceName}/build/GITHUB_REPO
-              - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${ServiceName}/build/GITHUB_TOKEN
+            Resource: "*"
           - Effect: Allow
             Action:
               - s3:PutObject
+              - s3:PutObjectAcl
+              - s3:PutBucketWebsite
               - s3:GetObject
               - s3:List*
               - s3:DeleteObject
+              - s3:CreateBucket
+              - s3:DeleteBucket
+              - s3:GetBucketLocation
             Resource: "*"
           - Effect: Allow
             Action:
@@ -204,6 +334,7 @@ Resources:
             Resource: !Sub arn:aws:iam::${AWS::AccountId}:role/${ServiceName}-*
           - Effect: Allow
             Action:
+              - lambda:GetFunction
               - lambda:CreateFunction
               - lambda:GetFunctionConfiguration
               - lambda:DeleteFunction
@@ -214,7 +345,11 @@ Resources:
               - lambda:TagResource
               - lambda:UntagResource
               - lambda:UpdateFunctionConfiguration
-            Resource: !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${ServiceName}-stack-*
+              - lambda:CreateEventSourceMapping
+              - lambda:DeleteEventSourceMapping
+              - lambda:UpdateEventSourceMapping
+              - lambda:GetEventSourceMapping
+            Resource: "*"
           - Effect: Allow
             Action:
               - apigateway:PUT
@@ -222,7 +357,9 @@ Resources:
               - apigateway:PATCH
               - apigateway:DELETE
               - apigateway:GET
-            Resource: !Sub arn:aws:apigateway:${AWS::Region}::/restapis*
+            Resource:
+              - !Sub arn:aws:apigateway:${AWS::Region}::/restapis*
+              - !Sub arn:aws:apigateway:${AWS::Region}::/apis*
           - Effect: Allow
             Action:
               - cloudformation:ValidateTemplate
@@ -252,18 +389,77 @@ Resources:
               - SNS:GetTopicAttributes
               - SNS:Subscribe
               - SNS:DeleteTopic
+              - SNS:SetTopicAttributes
+            Resource: "*"
+          - Effect: Allow
+            Action:
+              - dynamodb:Query
+              - dynamodb:PutItem
+              - dynamodb:CreateTable
+              - dynamodb:DescribeTable
+              - dynamodb:DeleteTable
+              - dynamodb:UpdateTable
+              - dynamodb:DescribeTimeToLive
+              - dynamodb:UpdateTimeToLive
+              - dynamodb:CreateBackup
+              - dynamodb:DescribeBackup
+              - dynamodb:ListTables
+              - dynamodb:DescribeContinuousBackups
+              - dynamodb:UpdateContinuousBackups
             Resource: "*"
           - Effect: Allow
             Action:
               - cloudwatch:PutMetricAlarm
               - cloudwatch:DeleteAlarms
             Resource: "*"
+          - Effect: Allow
+            Action:
+              - cognito-idp:AdminInitiateAuth
+            Resource: !Sub arn:aws:cognito-idp:${AWS::Region}:${AWS::AccountId}:userpool/*
+          - Effect: Allow
+            Action:
+              - states:CreateStateMachine
+              - states:DeleteStateMachine
+              - states:UpdateStateMachine
+              - states:TagResource
+              - states:DescribeStateMachine
+            Resource: "*"
+      Roles:
+        - !Ref CodebuildRole
+  CodeBuildStgPolicy:
+    Type: AWS::IAM::Policy
+    Condition: IsStaging
+    Properties:
+      PolicyName: !Sub ${ServiceName}-${AWS::Region}-${Environment}-codebuild-service-policy
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action: sts:AssumeRole
+            Resource: !Sub arn:aws:iam::${RelatedAccountId}:role/${ServiceName}-${AWS::Region}-prod-codebuild-service-role
+          # other prod regions here
+          - Effect: Allow
+            Action: sts:AssumeRole
+            Resource: !Sub arn:aws:iam::${RelatedAccountId}:role/${ServiceName}-eu-west-2-prod-codebuild-service-role
+      Roles:
+        - !Ref CodebuildRole
+  CodeBuildProdPolicy:
+    Type: AWS::IAM::Policy
+    Condition: IsProduction
+    Properties:
+      PolicyName: !Sub ${ServiceName}-${AWS::Region}-${Environment}-codebuild-service-policy
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action: codebuild:StartBuild
+            Resource: !GetAtt CodebuildProdProject.Arn
       Roles:
         - !Ref CodebuildRole
   CodebuildRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !Sub ${ServiceName}-codebuild-dev-service-role
+      RoleName: !Sub ${ServiceName}-${AWS::Region}-${Environment}-codebuild-service-role
       AssumeRolePolicyDocument:
           Version: 2012-10-17
           Statement:
@@ -271,12 +467,17 @@ Resources:
               Principal:
                 Service:
                   - codebuild.amazonaws.com
+                AWS:
+                  Fn::If:
+                    - IsProduction
+                    - !Sub arn:aws:iam::${RelatedAccountId}:role/${ServiceName}-${BuildRegion}-stg-codebuild-service-role
+                    - !Ref AWS::NoValue
               Action:
                 - sts:AssumeRole
   AmazonAPIGatewayPushToCloudWatchLogs:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !Sub ${ServiceName}-${AWS::Region}-logs-apigateway-role
+      RoleName: !Sub ${ServiceName}-${AWS::Region}-${Environment}-logs-apigateway-role
       AssumeRolePolicyDocument:
         Version: 2012-10-17
         Statement:
@@ -298,12 +499,19 @@ Resources:
   # Log Groups
   CodebuildDevLogGroup:
     Type: AWS::Logs::LogGroup
+    Condition: IsDev
     Properties:
       LogGroupName: !Sub /aws/codebuild/${CodebuildDevProject}
   CodebuildStgLogGroup:
     Type: AWS::Logs::LogGroup
+    Condition: IsStaging
     Properties:
       LogGroupName: !Sub /aws/codebuild/${CodebuildStgProject}
+  CodebuildProdLogGroup:
+    Type: AWS::Logs::LogGroup
+    Condition: IsProduction
+    Properties:
+      LogGroupName: !Sub /aws/codebuild/${CodebuildProdProject}
   ApiGatewayLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
