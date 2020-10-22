@@ -437,7 +437,6 @@ Resources:
           - Effect: Allow
             Action: sts:AssumeRole
             Resource: !Sub arn:aws:iam::${RelatedAccountId}:role/${ServiceName}-${AWS::Region}-prod-codebuild-service-role
-          # other prod regions here
           - Effect: Allow
             Action: sts:AssumeRole
             Resource: !Sub arn:aws:iam::${RelatedAccountId}:role/${ServiceName}-eu-west-2-prod-codebuild-service-role

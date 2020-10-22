@@ -25,20 +25,14 @@ phases:
   build:
     commands:
       # Copy the contract OpenApi 3.0 spec to the S3 bucket, so it can later be transformed into the SAM template
-      - aws s3 cp api-contract.yaml s3://$SAM_S3_BUCKET/stg/
+      - aws s3 cp api-contract.yaml s3://$SAM_S3_BUCKET/prod/
       # Execute packager tool so every lambda gets just the code and dependencies it needs
       - ./tools/build/packager.sh -q
       # Build the SAM template
       - sam build -s .build
       # Package the build
-      - sam package --s3-bucket $SAM_S3_BUCKET --s3-prefix stg --output-template-file NewSamTemplate.yaml > /dev/null
+      - sam package --s3-bucket $SAM_S3_BUCKET --s3-prefix prod --output-template-file NewSamTemplate.yaml > /dev/null
       # Deploy the package
-      - sam deploy --s3-bucket $SAM_S3_BUCKET --s3-prefix stg --capabilities CAPABILITY_NAMED_IAM --template-file NewSamTemplate.yaml --stack-name $SERVICE_NAME-stack --parameter-overrides ServiceName=$SERVICE_NAME S3Bucket=$SAM_S3_BUCKET/stg > /dev/null 2>&1
-      # Remove all unneeded cloudformation stacks
-      - ./tools/build/stack-remover.sh $SERVICE_NAME-stack-pr-
+      - sam deploy --s3-bucket $SAM_S3_BUCKET --s3-prefix prod --capabilities CAPABILITY_NAMED_IAM --template-file NewSamTemplate.yaml --stack-name $SERVICE_NAME-stack --parameter-overrides ServiceName=$SERVICE_NAME S3Bucket=$SAM_S3_BUCKET/prod > /dev/null 2>&1
       # Remove all unneeded s3 folders inside SAM_S3_BUCKET
-      - aws s3 rm s3://$SAM_S3_BUCKET/stg --recursive > /dev/null
-      # Get the ApiGateway Base URL
-      - export BASE_URL=$(./tools/build/get-api-url.sh $SERVICE_NAME-stg-apis)
-      # Run the integration tests
-      - python -m unittest it/test_*.py
+      - aws s3 rm s3://$SAM_S3_BUCKET/prod --recursive > /dev/null
