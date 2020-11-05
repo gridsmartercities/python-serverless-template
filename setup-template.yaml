@@ -179,7 +179,7 @@ Resources:
     Type: AWS::S3::Bucket
     Condition: NotProduction
     Properties:
-      BucketName: !Sub ${ServiceName}-${AWS::Region}-websocket-docs
+      BucketName: !Sub ${ServiceName}-${AWS::Region}-${Environment}-websocket-docs
       PublicAccessBlockConfiguration:
         BlockPublicAcls: false
         BlockPublicPolicy: false
