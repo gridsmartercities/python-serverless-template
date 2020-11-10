@@ -6,3 +6,4 @@ pylint_quotes
 yq
 aws-lambda-decorators
 cfn-lint
+mypy

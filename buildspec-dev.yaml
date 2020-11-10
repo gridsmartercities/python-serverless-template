@@ -40,6 +40,8 @@ phases:
       - $TAG "Swagger validation" "swagger-cli validate api-contract.yaml" > /dev/null
       # Running all prospector tools for code quality analysis
       - $TAG "Prospector checks" "prospector"
+      # Running mypy for static type checking
+      - $TAG "mypy" "mypy"
       # Running bandit for security testing
       - $TAG "Bandit tests" "bandit -r -q ."
       # Running all unittests
@@ -69,3 +71,7 @@ phases:
       - $TAG "Integration tests" "python -m unittest it/test_*.py"
       # Remove all unneeded s3 folders inside SAM_S3_BUCKET
       - $TAG "Clean up" "aws s3 rm s3://$SAM_S3_BUCKET/dev/$CLEAN_PR --recursive" > /dev/null
+
+cache:
+  paths:
+    - "/root/.cache/pip/**/*"
