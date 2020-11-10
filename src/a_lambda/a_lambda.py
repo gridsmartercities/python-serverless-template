@@ -9,7 +9,8 @@ LOGGER = get_logger(__name__)
 @cors()
 @log(parameters=True, response=True)
 @response_body_as_json
-def handler(event, context):  # pylint:disable=unused-argument
+# pylint:disable=unused-argument
+def handler(event: dict, context: dict) -> dict:
     LOGGER.info("Some info message")
     return {
         "statusCode": 200,

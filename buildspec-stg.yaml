@@ -8,6 +8,9 @@ env:
     GITHUB_REPO:              "/python-serverless-template/build/GITHUB_REPO"
     GITHUB_TOKEN:             "/python-serverless-template/build/GITHUB_TOKEN"
 
+    PROD_ACCOUNT_ID:          "/python-serverless-template/build/PROD_ACCOUNT_ID"
+    PROD_BUILD_REGIONS:       "/python-serverless-template/build/PROD_BUILD_REGIONS"
+
 phases:
   install:
     runtime-versions:
@@ -42,3 +45,5 @@ phases:
       - export BASE_URL=$(./tools/build/get-api-url.sh $SERVICE_NAME-stg-apis)
       # Run the integration tests
       - python -m unittest it/test_*.py
+      # trigger a production build in production account
+      - ./tools/build/run-prod-builds.sh $PROD_ACCOUNT_ID $SERVICE_NAME $PROD_BUILD_REGIONS

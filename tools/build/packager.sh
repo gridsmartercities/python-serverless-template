@@ -114,6 +114,14 @@ package $debug_flag "yaml"
 package $debug_flag "yml"
 package $debug_flag "json"
 
+# cleaning helping files
+rm -f ./.build/*.py
+# remove unneded directories
+rm -r ./.build/repos
+rm -r ./.build/services
+rm -r ./.build/signers
+
+
 debug $debug_flag "packager end"
 
 exit 0
