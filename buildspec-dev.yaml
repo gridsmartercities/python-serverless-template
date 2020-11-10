@@ -27,7 +27,7 @@ phases:
       # Installing dredd contract testing tool
       - npm install -g -q dredd --unsafe-perm=true
       # Installing Python dependencies
-      - pip3 install -q aws-sam-cli bandit coverage dredd-hooks prospector pylint_quotes aws-lambda-decorators yq cfn-lint
+      - pip3 install -q aws-sam-cli bandit coverage dredd-hooks prospector pylint_quotes aws-lambda-decorators yq cfn-lint mypy
   pre_build:
     commands:
       # Disable tests log info and error messages
