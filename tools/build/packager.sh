@@ -76,7 +76,7 @@ function add_external_dependencies() {
     if [ "`$parser -r '.external' $file`" != "null" ]; then
         for entry in $($parser -r '.external[] | .' $file); do
             echo $entry >> $base_dir/requirements.txt
-            debug debug_flag "appended $entry to requirements.txt"
+            debug $debug_flag "appended $entry to requirements.txt"
         done
     fi
 }
