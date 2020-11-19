@@ -195,7 +195,7 @@ Resources:
         - Endpoint: !Ref AlertEmail
           Protocol: email
 
-  NotificationsAlarm5xx:
+  CodeBuildFailedAlarm:
     Type: AWS::CloudWatch::Alarm
     Properties:
       ActionsEnabled: true
