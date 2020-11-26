@@ -186,34 +186,33 @@ Resources:
         IgnorePublicAcls: false
         RestrictPublicBuckets: false
 
-  # Code Build Failure rule
-  CodebuildFailedBuildEventRule:
-    Type: AWS::Events::Rule
-    Properties:
-      Name: !Sub ${ServiceName}-build-event-rule
-      Description: Fire an event when a staging build fails
-      EventPattern:
-        source:
-          - aws.codebuild
-        detail-type:
-          - CodeBuild Build State Change
-        detail:
-          build-status:
-            - FAILED
-          project-name:
-            - !If [IsProduction, !Ref CodebuildProdProject, !If [IsStaging, !Ref CodebuildStgProject, !Ref CodebuildDevProject]]
-      Targets:
-        - Arn: !Ref CodebuildAlarmTopic
-          Id: !Sub ${ServiceName}-build-event-rule-target
-
   # Code Build Alarms
   CodebuildAlarmTopic:
     Type: AWS::SNS::Topic
     Properties:
-      DisplayName: !Sub ${ServiceName}-codebuild-alarms
+      DisplayName: !Sub ${ServiceName}-codebuild-alarm
       Subscription:
         - Endpoint: !Ref AlertEmail
           Protocol: email
+
+  CodeBuildFailedAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      ActionsEnabled: true
+      AlarmDescription: Triggered when a could build failure occurs
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      EvaluationPeriods: 1
+      MetricName: FailedBuilds
+      Namespace: AWS/CodeBuild
+      Period: 60
+      Statistic: Sum
+      Threshold: 1.0
+      TreatMissingData: notBreaching
+      AlarmActions:
+      - !Ref CodebuildAlarmTopic
+      Dimensions:
+        - Name: ProjectName
+          Value: !If [IsProduction, !Ref CodebuildProdProject, !If [IsStaging, !Ref CodebuildStgProject, !Ref CodebuildDevProject]]
 
   # Code Build Projects
   CodebuildDevProject:
