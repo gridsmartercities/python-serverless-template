@@ -16,7 +16,19 @@ Globals:
     Runtime: python3.7
     Timeout: 3
     MemorySize: 256
+    Layers:
+      - !Ref CommonCodeLayer
 Resources:
+  CommonCodeLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: !Sub ${ServiceName}-${AWS::Region}-${ApiNameSuffix}-common-layer
+      ContentUri: ./lambda_layer
+      CompatibleRuntimes:
+        - python3.7
+      RetentionPolicy: Delete
+    Metadata:
+      BuildMethod: python3.7
   ALambda:
     Type: AWS::Serverless::Function
     Properties:

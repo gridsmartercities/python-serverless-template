@@ -23,7 +23,7 @@ This template is opinionated, and makes use of:
 - [pylint_quotes][pylint-quotes], a [pylint][pylint] plugin to ensure a consistent Python quotation style throughout the project.
 - [Bandit][bandit], a security testing tool.
 - [Dredd][dredd], for contract testing against the OpenAPI definition, with hooks written in Python.
-- A custom packaging tool to ease the sharing of code between [lambda functions][lambda].
+- A custom packaging tool to ease the sharing of code between [lambda functions][lambda] by using [lambda layers][lambda-layers].
 - A custom tool to notify GitHub of build progress on each build command.
 
 
@@ -120,7 +120,7 @@ To follow these instructions, you will need to be familiar with pip, and creatin
 
 The source code is located in the src folder. All code shared by more than 1 lambda should be placed in files in that directory (or subfolders in that directory) following the Single Responsibility and Interface Segregation principles.
 
-Each lambda has its own folder inside src, which contains the lambda code itself and a dependencies (either yaml or json) file that indicates the internal (common code) and external (packages) dependencies the lambda needs.
+Each lambda has its own folder inside src, which contains the lambda code itself and an optional requirements.txt file with a list of external dependencies the lambda needs.
 
 ### Tests
 
@@ -170,13 +170,9 @@ Runs swagger validation, cloudformation template validate, bandit, prospector, u
 
 ```./pre-build-checks.sh```
 
-#### [packager.sh][tool-packager]
+#### [lambda_layer.sh][tool-lambda-layer]
 
-This is a custom build tool that manages lambda dependencies so only the right common code and external dependencies are packaged with each individual lambda. The tool is used by the build process only.
-
-The tool can work with json or yaml files. For each lambda, add a *dependencies.yaml* or *dependencies.json* in the lambda folder (the tool will skip folders without a dependencies file). In there, add all internal code dependencies in the *internal* array, and all the external packages needed by your lambda in the *external* array.
-
-The packager creates a .build folder when run, which contains a copy of the internal common files needed by that lambda, and a requirements.txt files with a list of all its external dependencies.
+This is a custom build tool that structures the code in a way that can be added to a lambda layer (which is a resource in template.yaml). This tool is used by the build process only.
 
 Please note that if you run this packager locally, the .build folder might make the Bandit tests to take quite a lot of time. You might want to delete the .build folder once you've taken a look at it.
 
@@ -239,7 +235,7 @@ Create a folder with the same name in the tests folder, and add a python file wi
 
 Create a new folder with the name of your feature inside the *src* folder, and add a python file with an appropriate name to it. In this python file, define your lambda function handler.
 
-If you add a dependency (to an internal file with common code, or to an external python package), add a dependencies.json or dependencies.yaml file to your lambda folder, and specify the dependencies there.
+If that lambda needs an external library, add a requirements.txt file to the lambda folder, and specify the dependencies there.
 
 ### To run dredd locally:
 
@@ -291,10 +287,11 @@ Until the unittest library is fixed (and no __init__ files are needed), __init__
 [tool-test]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/dev/test.sh
 [tool-coverage]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/dev/coverage.sh
 [tool-pre-build-checks]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/build/pre-build-checks.sh
-[tool-packager]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/build/packager.sh
+[tool-lambda-layer]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/build/lambda_layer.sh
 [tool-stack-remover]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/build/stack-remover.sh
 [tool-get-api-url]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/build/get-api-url.sh
 [tool-update-commit-status]: https://github.com/gridsmartercities/python-serverless-template/blob/master/tools/build/update-commit-status.sh
 [cfn-python-lint]: https://github.com/aws-cloudformation/cfn-python-lint
 [buildspec-dev]: https://github.com/gridsmartercities/python-serverless-template/blob/master/buildspec-dev.yaml
 [aws-sam-cli-installation]: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html
+[lambda-layers]: https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html
