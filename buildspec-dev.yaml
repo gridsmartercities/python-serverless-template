@@ -63,7 +63,7 @@ phases:
       # Package the build
       - $TAG "SAM package" "sam package --s3-bucket $SAM_S3_BUCKET --s3-prefix dev/$CLEAN_PR --output-template-file NewSamTemplate.yaml" > /dev/null 2>&1
       # Deploy the package
-      - $TAG "SAM deploy" "sam deploy --s3-bucket $SAM_S3_BUCKET --s3-prefix dev/$CLEAN_PR --capabilities CAPABILITY_NAMED_IAM --template-file NewSamTemplate.yaml --stack-name $SERVICE_NAME-stack-$CLEAN_PR --parameter-overrides ServiceName=$SERVICE_NAME ApiNameSuffix=$CLEAN_PR S3Bucket=$SAM_S3_BUCKET/dev/$CLEAN_PR"
+      - $TAG "SAM deploy" "sam deploy --s3-bucket $SAM_S3_BUCKET --no-fail-on-empty-changeset --s3-prefix dev/$CLEAN_PR --capabilities CAPABILITY_NAMED_IAM --template-file NewSamTemplate.yaml --stack-name $SERVICE_NAME-stack-$CLEAN_PR --parameter-overrides ServiceName=$SERVICE_NAME ApiNameSuffix=$CLEAN_PR S3Bucket=$SAM_S3_BUCKET/dev/$CLEAN_PR" > /dev/null 2>&1
       # Get the ApiGateway Base URL
       - export BASE_URL=$(./tools/build/get-api-url.sh $SERVICE_NAME-apis-$CLEAN_PR)
       - echo BASE_URL is $BASE_URL
