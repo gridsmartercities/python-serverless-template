@@ -70,29 +70,29 @@ Resources:
             Location: !Sub s3://${S3Bucket}/api-contract.yaml
       StageName: Prod
 
-  # WAF
-  ApiGatewayWebACL:
-#    Condition: CreateProdResources
-    DependsOn: ApiGateway
-    Type: AWS::WAFv2::WebACL
-    Properties:
-      DefaultAction:
-        Allow: { }
-        # no rules defined, allow all for now.
-        # See https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wafv2-webacl.html#cfn-wafv2-webacl-rules
-      Scope: REGIONAL
-      VisibilityConfig:
-        CloudWatchMetricsEnabled: True
-        MetricName: ApiGatewayWAFMetric
-        SampledRequestsEnabled: False
-
-  ApiGatewayACLAssociation:
-#    Condition: CreateProdResources
-    DependsOn: ApiGateway
-    Type: AWS::WAFv2::WebACLAssociation
-    Properties:
-      ResourceArn: !Sub arn:aws:apigateway:${AWS::Region}::/restapis/${ApiGateway}/stages/Prod
-      WebACLArn: !GetAtt ApiGatewayWebACL.Arn
+#  # WAF
+#  ApiGatewayWebACL:
+##    Condition: CreateProdResources
+#    DependsOn: ApiGateway
+#    Type: AWS::WAFv2::WebACL
+#    Properties:
+#      DefaultAction:
+#        Allow: { }
+#        # no rules defined, allow all for now.
+#        # See https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wafv2-webacl.html#cfn-wafv2-webacl-rules
+#      Scope: REGIONAL
+#      VisibilityConfig:
+#        CloudWatchMetricsEnabled: True
+#        MetricName: ApiGatewayWAFMetric
+#        SampledRequestsEnabled: False
+#
+#  ApiGatewayACLAssociation:
+##    Condition: CreateProdResources
+#    DependsOn: ApiGateway
+#    Type: AWS::WAFv2::WebACLAssociation
+#    Properties:
+#      ResourceArn: !Sub arn:aws:apigateway:${AWS::Region}::/restapis/${ApiGateway}/stages/Prod
+#      WebACLArn: !GetAtt ApiGatewayWebACL.Arn
 
   ALambdaLogGroup:
     Type: AWS::Logs::LogGroup
