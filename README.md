@@ -274,6 +274,13 @@ Prospector works fine if you have no __init__ files, or if you have __init__ fil
 
 Until the unittest library is fixed (and no __init__ files are needed), __init__ are needed in all tests folders.
 
+# A Note on setting up a Web Application Firewall for Api Gateway
+
+You can enable a Web Application Firewall (AWS WAF) for Api Gateway by uncommenting some lines in *template.yaml*. This has a cost, however, of at least $5 per calendar month at the time of writing.
+
+To enable AWS WAF for Api Gateway, uncomment lines 73 to 95 of *template.yaml*. 
+
+To only deploy a WAF for your staging and production APIs, uncomment lines 21, 22, 75 and 90 in the same file. This will stop creating the resources in your dev environment only.
     
 [comment]: <> ([build-status]: https://codebuild.eu-west-2.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiYWNqUHZHVUFaR0NWYUtsYndvUWVkbGkyL240OCtYVlBMaVJ3SkU2cVZYN1hKeVRtdkllSHU4ZDlCdzJsK1NSczYxVCtXVGZhSEs2QkxzTWlpYlpDdnJBPSIsIml2UGFyYW1ldGVyU3BlYyI6Ik1haWpIZE5RYlNGWS9vZnUiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master)
 [mit-license-svg]: https://img.shields.io/badge/License-MIT-yellow.svg
