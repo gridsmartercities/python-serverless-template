@@ -71,7 +71,7 @@ This template is opinionated, and makes use of:
     - In the *Primary source webhook events* section, click the external webhook link to go to GitHub. 
     - In the *Which events would you like to trigger this webhook?* select *Let me select individual events.* and tick the *Pull requests* box only.
     - Click on *Update webhook* at the bottom.
-- If you have a Stg account, run the setup stack there in the same way you ran the stack in the dev account but with these value differences:
+- If you have a Stg account, run the *setup-template.yaml* stack there in the same way you ran the stack in the dev account but with these value differences:
     - In the *Parameters* section, enter the same values as in "dev", except:
         - "stg" as environment.
         - The value of "Related Account Id" is the AWS Account Id of your Prod account.
@@ -79,7 +79,7 @@ This template is opinionated, and makes use of:
     - Follow the instructions in the previous point, but for the *stg* codebuild project and webhook.
     - In the *Which events would you like to trigger this webhook?* select *Just the push event* option.
     - Click on *Update webhook* at the bottom.
-- If you have a Prod account, run the setup stack there in the same way you ran the stack in the dev account but with these value differences:    
+- If you have a Prod account, run the *setup-template.yaml* stack there in the same way you ran the stack in the dev account but with these value differences:    
     - In the *Parameters* section, enter the same values as in "dev", except:
         - "prod" as environment.
         - The value of "Related Account Id" is the AWS Account Id of your Stg account.
