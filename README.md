@@ -38,15 +38,15 @@ This template is opinionated, and makes use of:
     - Click on the *Generate token* button.
     - Copy the generated hash value (you will not be able to see it again). This is your GitHub Token.
 - Clone repository to your computer, and change all references to *python-serverless-template* to *your-service-name*.
-- [Create an AWS account][aws-account-create] if you don't have one already.
+- [Create three AWS accounts][aws-account-create] if you don't have them ready. You'll need an account for development (dev), staging (stg) and production (prod), although you could just start with a dev account for now and ignore all steps for seting up stg and prod below.
 - Ensure AWS has access to your GitHub account.
     - In your AWS account, go to *Services* and type *codebuild*.
     - In the *Build Projects*, Click the *Create build project* button.
     - Go to the *Source* section, and select *GitHub* as the Source Provider.
     - Ensure *Connect using OAuth* is selected, and click on the *Connect to GitHub* button.
     - Click the *Cancel* button to exit. Your AWS account can now access your GitHub account. 
-- Run the *setup-template.yaml* stack to create the CI/CD build projects.
-    - In your AWS account, go to *Services* and type *cloudformation*.
+- In your Dev AWS Account, run the *setup-template.yaml* stack to create the CI/CD build project.
+    - Go to *Services* and type *cloudformation*.
     - In the *Stacks* section, click on the *Create stack* button.
     - In the *Specify Template* section, select *Upload a template file*.
     - Click on the *Choose file* button, and select the *setup-template.yaml* cloudformation template located in this repository.
@@ -55,9 +55,12 @@ This template is opinionated, and makes use of:
     - In the *Parameters* section, enter:
         - The name of your service (for example, *your-service-name*). 
         - The email address where staging build errors should be sent to.
+        - For Environment, select "dev"
+        - You can leave the "Related Account Id" field empty for the dev stack.
         - The GitHub Owner (for example, for repo https://github.com/gridsmartercities/python-serverless-template.git, it would be *gridsmartercities*)
         - The GitHub Repo name (for repo https://github.com/gridsmartercities/python-serverless-template.git, it would be *python-serverless-template*)
         - Enter the GitHub token you generated before.
+        - For Build Region, enter your current AWS region.
     - Click *Next*.
     - Accept the *Capabilities and transforms* options at the bottom of the page, and click the *Create stack* button.
     - Wait until the stack is created.
@@ -68,10 +71,19 @@ This template is opinionated, and makes use of:
     - In the *Primary source webhook events* section, click the external webhook link to go to GitHub. 
     - In the *Which events would you like to trigger this webhook?* select *Let me select individual events.* and tick the *Pull requests* box only.
     - Click on *Update webhook* at the bottom.
+- If you have a Stg account, run the setup stack there in the same way you ran the stack in the dev account but with these value differences:
+    - In the *Parameters* section, enter the same values as in "dev", except:
+        - "stg" as environment.
+        - The value of "Related Account Id" is the AWS Account Id of your Prod account.
 - Update the *stg* webhook in Github to trigger the AWS codebuild on Push to the master branch only. 
     - Follow the instructions in the previous point, but for the *stg* codebuild project and webhook.
     - In the *Which events would you like to trigger this webhook?* select *Just the push event* option.
     - Click on *Update webhook* at the bottom.
+- If you have a Prod account, run the setup stack there in the same way you ran the stack in the dev account but with these value differences:    
+    - In the *Parameters* section, enter the same values as in "dev", except:
+        - "prod" as environment.
+        - The value of "Related Account Id" is the AWS Account Id of your Stg account.
+- Note: there is no webhook for the prod account. The Prod build will automatically be triggered by a successful run of the Stg build (using the related account Ids and Build region parameter values).
 - (Optional) To stop contributors from committing code directly to the master branch, setup a master branch protection rule in GitHub. Only peer reviewed, approved Pull Requests will be allowed to be merged into the master branch.
     - in your GitHub account, select *Settings*.
     - Go to the *Branches* section, and click on *Add rule*
@@ -134,7 +146,9 @@ The .prospector.yaml and .pylintrc files allows you to change the way prospector
 
 ### Buildspec Files
 
-Two buildspec files are included, one for the *dev* build and the other for the *stg* (Staging) build. A production build could also be generated from the *stg* buildspec, and could be triggered when, say, the integration tests have successfully run on the staging build.
+Three buildspec files are included, one for the *dev* build, one for the *stg* (Staging) build, and one for the *prod* build.
+
+The *dev* build will be triggered when a Pull Request occurs in Github. The *stg* build will be triggered when a Pull Request is merged into the master branch. The *prod* build will be automatically triggered when a *stg* build runs successfully.
 
 ### API Contract Specification
 
