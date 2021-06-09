@@ -58,6 +58,8 @@ phases:
       - ./tools/build/layer_packager.sh
       # Build the SAM template
       - $TAG "SAM build" "sam build -s .build" > /dev/null 2>&1
+      # Allow to inline editing large lambdas
+      - bash -c 'rm -rf .aws-sam/build/{*,*/*}/{boto,docutils,dateutil,s3transfer,urllib,jmespath}*'
       # Package the build
       - $TAG "SAM package" "sam package --s3-bucket $SAM_S3_BUCKET --s3-prefix dev/$CLEAN_PR --output-template-file NewSamTemplate.yaml" > /dev/null 2>&1
       # Deploy the package
