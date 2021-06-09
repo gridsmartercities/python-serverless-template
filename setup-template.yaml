@@ -348,6 +348,12 @@ Resources:
               - lambda:DeleteEventSourceMapping
               - lambda:UpdateEventSourceMapping
               - lambda:GetEventSourceMapping
+              - lambda:GetLayerVersion
+              - lambda:GetLayerVersionPolicy
+              - lambda:AddLayerVersionPermission
+              - lambda:DeleteLayerVersion
+              - lambda:PublishLayerVersion
+              - lambda:RemoveLayerVersionPermission
             Resource: "*"
           - Effect: Allow
             Action:
