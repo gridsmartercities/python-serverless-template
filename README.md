@@ -276,7 +276,7 @@ Until the unittest library is fixed (and no __init__ files are needed), __init__
 
 # A Note on setting up a Web Application Firewall for Api Gateway
 
-You can enable a Web Application Firewall (AWS WAF) for Api Gateway by uncommenting some lines in *template.yaml*. This has a cost, however, of at least $5 per calendar month at the time of writing.
+You can enable a Web Application Firewall ([AWS WAF][WAF]) for Api Gateway by uncommenting some lines in *template.yaml*. This has a cost, however, of at least $5 per calendar month at the time of writing.
 
 To enable AWS WAF for Api Gateway, uncomment lines 73 to 95 of *template.yaml*. 
 
@@ -316,3 +316,4 @@ To only deploy a WAF for your staging and production APIs, uncomment lines 21, 2
 [buildspec-dev]: https://github.com/gridsmartercities/python-serverless-template/blob/master/buildspec-dev.yaml
 [aws-sam-cli-installation]: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html
 [lambda-layers]: https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html
+[WAF]: https://docs.aws.amazon.com/waf/index.html
