@@ -1,6 +1,6 @@
 [<img align="right" alt="Grid Smarter Cities" src="https://s3.eu-west-2.amazonaws.com/open-source-resources/grid_smarter_cities_small.png">](https://www.gridsmartercities.com/)
 
-![Build Status][build-status]
+[comment]: <> (![Build Status][build-status])
 [![License: MIT][mit-license-svg]][mit-license]
 ![Github Release][release]
 
@@ -275,7 +275,7 @@ Prospector works fine if you have no __init__ files, or if you have __init__ fil
 Until the unittest library is fixed (and no __init__ files are needed), __init__ are needed in all tests folders.
 
     
-[build-status]: https://codebuild.eu-west-2.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiYWNqUHZHVUFaR0NWYUtsYndvUWVkbGkyL240OCtYVlBMaVJ3SkU2cVZYN1hKeVRtdkllSHU4ZDlCdzJsK1NSczYxVCtXVGZhSEs2QkxzTWlpYlpDdnJBPSIsIml2UGFyYW1ldGVyU3BlYyI6Ik1haWpIZE5RYlNGWS9vZnUiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master
+[comment]: <> ([build-status]: https://codebuild.eu-west-2.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiYWNqUHZHVUFaR0NWYUtsYndvUWVkbGkyL240OCtYVlBMaVJ3SkU2cVZYN1hKeVRtdkllSHU4ZDlCdzJsK1NSczYxVCtXVGZhSEs2QkxzTWlpYlpDdnJBPSIsIml2UGFyYW1ldGVyU3BlYyI6Ik1haWpIZE5RYlNGWS9vZnUiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master)
 [mit-license-svg]: https://img.shields.io/badge/License-MIT-yellow.svg
 [mit-license]: https://opensource.org/licenses/MIT
 [release]: https://img.shields.io/github/release/gridsmartercities/python-serverless-template.svg?style=flat
