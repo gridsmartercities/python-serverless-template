@@ -352,6 +352,7 @@ Resources:
               - apigateway:PATCH
               - apigateway:DELETE
               - apigateway:GET
+              - apigateway:SetWebACL  # waf related permission
             Resource:
               - !Sub arn:aws:apigateway:${AWS::Region}::/restapis*
               - !Sub arn:aws:apigateway:${AWS::Region}::/apis*
@@ -418,6 +419,16 @@ Resources:
               - states:UpdateStateMachine
               - states:TagResource
               - states:DescribeStateMachine
+            Resource: "*"
+          - Effect: Allow  # waf related permissions
+            Action:
+              - wafv2:CreateWebACL
+              - wafv2:UpdateWebACL
+              - wafv2:DeleteWebACL
+              - wafv2:GetWebACL
+              - wafv2:ListTagsForResource
+              - wafv2:AssociateWebACL
+              - wafv2:GetWebACLForResource
             Resource: "*"
       Roles:
         - !Ref CodebuildRole
