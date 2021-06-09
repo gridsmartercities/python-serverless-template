@@ -18,8 +18,8 @@ Globals:
     MemorySize: 256
     Layers:
       - !Ref CommonCodeLayer
-Conditions:
-  CreateProdResources: !Equals [ !Ref ApiNameSuffix, prod ]
+#Conditions:
+#  CreateProdResources: !Equals [ !Ref ApiNameSuffix, prod ]
 Resources:
   CommonCodeLayer:
     Type: AWS::Serverless::LayerVersion
