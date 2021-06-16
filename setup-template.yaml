@@ -123,7 +123,7 @@ Resources:
       Value: !Ref CodebuildOutputS3Bucket
   ProdAccountIdParameter:
     Type: AWS::SSM::Parameter
-    Condition: NotProduction
+    Condition: IsStaging
     Properties:
       Name: !Sub /${ServiceName}/build/PROD_ACCOUNT_ID
       Type: String
