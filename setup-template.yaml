@@ -90,21 +90,18 @@ Resources:
       Value: !Ref AlertEmail
   GitHubOwnerParameter:
     Type: AWS::SSM::Parameter
-    Condition: NotProduction
     Properties:
       Name: !Sub /${ServiceName}/build/GITHUB_OWNER
       Type: String
       Value: !Sub ${GitHubOwner}
   GitHubRepoParameter:
     Type: AWS::SSM::Parameter
-    Condition: NotProduction
     Properties:
       Name: !Sub /${ServiceName}/build/GITHUB_REPO
       Type: String
       Value: !Sub ${GitHubRepo}
   GitHubTokenParameter:
     Type: AWS::SSM::Parameter
-    Condition: NotProduction
     Properties:
       Name: !Sub /${ServiceName}/build/GITHUB_TOKEN
       Type: String
